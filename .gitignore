@@ -1,0 +1,18 @@
+# Folders:
+.DS_Store/
+.vs/
+bin/
+cache/
+log/
+obj/
+node_modules/
+
+# Files:
+*.csproj.user
+*~
+
+# Project specific:
+bison-parser.c
+bison-parser.h
+flex-scanner.c
+program
