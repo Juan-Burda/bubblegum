@@ -23,15 +23,39 @@
 	int program;
 	int expression;
 	int assign;
-	int primitive;
+	int function;
 	int compoundStatement;
+
+	int primitive;
+	int shape;
+
 	int paramAnimation;
 	int paramListTranslate;
 	int paramTranslate;
+	int paramListOpacity;
+	int paramOpacity;
+	int paramListRotate;
+	int paramRotate;
+	int paramListResize;
+	int paramResize;
+	int paramListMorph;
+	int paramMorph;
+	int paramListRecolor;
+	int paramRecolor;
+
+	int paramShape;
+	int paramListRectangle;
+	int paramRectangle;
+	int paramListEllipse;
+	int paramEllipse;
+	int paramListTriangle;
+	int paramTriangle;
+
 	int typeInteger;
 	int typeBoolean;
 	int typeShape;
 	int typePrimitive;
+	int typeColor;
 
 	// Terminales.
 	token token;
@@ -53,7 +77,6 @@
 %token <token> COMMA
 %token <token> VARNAME
 %token <token> ASSIGN
-%token <token> EOL
 
 // Layouts
 %token <layout> LAYOUT
@@ -112,20 +135,46 @@
 %token <textdeco> TYPE_TEXT_DECORATION
 %token <fontfamily> TYPE_FONT_FAMILY
 %token <fontstyle> TYPE_FONT_STYLE
+%token <token> COLOR_HEX
 
 // Tipos de dato para los no-terminales generados desde Bison.
 %type <program> program;
 %type <expression> expression;
 %type <assign> assign;
-%type <primitive> primitive;
+%type <function> function;
 %type <compoundStatement> compoundStatement;
-%type <paramListTranslate> paramListTranslate;
+
+%type <primitive> primitive;
+%type <layout> layout;
+%type <shape> shape;
+
 %type <paramAnimation> paramAnimation;
+%type <paramListTranslate> paramListTranslate;
 %type <paramTranslate> paramTranslate;
+%type <paramListOpacity> paramListOpacity;
+%type <paramOpacity> paramOpacity;
+%type <paramListRotate> paramListRotate;
+%type <paramRotate> paramRotate;
+%type <paramListResize> paramListResize;
+%type <paramResize> paramResize;
+%type <paramListMorph> paramListMorph;
+%type <paramMorph> paramMorph;
+%type <paramListRecolor> paramListRecolor;
+%type <paramRecolor> paramRecolor;
+
+%type <paramShape> paramShape;
+%type <paramListRectangle> paramListRectangle;
+%type <paramRectangle> paramRectangle;
+%type <paramListEllipse> paramListEllipse;
+%type <paramEllipse> paramEllipse;
+%type <paramListTriangle> paramListTriangle;
+%type <paramTriangle> paramTriangle;
+
 %type <typeInteger> typeInteger;
 %type <typeBoolean> typeBoolean;
 %type <typePrimitive> typePrimitive;
 %type <typeShape> typeShape;
+%type <typeColor> typeColor;
 
 // El símbolo inicial de la gramatica.
 %start program
@@ -136,18 +185,35 @@ program: expression			{ $$ = ProgramGrammarAction(0); }
 
 expression: /* empty */		{ $$ = Return0(); }
 	| primitive				{ $$ = Return0(); }
+	| layout				{ $$ = Return0(); }
+	| shape					{ $$ = Return0(); }
 	| assign				{ $$ = Return0(); }
 	| VARNAME				{ $$ = Return0(); }
 
-assign: typePrimitive VARNAME ASSIGN function 			{ $$ = Return0(); }
-	| VARNAME ASSIGN expression 						{ $$ = Return0(); }
+assign: typePrimitive VARNAME ASSIGN function 		{ $$ = Return0(); }
+	| typeShape VARNAME ASSIGN function				{ $$ = Return0(); }
+	| VARNAME ASSIGN expression 					{ $$ = Return0(); }
 
-function: primitive
-
-primitive: TRANSLATE_X OPEN_PARENTHESIS paramListTranslate CLOSE_PARENTHESIS compoundStatement		{ $$ = Return0(); }
+function: primitive		{ $$ = Return0(); }
+	| layout			{ $$ = Return0(); }
+	| shape				{ $$ = Return0(); }
 
 compoundStatement: /* empty */					{ $$ = Return0(); }
 	| OPEN_CURLY expression CLOSE_CURLY			{ $$ = Return0(); }
+
+primitive: TRANSLATE_X OPEN_PARENTHESIS paramListTranslate CLOSE_PARENTHESIS compoundStatement		{ $$ = Return0(); }
+	| TRANSLATE_Y OPEN_PARENTHESIS paramListTranslate CLOSE_PARENTHESIS compoundStatement			{ $$ = Return0(); }
+	| OPACITY OPEN_PARENTHESIS paramListOpacity CLOSE_PARENTHESIS compoundStatement					{ $$ = Return0(); }
+	| RECOLOR OPEN_PARENTHESIS paramListRecolor CLOSE_PARENTHESIS compoundStatement					{ $$ = Return0(); }
+	| ROTATE OPEN_PARENTHESIS paramListRotate CLOSE_PARENTHESIS compoundStatement					{ $$ = Return0(); }
+	| RESIZE OPEN_PARENTHESIS paramListResize CLOSE_PARENTHESIS compoundStatement					{ $$ = Return0(); }
+	| MORPH OPEN_PARENTHESIS paramListMorph CLOSE_PARENTHESIS compoundStatement						{ $$ = Return0(); }
+
+layout: LAYOUT OPEN_PARENTHESIS CLOSE_CURLY compoundStatement		{ $$ = Return0(); }
+
+shape: RECTANGLE OPEN_CURLY paramListRectangle CLOSE_PARENTHESIS compoundStatement		{ $$ = Return0(); }
+	| TRIANGLE OPEN_CURLY paramListTriangle CLOSE_PARENTHESIS compoundStatement			{ $$ = Return0(); }
+	| ELLIPSE OPEN_CURLY paramListEllipse CLOSE_PARENTHESIS compoundStatement			{ $$ = Return0(); }
 
 /* Parameters */
 // For animations
@@ -162,7 +228,84 @@ paramListTranslate: /* empty */						{ $$ = Return0(); }
 	| paramTranslate COMMA paramListTranslate		{ $$ = Return0(); }
 	| paramTranslate								{ $$ = Return0(); }
 
-paramTranslate: PARAM_END_VALUE COLON typeInteger			{ $$ = Return0(); }
+paramTranslate: PARAM_END_VALUE COLON typeInteger	{ $$ = Return0(); }
+
+paramListOpacity: /* empty */						{ $$ = Return0(); }
+	| paramAnimation COMMA paramListOpacity			{ $$ = Return0(); }
+	| paramAnimation								{ $$ = Return0(); }
+	| paramOpacity COMMA paramListOpacity			{ $$ = Return0(); }
+	| paramOpacity									{ $$ = Return0(); }
+
+// TODO: cambiar a typeFloat
+paramOpacity: PARAM_ALPHA COLON typeInteger			{ $$ = Return0(); }
+
+paramListRotate: /* empty */						{ $$ = Return0(); }
+	| paramAnimation COMMA paramListRotate			{ $$ = Return0(); }
+	| paramAnimation								{ $$ = Return0(); }
+	| paramRotate COMMA paramListRotate				{ $$ = Return0(); }
+	| paramRotate									{ $$ = Return0(); }
+
+paramRotate: PARAM_ANGLE COLON typeInteger			{ $$ = Return0(); }
+
+paramListResize: /* empty */						{ $$ = Return0(); }
+	| paramAnimation COMMA paramListResize			{ $$ = Return0(); }
+	| paramAnimation								{ $$ = Return0(); }
+	| paramResize COMMA paramListResize				{ $$ = Return0(); }
+	| paramResize									{ $$ = Return0(); }
+
+// TODO: cambiar a typeFloat
+paramResize: PARAM_SCALE COLON typeInteger			{ $$ = Return0(); }
+
+paramListMorph: /* empty */							{ $$ = Return0(); }
+	| paramAnimation COMMA paramListMorph			{ $$ = Return0(); }
+	| paramAnimation								{ $$ = Return0(); }
+	| paramMorph COMMA paramListMorph				{ $$ = Return0(); }
+	| paramMorph									{ $$ = Return0(); }
+
+// TODO: cambiar a typePoints
+paramMorph: PARAM_POINTS COLON typeInteger			{ $$ = Return0(); }
+
+paramListRecolor: /* empty */						{ $$ = Return0(); }
+	| paramAnimation COMMA paramListRecolor			{ $$ = Return0(); }
+	| paramAnimation								{ $$ = Return0(); }
+	| paramRecolor COMMA paramListRecolor			{ $$ = Return0(); }
+	| paramRecolor									{ $$ = Return0(); }
+
+paramRecolor: PARAM_END_COLOR COLON typeColor		{ $$ = Return0(); }
+
+// For shapes
+paramShape: PARAM_FILL_COLOR COLON typeColor		{ $$ = Return0(); }
+	| PARAM_BORDER_COLOR COLON typeColor			{ $$ = Return0(); }
+	| PARAM_BORDER_WIDTH COLON typeInteger			{ $$ = Return0(); }
+	| PARAM_ROTATION COLON typeInteger				{ $$ = Return0(); }
+
+paramListRectangle: /* empty */						{ $$ = Return0(); }
+	| paramShape COMMA paramListRectangle			{ $$ = Return0(); }
+	| paramShape									{ $$ = Return0(); }
+	| paramRectangle COMMA paramListRectangle		{ $$ = Return0(); }
+	| paramRectangle								{ $$ = Return0(); }
+
+paramRectangle: PARAM_HEIGHT COLON typeInteger		{ $$ = Return0(); }
+	| PARAM_WIDTH COLON typeInteger					{ $$ = Return0(); }
+
+paramListEllipse: /* empty */						{ $$ = Return0(); }
+	| paramShape COMMA paramListEllipse				{ $$ = Return0(); }
+	| paramShape									{ $$ = Return0(); }
+	| paramEllipse COMMA paramListEllipse			{ $$ = Return0(); }
+	| paramEllipse									{ $$ = Return0(); }
+
+paramEllipse: PARAM_X_AXIS COLON typeInteger		{ $$ = Return0(); }
+	| PARAM_Y_AXIS COLON typeInteger				{ $$ = Return0(); }
+
+paramListTriangle: /* empty */						{ $$ = Return0(); }
+	| paramShape COMMA paramListTriangle			{ $$ = Return0(); }
+	| paramShape									{ $$ = Return0(); }
+	| paramTriangle COMMA paramListTriangle			{ $$ = Return0(); }
+	| paramTriangle									{ $$ = Return0(); }
+
+paramTriangle: PARAM_HEIGHT COLON typeInteger		{ $$ = Return0(); }
+	| PARAM_BASE COLON typeInteger					{ $$ = Return0(); }
+
 
 /* Data types */
 typeInteger: TYPE_INTEGER		{ $$ = Return0(); }
@@ -180,5 +323,7 @@ typePrimitive: TRANSLATE_X 		{ $$ = Return0(); }
 typeShape: ELLIPSE 				{ $$ = Return0(); }
 	| RECTANGLE 				{ $$ = Return0(); }
 	| TRIANGLE 					{ $$ = Return0(); }
+
+typeColor: COLOR_HEX			{ $$ = Return0(); }
 
 %%

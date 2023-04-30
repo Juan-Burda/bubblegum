@@ -74,8 +74,11 @@ token BooleanPatternAction(const char * lexeme, const boolean_t boolean);
 token FontStylePatternAction(const char * lexeme, const fontstyle_t fontstyle);
 token FontFamilyPatternAction(const char * lexeme, const fontfamily_t fontfamily);
 token TextDecoPatternAction(const char * lexeme, const textdeco_t textdeco);
-token VarnamePatternAction(const char * lexeme, const int length);
 token IntegerPatternAction(const char * lexeme, const int length);
+token ColorHexPatternAction(const char * lexeme);
+
+/* Others */
+token VarnamePatternAction(const char * lexeme, const int length);
 
 // Patrón desconocido, permite abortar debido a un error de sintaxis.
 token UnknownPatternAction(const char * lexeme, const int length);

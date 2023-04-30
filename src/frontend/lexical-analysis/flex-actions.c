@@ -301,6 +301,12 @@ token IntegerPatternAction(const char * lexeme, const int length) {
 	return TYPE_INTEGER;
 }
 
+token ColorHexPatternAction(const char * lexeme) {
+	LogDebug("BooleanPatternAction: '%s' ", lexeme);
+	yylval.token = COLOR_HEX;
+	return COLOR_HEX;
+}
+
 /* Others */
 token VarnamePatternAction(const char * lexeme, const int length) {
 	LogDebug("VarnamePatternAction: '%s' (length = %d).", lexeme, length);

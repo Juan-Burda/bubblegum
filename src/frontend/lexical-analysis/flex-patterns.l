@@ -21,6 +21,7 @@ digit			[0-9]
 endline			[(\r)?\n]
 whitespace		[ \f\n\r\t\v]
 letter          [a-zA-Z]
+hexcolor        [#[A-Fa-f0-9]{6}]
 
 %%
 
@@ -36,7 +37,6 @@ letter          [a-zA-Z]
 ":"											{ return COLON; }
 ","											{ return COMMA; }
 "="											{ return ASSIGN; }
-{endline}                                   { return EOL; }
 
 "Center"									{ return LayoutPatternAction(yytext, CENTER); }
 "Top"									    { return LayoutPatternAction(yytext, TOP); }
@@ -103,6 +103,7 @@ letter          [a-zA-Z]
 "underline"								    { return TextDecoPatternAction(yytext, UNDERLINE); }
 "overline"								    { return TextDecoPatternAction(yytext, OVERLINE); }
 "line-through"								{ return TextDecoPatternAction(yytext, LINE_THROUGH); }
+{hexcolor}                                  { return ColorHexPatternAction(yytext); }
 {digit}+									{ return IntegerPatternAction(yytext, yyleng); }
 {letter}+									{ return VarnamePatternAction(yytext, yyleng); }
 
