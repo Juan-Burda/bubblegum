@@ -16,3 +16,6 @@ bison-parser.c
 bison-parser.h
 flex-scanner.c
 program
+
+# Other
+.bash_history
