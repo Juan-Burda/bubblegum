@@ -1,0 +1,10 @@
+square = Rectangle(height: 100, width: 100, fill-color: #000000)
+
+Center() {
+    TranslateX(delay: 10, end-value: 39, loop: true) {
+        TranslateY(delay: 3999) {
+            square
+        },
+        square
+    }
+}

@@ -23,7 +23,6 @@ whitespace		[ \f\n\r\t\v]
 letter          [a-zA-Z]
 hexcolor        #[A-Fa-f0-9]{6}
 float           [+-]?({digit}*[.])?{digit}+
-space           [ ]
 
 %%
 

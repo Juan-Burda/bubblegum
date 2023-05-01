@@ -24,7 +24,9 @@
 	int expression;
 	int assign;
 	int function;
-	int compoundStatement;
+	int functionList;
+	int layoutCompoundStatement;
+	int primitiveCompoundStatement;
 
 	int primitive;
 	int shape;
@@ -53,8 +55,6 @@
 
 	int typeInteger;
 	int typeBoolean;
-	int typeShape;
-	int typePrimitive;
 	int typeColor;
 	int typeFloat;
 	int typePoints;
@@ -81,8 +81,6 @@
 %token <token> VARNAME
 %token <token> ASSIGN
 
-// Layouts
-%token <layout> LAYOUT
 // Animation primitives
 %token <token> OPACITY
 %token <token> TRANSLATE_X
@@ -146,7 +144,9 @@
 %type <expression> expression;
 %type <assign> assign;
 %type <function> function;
-%type <compoundStatement> compoundStatement;
+%type <functionList> functionList;
+%type <layoutCompoundStatement> layoutCompoundStatement;
+%type <primitiveCompoundStatement> primitiveCompoundStatement;
 
 %type <primitive> primitive;
 %type <layout> layout;
@@ -177,8 +177,6 @@
 %type <typeFloat> typeFloat;
 %type <typeInteger> typeInteger;
 %type <typeBoolean> typeBoolean;
-%type <typePrimitive> typePrimitive;
-%type <typeShape> typeShape;
 %type <typeColor> typeColor;
 %type <typePoints> typePoints;
 
@@ -190,36 +188,42 @@
 program: expression			{ $$ = ProgramGrammarAction(0); }
 
 expression: /* empty */		{ $$ = Return0(); }
-	| primitive				{ $$ = Return0(); }
-	| layout				{ $$ = Return0(); }
-	| shape					{ $$ = Return0(); }
-	| assign				{ $$ = Return0(); }
-	| VARNAME				{ $$ = Return0(); }
-
-assign: typePrimitive VARNAME ASSIGN function 		{ $$ = Return0(); }
-	| typeShape VARNAME ASSIGN function				{ $$ = Return0(); }
-	| VARNAME ASSIGN expression 					{ $$ = Return0(); }
+	| function expression	{ $$ = Return0(); }
+	| assign expression		{ $$ = Return0(); }
 
 function: primitive		{ $$ = Return0(); }
 	| layout			{ $$ = Return0(); }
 	| shape				{ $$ = Return0(); }
 
-compoundStatement: /* empty */					{ $$ = Return0(); }
-	| OPEN_CURLY expression CLOSE_CURLY			{ $$ = Return0(); }
+assign: VARNAME ASSIGN function 		{ $$ = Return0(); }
 
-primitive: TRANSLATE_X OPEN_PARENTHESIS paramListTranslate CLOSE_PARENTHESIS compoundStatement		{ $$ = Return0(); }
-	| TRANSLATE_Y OPEN_PARENTHESIS paramListTranslate CLOSE_PARENTHESIS compoundStatement			{ $$ = Return0(); }
-	| OPACITY OPEN_PARENTHESIS paramListOpacity CLOSE_PARENTHESIS compoundStatement					{ $$ = Return0(); }
-	| RECOLOR OPEN_PARENTHESIS paramListRecolor CLOSE_PARENTHESIS compoundStatement					{ $$ = Return0(); }
-	| ROTATE OPEN_PARENTHESIS paramListRotate CLOSE_PARENTHESIS compoundStatement					{ $$ = Return0(); }
-	| RESIZE OPEN_PARENTHESIS paramListResize CLOSE_PARENTHESIS compoundStatement					{ $$ = Return0(); }
-	| MORPH OPEN_PARENTHESIS paramListMorph CLOSE_PARENTHESIS compoundStatement						{ $$ = Return0(); }
+primitive: TRANSLATE_X OPEN_PARENTHESIS paramListTranslate CLOSE_PARENTHESIS primitiveCompoundStatement		{ $$ = Return0(); }
+	| TRANSLATE_Y OPEN_PARENTHESIS paramListTranslate CLOSE_PARENTHESIS primitiveCompoundStatement			{ $$ = Return0(); }
+	| OPACITY OPEN_PARENTHESIS paramListOpacity CLOSE_PARENTHESIS primitiveCompoundStatement				{ $$ = Return0(); }
+	| RECOLOR OPEN_PARENTHESIS paramListRecolor CLOSE_PARENTHESIS primitiveCompoundStatement				{ $$ = Return0(); }
+	| ROTATE OPEN_PARENTHESIS paramListRotate CLOSE_PARENTHESIS primitiveCompoundStatement					{ $$ = Return0(); }
+	| RESIZE OPEN_PARENTHESIS paramListResize CLOSE_PARENTHESIS primitiveCompoundStatement					{ $$ = Return0(); }
+	| MORPH OPEN_PARENTHESIS paramListMorph CLOSE_PARENTHESIS primitiveCompoundStatement					{ $$ = Return0(); }
 
-layout: TYPE_LAYOUT OPEN_PARENTHESIS CLOSE_PARENTHESIS compoundStatement		{ $$ = Return0(); }
+primitiveCompoundStatement: OPEN_CURLY function CLOSE_CURLY		{ $$ = Return0(); }
 
-shape: RECTANGLE OPEN_PARENTHESIS paramListRectangle CLOSE_PARENTHESIS compoundStatement		{ $$ = Return0(); }
-	| TRIANGLE OPEN_PARENTHESIS paramListTriangle CLOSE_PARENTHESIS compoundStatement			{ $$ = Return0(); }
-	| ELLIPSE OPEN_PARENTHESIS paramListEllipse CLOSE_PARENTHESIS compoundStatement				{ $$ = Return0(); }
+layout: TYPE_LAYOUT OPEN_PARENTHESIS CLOSE_PARENTHESIS layoutCompoundStatement		{ $$ = Return0(); }
+
+layoutCompoundStatement: OPEN_CURLY VARNAME functionList CLOSE_CURLY	{ $$ = Return0(); }
+	| OPEN_CURLY VARNAME CLOSE_CURLY									{ $$ = Return0(); }
+	| OPEN_CURLY shape functionList CLOSE_CURLY							{ $$ = Return0(); }
+	| OPEN_CURLY shape CLOSE_CURLY										{ $$ = Return0(); }
+	| OPEN_CURLY layout functionList CLOSE_CURLY						{ $$ = Return0(); }
+	| OPEN_CURLY layout CLOSE_CURLY										{ $$ = Return0(); }
+	| OPEN_CURLY primitive functionList CLOSE_CURLY						{ $$ = Return0(); }
+	| OPEN_CURLY primitive CLOSE_CURLY									{ $$ = Return0(); }
+
+functionList: COMMA function	{ $$ = Return0(); }
+	| COMMA VARNAME				{ $$ = Return0(); }
+
+shape: RECTANGLE OPEN_PARENTHESIS paramListRectangle CLOSE_PARENTHESIS 		{ $$ = Return0(); }
+	| TRIANGLE OPEN_PARENTHESIS paramListTriangle CLOSE_PARENTHESIS 		{ $$ = Return0(); }
+	| ELLIPSE OPEN_PARENTHESIS paramListEllipse CLOSE_PARENTHESIS 			{ $$ = Return0(); }
 
 /* Parameters */
 // For animations
@@ -316,18 +320,6 @@ typeFloat: TYPE_FLOAT			{ $$ = Return0(); }
 typeInteger: TYPE_INTEGER		{ $$ = Return0(); }
 
 typeBoolean: TYPE_BOOLEAN		{ $$ = Return0(); }
-
-typePrimitive: TRANSLATE_X 		{ $$ = Return0(); }
-	| TRANSLATE_Y 				{ $$ = Return0(); }
-	| OPACITY 					{ $$ = Return0(); }
-	| RECOLOR 					{ $$ = Return0(); }
-	| ROTATE 					{ $$ = Return0(); }
-	| RESIZE 					{ $$ = Return0(); }
-	| MORPH						{ $$ = Return0(); }
-
-typeShape: ELLIPSE 				{ $$ = Return0(); }
-	| RECTANGLE 				{ $$ = Return0(); }
-	| TRIANGLE 					{ $$ = Return0(); }
 
 typeColor: COLOR_HEX			{ $$ = Return0(); }
 
