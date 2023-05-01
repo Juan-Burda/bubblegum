@@ -21,7 +21,9 @@ digit			[0-9]
 endline			[(\r)?\n]
 whitespace		[ \f\n\r\t\v]
 letter          [a-zA-Z]
-hexcolor        [#[A-Fa-f0-9]{6}]
+hexcolor        #[A-Fa-f0-9]{6}
+float           [+-]?({digit}*[.])?{digit}+
+space           [ ]
 
 %%
 
@@ -105,6 +107,7 @@ hexcolor        [#[A-Fa-f0-9]{6}]
 "line-through"								{ return TextDecoPatternAction(yytext, LINE_THROUGH); }
 {hexcolor}                                  { return ColorHexPatternAction(yytext); }
 {digit}+									{ return IntegerPatternAction(yytext, yyleng); }
+{float}                                     { return FloatPatternAction(yytext, yyleng); }
 {letter}+									{ return VarnamePatternAction(yytext, yyleng); }
 
 {whitespace}								{ IgnoredPatternAction(yytext, yyleng); }

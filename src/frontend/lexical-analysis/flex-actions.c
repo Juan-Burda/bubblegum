@@ -31,7 +31,7 @@ void EndCommentPatternAction() {
 token LayoutPatternAction(const char * lexeme, const layout_t layout) {
 	LogDebug("LayoutPatternAction: '%s' ", lexeme);
 	yylval.layout = layout;
-	return LAYOUT;
+	return TYPE_LAYOUT;
 }
 
 /* Animation primitives */
@@ -292,7 +292,13 @@ token TextDecoPatternAction(const char * lexeme, const textdeco_t textdeco) {
 token BooleanPatternAction(const char * lexeme, const boolean_t boolean) {
 	LogDebug("BooleanPatternAction: '%s' ", lexeme);
 	yylval.boolean = boolean;
-	return TYPE_TEXT_DECORATION;
+	return TYPE_BOOLEAN;
+}
+
+token FloatPatternAction(const char * lexeme, const int length) {
+	LogDebug("FloatPatternAction: '%s' (length = %d).", lexeme, length);
+	yylval.floating = atof(lexeme);
+	return TYPE_FLOAT;
 }
 
 token IntegerPatternAction(const char * lexeme, const int length) {

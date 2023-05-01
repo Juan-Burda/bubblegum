@@ -74,6 +74,7 @@ token BooleanPatternAction(const char * lexeme, const boolean_t boolean);
 token FontStylePatternAction(const char * lexeme, const fontstyle_t fontstyle);
 token FontFamilyPatternAction(const char * lexeme, const fontfamily_t fontfamily);
 token TextDecoPatternAction(const char * lexeme, const textdeco_t textdeco);
+token FloatPatternAction(const char * lexeme, const int length);
 token IntegerPatternAction(const char * lexeme, const int length);
 token ColorHexPatternAction(const char * lexeme);
 
