@@ -1,0 +1,29 @@
+redSquare = Rectangle(height: 100, width: 100, fill-color: #939399)
+greenSquare = Rectangle(height: 100, fill-color: #838383)
+
+grayCircle = Ellipse(x-axis: 500, y-axis: 500, fill-color: #E0E0E0)
+
+squaresAnimation = Center() {
+  Horizontal() {
+      TranslateY(delay: 0, end-value: 100, loop: true, alternate: true) {
+        Rectangle(height: 100, width: 100, fill-color: #000000)
+      },
+      TranslateY(delay: 100, end-value: 100, loop: true, alternate: true) {
+        redSquare 
+      },
+      TranslateY(delay: 200, end-value: 100, loop: true, alternate: true) {
+        greenSquare 
+      }
+  }
+}
+
+circleAnimation = Center() { 
+  Opacity(duration: 200, delay: 100, loop: true, alpha: 0) {
+    grayCircle 
+  }
+} 
+
+Stack() {
+   circleAnimation,
+   squaresAnimation
+}

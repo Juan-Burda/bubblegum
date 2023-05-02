@@ -1,0 +1,29 @@
+
+translate = Horizontal() {
+    TranslateY(loop: true, delay: 0, alternate: true) {
+        Rectangle(height: 100, width: 100, fill-color: #ffffff)
+    },
+    Opacity(alpha: 0.4, loop: true, alternate: true, duration: 50) {
+        Ellipse(fill-color: #434343, border-width: 3, border-color: #929292)
+    },
+    Center() {
+        Rectangle(height: 10, width: 10)
+    }
+}
+
+translateB = Center() {
+    TranslateY(loop: true, delay: 0, alternate: true) {
+        Rectangle(height: 100, width: 100, fill-color: #ffffff)
+    },
+    Opacity(alpha: 0.4, loop: true, alternate: true, duration: 50) {
+        Ellipse(fill-color: #434343, border-width: 3, border-color: #929292)
+    },
+    Center() {
+        Rectangle(height: 10, width: 10)
+    }
+}
+
+Stack() {
+    translate,
+    translateB
+}

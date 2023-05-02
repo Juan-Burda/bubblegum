@@ -1,5 +1,0 @@
-Top() {
-    Recolor(end-color: #987aff, duration: 10, loop: true, alternate: true) {
-        Ellipse(x-axis: 10, y-axis: 10, border-color: #9475df)
-    }
-}

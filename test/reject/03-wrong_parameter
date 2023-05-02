@@ -1,0 +1,2 @@
+/* there is no delay parameter for shapes */
+Rectangle(delay: 10)

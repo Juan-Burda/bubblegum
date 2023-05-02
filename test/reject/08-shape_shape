@@ -1,0 +1,4 @@
+/* you cannot compose shapes */
+Rectangle() {
+    Rectangle()
+}

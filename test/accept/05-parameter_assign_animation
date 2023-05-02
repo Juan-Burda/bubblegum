@@ -1,0 +1,8 @@
+translateX = TranslateX(
+    delay: 10,
+    loop: true,
+    duration: 9,
+    alternate: false
+) { 
+    Ellipse(fill-color: #93aa11, border-width: 10) 
+}
