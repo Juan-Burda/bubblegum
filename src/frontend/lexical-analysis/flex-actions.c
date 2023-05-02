@@ -31,7 +31,7 @@ void EndCommentPatternAction() {
 token LayoutPatternAction(const char * lexeme, const layout_t layout) {
 	LogDebug("LayoutPatternAction: '%s' ", lexeme);
 	yylval.layout = layout;
-	return TYPE_LAYOUT;
+	return LAYOUT;
 }
 
 /* Animation primitives */
@@ -96,14 +96,14 @@ token ShapeTrianglePatternAction(const char * lexeme) {
 	return TRIANGLE;
 }
 
-/* Objects */
-token ObjectImagePatternAction(const char * lexeme) {
+/* Vectors */
+token VectorImagePatternAction(const char * lexeme) {
 	LogDebug("ObjectImagePatternAction: '%s' ", lexeme);
 	yylval.token = IMAGE;
 	return IMAGE;
 }
 
-token ObjectTextPatternAction(const char * lexeme) {
+token VectorTextPatternAction(const char * lexeme) {
 	LogDebug("ObjectTextPatternAction: '%s' ", lexeme);
 	yylval.token = TEXT;
 	return TEXT;
@@ -314,6 +314,14 @@ token ColorHexPatternAction(const char * lexeme) {
 }
 
 /* Others */
+token UrlPatternAction(const char * lexeme, const int length) {
+	LogDebug("UrlPatternAction: '%s' (length = %d).", lexeme, length);
+    char * url = (char *) calloc(length + 1, sizeof(char));
+    strncpy(url, lexeme, length);
+    yylval.string = url;
+	return TYPE_URL;
+}
+
 token VarnamePatternAction(const char * lexeme, const int length) {
 	LogDebug("VarnamePatternAction: '%s' (length = %d).", lexeme, length);
     char * varname = (char *) calloc(length + 1, sizeof(char));

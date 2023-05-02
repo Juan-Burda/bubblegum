@@ -39,9 +39,9 @@ token AnimationMorphPatternAction(const char * lexeme);
 token ShapeRectanglePatternAction(const char * lexeme);
 token ShapeEllipsePatternAction(const char * lexeme);
 token ShapeTrianglePatternAction(const char * lexeme);
-/* Objects */
-token ObjectImagePatternAction(const char * lexeme);
-token ObjectTextPatternAction(const char * lexeme);
+/* Vectors */
+token VectorImagePatternAction(const char * lexeme);
+token VectorTextPatternAction(const char * lexeme);
 /* Parameters */
 token ParameterAlternatePatternAction(const char * lexeme);
 token ParameterLoopPatternAction(const char * lexeme);
@@ -77,6 +77,7 @@ token TextDecoPatternAction(const char * lexeme, const textdeco_t textdeco);
 token FloatPatternAction(const char * lexeme, const int length);
 token IntegerPatternAction(const char * lexeme, const int length);
 token ColorHexPatternAction(const char * lexeme);
+token UrlPatternAction(const char * lexeme, const int length);
 
 /* Others */
 token VarnamePatternAction(const char * lexeme, const int length);

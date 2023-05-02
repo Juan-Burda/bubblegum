@@ -23,6 +23,7 @@ whitespace		[ \f\n\r\t\v]
 letter          [a-zA-Z]
 hexcolor        #[A-Fa-f0-9]{6}
 float           [+-]?({digit}*[.])?{digit}+
+url             https?:\/\/([a-zA-Z0-9$\-_.+!*'(),%;:@&=]+(?:\/[a-zA-Z0-9$\-_.+!*'(),%;:@&=]*)*(?:\?[a-zA-Z0-9$\-_.+!*'(),%;:@&=\/]*)?(?:#[a-zA-Z0-9$\-_.+!*'(),%;:@&=\/]*)?)
 
 %%
 
@@ -38,6 +39,7 @@ float           [+-]?({digit}*[.])?{digit}+
 ":"											{ return COLON; }
 ","											{ return COMMA; }
 "="											{ return ASSIGN; }
+"\""                                        { return DOUBLE_QUOTE; }
 
 "Center"									{ return LayoutPatternAction(yytext, CENTER); }
 "Top"									    { return LayoutPatternAction(yytext, TOP); }
@@ -61,8 +63,8 @@ float           [+-]?({digit}*[.])?{digit}+
 "Ellipse"	    							{ return ShapeEllipsePatternAction(yytext); }
 "Triangle"	    							{ return ShapeTrianglePatternAction(yytext); }
 
-"Image"	    							    { return ObjectImagePatternAction(yytext); }
-"Text"	    							    { return ObjectTextPatternAction(yytext); }
+"Image"	    							    { return VectorImagePatternAction(yytext); }
+"Text"	    							    { return VectorTextPatternAction(yytext); }
 
 "alternate"	    							{ return ParameterAlternatePatternAction(yytext); }
 "loop"	    							    { return ParameterLoopPatternAction(yytext); }
@@ -104,6 +106,7 @@ float           [+-]?({digit}*[.])?{digit}+
 "underline"								    { return TextDecoPatternAction(yytext, UNDERLINE); }
 "overline"								    { return TextDecoPatternAction(yytext, OVERLINE); }
 "line-through"								{ return TextDecoPatternAction(yytext, LINE_THROUGH); }
+{url}                                       { return UrlPatternAction(yytext, yyleng); }
 {hexcolor}                                  { return ColorHexPatternAction(yytext); }
 {digit}+									{ return IntegerPatternAction(yytext, yyleng); }
 {float}                                     { return FloatPatternAction(yytext, yyleng); }
