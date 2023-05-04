@@ -1,0 +1,7 @@
+redSquare = Rectangle(height: 50, width: 50, fill-color: #ff0000)
+yellowCircle = Ellipse(x-axis: 100, y-axis: 100, fill-color: #FFFF00)
+
+Stack() {
+    yellowCircle,
+    redSquare
+}
