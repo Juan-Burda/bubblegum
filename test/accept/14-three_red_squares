@@ -1,0 +1,25 @@
+redSquareOne = Rectangle(height: 20, width: 20, fill-color: #FF0000)
+
+redSquareTwo = Rectangle(height: 50, width: 50, fill-color: #FF0000)
+
+redSquareThree = Rectangle(height: 5, width: 5, fill-color: #FF0000)
+
+Center () {
+    Horizontal() {
+        TranslateY(delay: 0, end-value: -100, loop: true, alternate: true) {
+            TranslateX(delay: 0, end-value: 100, loop: true, alternate: true) {
+                redSquareOne
+            }
+        },
+        TranslateX(delay: 0, end-value: 100, loop: true, alternate: true) {
+            TranslateY(delay: 0, end-value: -100, loop: true, alternate: true) {
+                redSquareTwo
+            }
+        },
+        TranslateY(delay: 0, end-value: 0, loop: true, alternate: true) {
+            TranslateX(delay: 0, end-value: 100, loop: true, alternate: true) {
+                redSquareThree
+            }
+        }
+    }
+}
