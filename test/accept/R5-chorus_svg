@@ -1,0 +1,27 @@
+alien = Image(src: "https://images.com/alien.svg")
+
+
+Right(){
+    Top(){
+        Stack(){
+            Recolor(end-color: #4DC724, duration: 100, loop: true, alternate: true) {
+            TranslateX(end-value: 100, loop: true, alternate: true, delay: 6, duration: 100) {
+                alien
+            }
+        },
+        Recolor(end-color: #00FF00, duration: 100, loop: true, alternate: true) {
+            TranslateX(end-value: 100, loop: true, alternate: true, delay: 4, duration: 100) {
+                alien
+            }
+        },
+        Recolor(end-color: #46410E, duration: 100, loop: true, alternate: true) {
+            TranslateX(end-value: 100, loop: true, alternate: true, delay: 2, duration: 100) {
+                alien
+            }
+        },
+        TranslateX(end-value: 100, loop: true, alternate: true, duration: 100) {
+            alien
+        }   
+        }
+    }
+}

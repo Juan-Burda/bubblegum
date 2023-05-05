@@ -1,0 +1,9 @@
+png = Image(src: "https://images.com/eye.png")
+
+Left(){
+    Bottom(){
+        Opacity(alternate: true){
+            png
+        }
+    }
+}
