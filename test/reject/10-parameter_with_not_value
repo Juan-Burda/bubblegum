@@ -1,0 +1,4 @@
+/* Parameter (loop) with no value*/
+Morph(loop: ){
+    Ellipse(x-axis:50, y-axis:100)
+}

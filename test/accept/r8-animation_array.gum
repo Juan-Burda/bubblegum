@@ -1,0 +1,11 @@
+Horizontal() {
+    Rotate(loop: true){
+        Rectangle(height: 100, width: 200, fill-color: #2228C2)
+    },
+    Morph(duration: 200){
+        Triangle(base: 50, height: 200, fill-color: #D71743)
+    },
+    TranslateX(end-value: 50){
+        Ellipse(x-axis: 50, y-axis: 20, fill-color: #EAEA15)
+    }
+}
