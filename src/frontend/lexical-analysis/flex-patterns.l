@@ -23,6 +23,7 @@ whitespace		[ \f\n\r\t\v]
 letter          [a-zA-Z]
 hexcolor        #[A-Fa-f0-9]{6}
 float           [+-]?({digit}*[.])?{digit}+
+integer         [+-]?{digit}+
 url             https?:\/\/([a-zA-Z0-9$\-_.+!*'(),%;:@&=]+(?:\/[a-zA-Z0-9$\-_.+!*'(),%;:@&=]*)*(?:\?[a-zA-Z0-9$\-_.+!*'(),%;:@&=\/]*)?(?:#[a-zA-Z0-9$\-_.+!*'(),%;:@&=\/]*)?)
 
 %%
@@ -108,7 +109,7 @@ url             https?:\/\/([a-zA-Z0-9$\-_.+!*'(),%;:@&=]+(?:\/[a-zA-Z0-9$\-_.+!
 "line-through"								{ return TextDecoPatternAction(yytext, LINE_THROUGH); }
 {url}                                       { return UrlPatternAction(yytext, yyleng); }
 {hexcolor}                                  { return ColorHexPatternAction(yytext); }
-{digit}+									{ return IntegerPatternAction(yytext, yyleng); }
+{integer}									{ return IntegerPatternAction(yytext, yyleng); }
 {float}                                     { return FloatPatternAction(yytext, yyleng); }
 {letter}+									{ return VarnamePatternAction(yytext, yyleng); }
 
