@@ -7,6 +7,10 @@
 * de otras 2 expresiones.
 */
 typedef struct Expression Expression;
+typedef struct ParamListShapeNode ParamListShapeNode;
+typedef struct ParamListRectangleNode ParamListRectangleNode;
+typedef struct ParamListEllipseNode ParamListEllipseNode;
+typedef struct ParamListTriangleNode ParamListTriangleNode; 
 
 /**
 * Para cada no-terminal se define una nueva estructura que representa su tipo
@@ -52,5 +56,85 @@ struct Expression {
 typedef struct {
 	Expression * expression;
 } Program;
+
+typedef struct{
+	char * color;
+} TypeColorNode;
+
+typedef enum {
+	FILL_COLOR,
+	BORDER_COLOR,
+	BORDER_WITH,
+	ROTATION
+} ParamShapeType;
+
+typedef struct {
+	ParamShapeType ParamShapeType;
+	TypeColorNode * fillColor;
+	TypeColorNode * borderColor;
+	int borderWith;
+	int rotation;
+} ParamShapeNode;
+
+typedef enum{
+	EMPTY,
+	SHAPE,
+	RECTANGLE,
+	SHAPE_RECTANGLE_LIST,
+	RECTANGLE_RECTANGLE_LIST
+} ParamListRectangleType;
+
+typedef struct{
+	int height;
+	int width;
+} ParamRectangleNode;
+
+struct ParamListRectangleNode{
+	ParamListRectangleType paramListRectangleType;
+	ParamListRectangleNode * ParamListRectangleNode;
+	ParamShapeNode * ParamShapeNode;
+	ParamRectangleNode * paramRectangleNode;
+};
+
+typedef enum{
+	EMPTY,
+	SHAPE,
+	ELLIPSE,
+	SHAPE_ELLIPSE_LIST,
+	ELLIPSE_ELLIPSE_LIST
+} ParamListEllipseType;
+
+typedef struct{
+	int x_axis;
+	int y_axis;
+} ParamEllipseNode;
+
+struct ParamListEllipseNode{
+	ParamListEllipseType paramListEllipseType;
+	ParamListEllipseNode * ParamListEllipseNode;
+	ParamShapeNode * ParamShapeNode;
+	ParamEllipseNode * paramEllipseNode;
+};
+
+typedef enum{
+	EMPTY,
+	SHAPE,
+	TRIANGLE,
+	SHAPE_TRIANGLE_LIST,
+	TRIANGLE_TRIANGLE_LIST
+} ParamListTriangleType;
+
+typedef struct{
+	int height;
+	int base;
+} ParamTriangleNode;
+
+struct ParamListTriangleNode{
+	ParamListTriangleType paramListTriangleType;
+	ParamListTriangleNode * ParamListTriangleNode;
+	ParamShapeNode * ParamShapeNode;
+	ParamTriangleNode * paramTriangleNode;
+};
+
 
 #endif
