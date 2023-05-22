@@ -19,4 +19,36 @@ int Return0();
 // Constantes.
 int IntegerConstantGrammarAction(const int value);
 
+ParamListRectangleNode* EmptyParamListRectangleAction();
+ParamListRectangleNode* ParamShapeParamListRectangleAction(ParamShapeNode* , ParamListRectangleNode*);
+ParamListRectangleNode* ParamShapeRectangleAction(ParamShapeNode*);
+ParamListRectangleNode * ParamRectangleParamListRectangleAction(ParamRectangleNode*, ParamListRectangleNode*);
+ParamListRectangleNode * ParamRectangleAction(ParamRectangleNode*);
+
+ParamListEllipseNode* EmptyParamListEllipseAction();
+ParamListEllipseNode* ParamShapeParamListEllipseAction(ParamShapeNode* , ParamListEllipseNode*);
+ParamListEllipseNode* ParamShapeEllipseAction(ParamShapeNode*);
+ParamListEllipseNode * ParamEllipseParamListEllipseAction(ParamEllipseNode*, ParamListEllipseNode*);
+ParamListEllipseNode * ParamEllipseAction(ParamEllipseNode*);
+
+ParamListTriangleNode* EmptyParamListTriangleAction();
+ParamListTriangleNode* ParamShapeParamListTriangleAction(ParamShapeNode* , ParamListTriangleNode*);
+ParamListTriangleNode* ParamShapeTriangleAction(ParamShapeNode*);
+ParamListTriangleNode * ParamTriangleParamListTriangleAction(ParamTriangleNode*, ParamListTriangleNode*);
+ParamListTriangleNode * ParamTriangleAction(ParamTriangleNode*);
+
+ParamRectangleNode * HeightParamRectangleAction(int);
+ParamRectangleNode * WidthParamRectangleAction(int);
+
+ParamEllipseNode * XAxisParamEllipseAction(int);
+ParamEllipseNode * YAxisParamEllipseAction(int); 
+
+ParamTriangleNode * HeightParamTriangleAction(int);
+ParamTriangleNode * BaseParamTriangleAction(int);
+
+ParamShapeNode * FillColorParamShapeAction(TypeColorNode *);
+ParamShapeNode * BorderColorParamShapeAction(TypeColorNode *);
+ParamShapeNode * BorderWidthParamShapeAction(int width);
+ParamShapeNode * RotationParamShapeAction(int rotation);
+
 #endif
