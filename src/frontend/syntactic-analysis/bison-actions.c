@@ -422,3 +422,132 @@ ParamShapeNode * RotationParamShapeAction(int rotation){
 
 	return paramShapeNode;
 }
+
+/* Image actions*/
+
+ParamListImageNode * ParamListImageMultipleAction(ParamImageNode * paramImageNode, 
+    ParamListImageNode * paramListImageNode){
+	ParamListImageNode * paramListImageNode = (ParamListImageNode*)calloc(1,sizeof(ParamListImageNode));
+	paramListImageNode->paramImageNode=paramImageNode;
+	paramListImageNode->paramListImageNode = paramListImageNode;
+	return paramListImageNode;
+}
+
+ParamListImageNode * ParamListImageAction(ParamImageNode * paramImageNode){
+	ParamListImageNode * paramListImageNode = (ParamListImageNode*)calloc(1,sizeof(ParamListImageNode));
+	paramListImageNode->paramImageNode=paramImageNode;
+	paramListImageNode->paramListImageNode = NULL;
+	return paramListImageNode;
+}
+
+ParamImageNode * ParamImageAction(char * typeUrl){
+	ParamImageNode * paramImageNode = (ParamImageNode*)calloc(1,sizeof(ParamImageNode));
+	paramImageNode->typeUrl = typeUrl;
+	return paramImageNode;
+}
+
+/* Text parameters actions */
+
+ParamListTextNode * ParamListTextMultipleAction(ParamTextNode * paramTextNode, 
+	ParamListTextNode * paramListTextNode){
+	ParamListTextNode * paramListTextNode = (ParamListTextNode*)calloc(1,sizeof(ParamListTextNode));
+	paramListTextNode->paramTextNode = paramTextNode;
+	paramListTextNode->paramListTextNode = paramListTextNode;
+}
+ParamListTextNode * ParamListTextAction(ParamTextNode * paramTextNode){
+	ParamListTextNode * paramListTextNode = (ParamListTextNode*)calloc(1,sizeof(ParamListTextNode));
+	paramListTextNode->paramTextNode = paramTextNode;
+	paramListTextNode->paramListTextNode = NULL;
+}
+
+ParamTextNode * ParamFontWidthAction(int fontWidth){
+	ParamTextNode * paramTextNode = (ParamTextNode*)calloc(1,sizeof(ParamTextNode));
+	paramTextNode->type = FONT_WIDTH;
+	paramTextNode->fontWidth = fontWidth;
+	paramTextNode->fontFamily = NULL;
+	paramTextNode->fontWeight = NULL;
+	paramTextNode->fontStyle = NULL;
+	paramTextNode->textDecoration = NULL;
+	paramTextNode->paramTypeColorNode = NULL;
+	return paramTextNode;
+}
+
+ParamTextNode * ParamFontFamilyAction(fontfamily_t fontFamily){
+	ParamTextNode * paramTextNode = (ParamTextNode*)calloc(1,sizeof(ParamTextNode));
+	paramTextNode->type = FONT_FAMILY;
+	paramTextNode->fontWidth = NULL;
+	paramTextNode->fontFamily = fontFamily;
+	paramTextNode->fontWeight = NULL;
+	paramTextNode->fontStyle = NULL;
+	paramTextNode->textDecoration = NULL;
+	paramTextNode->paramTypeColorNode = NULL;
+	return paramTextNode;
+}
+
+ParamTextNode * ParamFontWeightAction(int fontWeight){
+	ParamTextNode * paramTextNode = (ParamTextNode*)calloc(1,sizeof(ParamTextNode));
+	paramTextNode->type = FONT_WEIGHT;
+	paramTextNode->fontWidth = NULL;
+	paramTextNode->fontFamily = NULL;
+	paramTextNode->fontWeight = fontWeight;
+	paramTextNode->fontStyle = NULL;
+	paramTextNode->textDecoration = NULL;
+	paramTextNode->paramTypeColorNode = NULL;
+	return paramTextNode;
+}
+
+ParamTextNode * ParamFontStyleAction(fontstyle_t fontStyle){
+	ParamTextNode * paramTextNode = (ParamTextNode*)calloc(1,sizeof(ParamTextNode));
+	paramTextNode->type = FONT_STYLE;
+	paramTextNode->fontWidth = NULL;
+	paramTextNode->fontFamily = NULL;
+	paramTextNode->fontWeight = NULL;
+	paramTextNode->fontStyle = fontStyle;
+	paramTextNode->textDecoration = NULL;
+	paramTextNode->paramTypeColorNode = NULL;
+	return paramTextNode;
+}
+
+ParamTextNode * ParamTextDecorationAction(textdeco_t textDecoration){
+	ParamTextNode * paramTextNode = (ParamTextNode*)calloc(1,sizeof(ParamTextNode));
+	paramTextNode->type = TEXT_DECORATION;
+	paramTextNode->fontWidth = NULL;
+	paramTextNode->fontFamily = NULL;
+	paramTextNode->fontWeight = NULL;
+	paramTextNode->fontStyle = NULL;
+	paramTextNode->textDecoration = textDecoration;
+	paramTextNode->paramTypeColorNode = NULL;
+	return paramTextNode;
+}
+
+ParamTextNode * ParamBackgroundColorAction(ParamTypeColorNode * paramTypeColorNode){
+	ParamTextNode * paramTextNode = (ParamTextNode*)calloc(1,sizeof(ParamTextNode));
+	paramTextNode->type = BACKGROUND_COLOR;
+	paramTextNode->fontWidth = NULL;
+	paramTextNode->fontFamily = NULL;
+	paramTextNode->fontWeight = NULL;
+	paramTextNode->fontStyle = NULL;
+	paramTextNode->textDecoration = NULL;
+	paramTextNode->paramTypeColorNode = paramTypeColorNode;
+	return paramTextNode;
+}
+
+/* Data types actions*/
+
+ParamTypeColorNode * ParamTypeColorAction(char * typeColor){
+	ParamTypeColorNode * paramTypeColorNode = (ParamTypeColorNode*)calloc(1,sizeof(ParamTypeColorNode));
+	paramTypeColorNode->typeColor = typeColor;
+	return paramTypeColorNode;
+}
+
+ParamFloatNode * ParamTypeFloatMultipleAction(float floating, ParamFloatNode * paramFloatNode){
+	ParamFloatNode * paramFloatNode = (ParamFloatNode*)calloc(1,sizeof(ParamFloatNode));
+	paramFloatNode->floating = floating;
+	paramFloatNode->paramFloatNode = paramFloatNode;
+}
+
+ParamFloatNode * ParamTypeFloatAction(float floating){
+	ParamFloatNode * paramFloatNode = (ParamFloatNode*)calloc(1,sizeof(ParamFloatNode));
+	paramFloatNode->floating = floating;
+	paramFloatNode->paramFloatNode = NULL;
+}

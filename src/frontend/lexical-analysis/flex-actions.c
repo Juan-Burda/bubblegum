@@ -313,6 +313,18 @@ token ColorHexPatternAction(const char * lexeme) {
 	return COLOR_HEX;
 }
 
+/*
+TO-DO: check if this is correct
+token ColorHexPatternAction(const char * lexeme, const int length) {
+	LogDebug("ColorHexPatternAction: '%s' (length = %d).", lexeme, length);
+    char * text = (char *) calloc(length + 1, sizeof(char));
+    strncpy(text, lexeme, length);
+    yylval.token = text;
+    free(text);
+    return COLOR_HEX;
+}
+*/
+
 /* Others */
 token UrlPatternAction(const char * lexeme, const int length) {
 	LogDebug("UrlPatternAction: '%s' (length = %d).", lexeme, length);

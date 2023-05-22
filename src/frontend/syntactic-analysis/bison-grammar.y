@@ -55,7 +55,7 @@
 	ParamTriangleNode* paramTriangle;
 
 	int paramListText;
-	int paramText;
+	paramTextNode * paramText;
 	int paramListImage;
 	int paramImage;
 
@@ -324,27 +324,26 @@ paramTriangle: PARAM_HEIGHT COLON TYPE_INTEGER		{ $$ = HeightParamTriangleAction
 
 // For vectors
 paramListImage: /* empty */					{ $$ = Return0(); }
-	| paramImage COMMA paramListImage		{ $$ = Return0(); }
-	| paramImage							{ $$ = Return0(); }
+	| paramImage COMMA paramListImage		{ $$ = ParamListImageMultipleAction($1, $3); }
+	| paramImage							{ $$ = ParamListImageAction($1); }
 
-paramImage: PARAM_SRC COLON DOUBLE_QUOTE TYPE_URL DOUBLE_QUOTE { $$ = Return0(); }
+paramImage: PARAM_SRC COLON DOUBLE_QUOTE TYPE_URL DOUBLE_QUOTE { $$ = ParamImageAction($4); }
 
 paramListText: /* empty */					{ $$ = Return0(); }
-	| paramText COMMA paramListText			{ $$ = Return0(); }
-	| paramText								{ $$ = Return0(); }
+	| paramText COMMA paramListText			{ $$ = ParamListTextMultipleAction($1, $3); }
+	| paramText								{ $$ = ParamListTextAction($1); }
 
-paramText: PARAM_FONT_WIDTH COLON TYPE_INTEGER 				{ $$ = Return0(); }
-	| PARAM_FONT_FAMILY COLON TYPE_FONT_FAMILY 				{ $$ = Return0(); }
-	| PARAM_FONT_WEIGHT COLON TYPE_INTEGER 					{ $$ = Return0(); }
-	| PARAM_FONT_STYLE COLON TYPE_FONT_STYLE 				{ $$ = Return0(); }
-	| PARAM_TEXT_DECORATION COLON TYPE_TEXT_DECORATION 		{ $$ = Return0(); }
-	| PARAM_BACKGROUND_COLOR COLON typeColor 				{ $$ = Return0(); }
-
+paramText: PARAM_FONT_WIDTH COLON TYPE_INTEGER 				{ $$ = ParamFontWidthAction($3); }
+	| PARAM_FONT_FAMILY COLON TYPE_FONT_FAMILY 				{ $$ = ParamFontFamilyAction($3); }
+	| PARAM_FONT_WEIGHT COLON TYPE_INTEGER 					{ $$ = ParamFontWeightAction($3); }
+	| PARAM_FONT_STYLE COLON TYPE_FONT_STYLE 				{ $$ = ParamFontStyleAction($3); }
+	| PARAM_TEXT_DECORATION COLON TYPE_TEXT_DECORATION 		{ $$ = ParamTextDecorationAction($3); }
+	| PARAM_BACKGROUND_COLOR COLON typeColor 				{ $$ = ParamBackgroundColorAction($3); }
 
 /* Data types */
-typeColor: COLOR_HEX			{ $$ = Return0(); }
+typeColor: COLOR_HEX			{ $$ = ParamTypeColorAction($1); }
 
-typePoints: TYPE_FLOAT typePoints 		{ $$ = Return0(); }
-	| TYPE_FLOAT 						{ $$ = Return0(); }
+typePoints: TYPE_FLOAT typePoints 		{ $$ = ParamTypeFloatMultipleAction($1, $2); }
+	| TYPE_FLOAT 						{ $$ = ParamTypeFloatAction($1); }
 
 %%

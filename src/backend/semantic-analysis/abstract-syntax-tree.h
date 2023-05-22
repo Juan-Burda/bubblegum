@@ -1,6 +1,9 @@
 #ifndef ABSTRACT_SYNTAX_TREE_HEADER
 #define ABSTRACT_SYNTAX_TREE_HEADER
 
+//TO-DO: check if this is correct
+#include "../data-types.h"
+
 /**
 * Se realiza este tipo de definiciones cuando el tipo de dato debe
 * auto-referenciarse, como es el caso de una "Expression", que está compuesta
@@ -136,5 +139,52 @@ struct ParamListTriangleNode{
 	ParamTriangleNode * paramTriangleNode;
 };
 
+/* Image node */
+
+typedef struct{
+	char * typeUrl
+} ParamImageNode;
+
+typedef struct{
+	ParamImageNode * paramImageNode;
+	ParamListImageNode * paramListImageNode;
+} ParamListImageNode;
+
+/* Text parameters nodes */
+
+typedef enum {
+	FONT_WIDTH,
+	FONT_FAMILY,
+	FONT_WEIGHT,
+	FONT_STYLE,
+	TEXT_DECORATION,
+	BACKGROUND_COLOR
+} ParamTextType; 
+
+typedef struct{
+	ParamTextType type;
+	int fontWidth;
+	fontfamily_t fontFamily;
+	int fontWeight;
+	fontstyle_t fontStyle;
+	textdeco_t textDecoration;
+	ParamTypeColorNode * paramTypeColorNode;
+} ParamTextNode;
+
+typedef struct {
+	ParamTextNode * paramTextNode;
+	ParamListTextNode * paramListTextNode;
+} ParamListTextNode;
+
+/* Data type nodes */
+
+typedef struct {
+	char * typeColor;
+} ParamTypeColorNode;
+
+typedef struct {
+	float floating;
+	ParamFloatNode paramFloatNode;
+} ParamFloatNode;
 
 #endif

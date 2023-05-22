@@ -3,6 +3,8 @@
 
 #include "../../backend/support/shared.h"
 #include "../../backend/semantic-analysis/abstract-syntax-tree.h"
+// TO-DO: check if this is correct
+#include "../data-types.h"
 
 /**
  * Se definen las acciones a ejecutar sobre cada regla de producción de la
@@ -50,5 +52,29 @@ ParamShapeNode * FillColorParamShapeAction(TypeColorNode *);
 ParamShapeNode * BorderColorParamShapeAction(TypeColorNode *);
 ParamShapeNode * BorderWidthParamShapeAction(int width);
 ParamShapeNode * RotationParamShapeAction(int rotation);
+
+/* Image actions */
+
+ParamListImageNode * ParamListImageMultipleAction(ParamImageNode * paramImageNode, ParamListImageNode * paramListImageNode);
+ParamListImageNode * ParamListImageAction(ParamImageNode * paramImageNode);
+ParamImageNode * ParamImageAction(char * typeUrl);
+
+/* Text parameters actions */
+
+ParamListTextNode * ParamListTextMultipleAction(ParamTextNode * paramTextNode, ParamListTextNode * paramListTextNode);
+ParamListTextNode * ParamListTextAction(ParamTextNode * paramTextNode);
+
+ParamTextNode * ParamFontWidthAction(int fontWidth);
+ParamTextNode * ParamFontFamilyAction(fontfamily_t fontFamily);
+ParamTextNode * ParamFontWeightAction(int fontWeight);
+ParamTextNode * ParamFontStyleAction(fontstyle_t fontStyle);
+ParamTextNode * ParamTextDecorationAction(textdeco_t textDecoration);
+ParamTextNode * ParamBackgroundColorAction(ParamTypeColorNode * paramTextValueNode);
+
+/* Data types actions*/
+
+ParamTypeColorNode * ParamTypeColorAction(char * typeColor);
+ParamFloatNode * ParamTypeFloatMultipleAction(float floating, ParamFloatNode * paramFloatNode);
+ParamFloatNode * ParamTypeFloatAction(float floating);
 
 #endif
