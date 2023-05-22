@@ -46,20 +46,20 @@
 	int paramListRecolor;
 	int paramRecolor;
 
-	int paramShape;
-	int paramListRectangle;
-	int paramRectangle;
-	int paramListEllipse;
-	int paramEllipse;
-	int paramListTriangle;
-	int paramTriangle;
+	ParamShapeNode* paramShape;
+	ParamListRectangleNode* paramListRectangle;
+	ParamRectangleNode* paramRectangle;
+	ParamListEllipseNode* paramListEllipse;
+	ParamEllipseNode* paramEllipse;
+	ParamListTriangleNode* paramListTriangle;
+	ParamTriangleNode* paramTriangle;
 
 	int paramListText;
 	int paramText;
 	int paramListImage;
 	int paramImage;
 
-	int typeColor;
+	TypeColorNode* typeColor;
 	int typePoints;
 
 	// Terminales.
@@ -290,37 +290,37 @@ paramListRecolor: /* empty */						{ $$ = Return0(); }
 paramRecolor: PARAM_END_COLOR COLON typeColor		{ $$ = Return0(); }
 
 // For shapes
-paramShape: PARAM_FILL_COLOR COLON typeColor		{ $$ = Return0(); }
-	| PARAM_BORDER_COLOR COLON typeColor			{ $$ = Return0(); }
-	| PARAM_BORDER_WIDTH COLON TYPE_INTEGER			{ $$ = Return0(); }
-	| PARAM_ROTATION COLON TYPE_INTEGER				{ $$ = Return0(); }
+paramShape: PARAM_FILL_COLOR COLON typeColor		{ $$ = FillColorParamShapeAction($3); }
+	| PARAM_BORDER_COLOR COLON typeColor			{ $$ = BorderColorParamShapeAction($3); }
+	| PARAM_BORDER_WIDTH COLON TYPE_INTEGER			{ $$ = BorderWidthParamShapeAction($3); }
+	| PARAM_ROTATION COLON TYPE_INTEGER				{ $$ = RotationParamShapeAction($3); }
 
-paramListRectangle: /* empty */						{ $$ = Return0(); }
-	| paramShape COMMA paramListRectangle			{ $$ = Return0(); }
-	| paramShape									{ $$ = Return0(); }
-	| paramRectangle COMMA paramListRectangle		{ $$ = Return0(); }
-	| paramRectangle								{ $$ = Return0(); }
+paramListRectangle: /* empty */						{ $$ = EmptyParamListRectangleAction(); }
+	| paramShape COMMA paramListRectangle			{ $$ = ParamShapeParamListRectangleAction($1,$3); }
+	| paramShape									{ $$ = ParamShapeRectangleAction($1); }
+	| paramRectangle COMMA paramListRectangle		{ $$ = ParamRectangleParamListRectangleAction($1,$3);; }
+	| paramRectangle								{ $$ = ParamRectangleAction($1); }
 
-paramRectangle: PARAM_HEIGHT COLON TYPE_INTEGER		{ $$ = Return0(); }
-	| PARAM_WIDTH COLON TYPE_INTEGER					{ $$ = Return0(); }
+paramRectangle: PARAM_HEIGHT COLON TYPE_INTEGER		{ $$ = HeightParamRectangleAction($3); }
+	| PARAM_WIDTH COLON TYPE_INTEGER				{ $$ = WidthParamRectangleAction($3); }
 
-paramListEllipse: /* empty */						{ $$ = Return0(); }
-	| paramShape COMMA paramListEllipse				{ $$ = Return0(); }
-	| paramShape									{ $$ = Return0(); }
-	| paramEllipse COMMA paramListEllipse			{ $$ = Return0(); }
-	| paramEllipse									{ $$ = Return0(); }
+paramListEllipse: /* empty */						{ $$ = EmptyParamListEllipseAction(); }
+	| paramShape COMMA paramListEllipse				{ $$ = ParamShapeParamListEllipseAction($1,$3);}
+	| paramShape									{ $$ = ParamShapeEllipseAction($1); }
+	| paramEllipse COMMA paramListEllipse			{ $$ = ParamEllipseParamListEllipseAction($1,$3); }
+	| paramEllipse									{ $$ = ParamEllipseAction($1); }
 
-paramEllipse: PARAM_X_AXIS COLON TYPE_INTEGER		{ $$ = Return0(); }
-	| PARAM_Y_AXIS COLON TYPE_INTEGER				{ $$ = Return0(); }
+paramEllipse: PARAM_X_AXIS COLON TYPE_INTEGER		{ $$ = XAxisParamEllipseAction($3); }
+	| PARAM_Y_AXIS COLON TYPE_INTEGER				{ $$ = YAxisParamEllipseAction($3); }
 
-paramListTriangle: /* empty */						{ $$ = Return0(); }
-	| paramShape COMMA paramListTriangle			{ $$ = Return0(); }
-	| paramShape									{ $$ = Return0(); }
-	| paramTriangle COMMA paramListTriangle			{ $$ = Return0(); }
-	| paramTriangle									{ $$ = Return0(); }
+paramListTriangle: /* empty */						{ $$ = EmptyParamListTriangleAction(); }
+	| paramShape COMMA paramListTriangle			{ $$ = ParamShapeParamListTriangleAction($1,$3); }
+	| paramShape									{ $$ = ParamShapeTriangleAction($1); }
+	| paramTriangle COMMA paramListTriangle			{ $$ = ParamTriangleParamListTriangleAction($1,$3); }
+	| paramTriangle									{ $$ = ParamTriangleAction($1); }
 
-paramTriangle: PARAM_HEIGHT COLON TYPE_INTEGER		{ $$ = Return0(); }
-	| PARAM_BASE COLON TYPE_INTEGER					{ $$ = Return0(); }
+paramTriangle: PARAM_HEIGHT COLON TYPE_INTEGER		{ $$ = HeightParamTriangleAction($3); }
+	| PARAM_BASE COLON TYPE_INTEGER					{ $$ = BaseParamTriangleAction($3); }
 
 // For vectors
 paramListImage: /* empty */					{ $$ = Return0(); }
