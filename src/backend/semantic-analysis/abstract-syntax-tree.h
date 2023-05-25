@@ -2,14 +2,13 @@
 #define ABSTRACT_SYNTAX_TREE_HEADER
 
 //TO-DO: check if this is correct
-#include "../data-types.h"
+#include "../../frontend/data-types.h"
 
 /**
 * Se realiza este tipo de definiciones cuando el tipo de dato debe
 * auto-referenciarse, como es el caso de una "Expression", que está compuesta
 * de otras 2 expresiones.
 */
-typedef struct Expression Expression;
 typedef struct ParamListShapeNode ParamListShapeNode;
 typedef struct ParamListRectangleNode ParamListRectangleNode;
 typedef struct ParamListEllipseNode ParamListEllipseNode;
@@ -32,115 +31,100 @@ typedef struct {
 * De este modo, al recorrer el AST, es posible determinar qué nodos hijos
 * posee según el valor de este enumerado.
 */
-typedef enum {
-	EXPRESSION,
-	CONSTANT
-} FactorType;
 
-typedef struct {
-	FactorType type;
-	Expression * expression;
-} Factor;
+/* Parameters */
+// For animations
+// TODO
 
-typedef enum {
-	ADDITION,
-	SUBTRACTION,
-	MULTIPLICATION,
-	DIVISION,
-	FACTOR
-} ExpressionType;
-
-struct Expression {
-	ExpressionType type;
-	Expression * leftExpression;
-	Expression * rightExpression;
-};
-
-typedef struct {
-	Expression * expression;
-} Program;
-
-typedef struct{
-	char * color;
-} TypeColorNode;
-
+// For shapes
 typedef enum {
 	FILL_COLOR,
 	BORDER_COLOR,
-	BORDER_WITH,
+	BORDER_WIDTH,
 	ROTATION
 } ParamShapeType;
-
 typedef struct {
-	ParamShapeType ParamShapeType;
-	TypeColorNode * fillColor;
-	TypeColorNode * borderColor;
-	int borderWith;
+	ParamShapeType type;
+	ParamTypeColorNode * fillColor;
+	ParamTypeColorNode * borderColor;
+	int borderWidth;
 	int rotation;
 } ParamShapeNode;
 
-typedef enum{
-	EMPTY,
-	SHAPE,
-	RECTANGLE,
-	SHAPE_RECTANGLE_LIST,
-	RECTANGLE_RECTANGLE_LIST
+typedef enum {
+	RL_EMPTY,
+	RL_SHAPE,
+	RL_RECTANGLE,
+	RL_SHAPE_RECTANGLE_LIST,
+	RL_RECTANGLE_RECTANGLE_LIST
 } ParamListRectangleType;
-
-typedef struct{
-	int height;
-	int width;
-} ParamRectangleNode;
-
-struct ParamListRectangleNode{
+typedef struct {
 	ParamListRectangleType paramListRectangleType;
 	ParamListRectangleNode * ParamListRectangleNode;
 	ParamShapeNode * ParamShapeNode;
 	ParamRectangleNode * paramRectangleNode;
-};
+} ParamListRectangleNode;
 
-typedef enum{
-	EMPTY,
-	SHAPE,
-	ELLIPSE,
-	SHAPE_ELLIPSE_LIST,
-	ELLIPSE_ELLIPSE_LIST
+typedef enum {
+	RT_HEIGHT,	// rectangle type height
+	RT_WIDTH	// rectangle type width
+} ParamRectangleType;
+typedef struct {
+	ParamRectangleType type;
+	int height;
+	int width;
+} ParamRectangleNode;
+
+typedef enum {
+	EL_EMPTY,
+	EL_SHAPE,
+	EL_ELLIPSE,
+	EL_SHAPE_ELLIPSE_LIST,
+	EL_ELLIPSE_ELLIPSE_LIST
 } ParamListEllipseType;
-
-typedef struct{
-	int x_axis;
-	int y_axis;
-} ParamEllipseNode;
-
-struct ParamListEllipseNode{
+typedef struct {
 	ParamListEllipseType paramListEllipseType;
 	ParamListEllipseNode * ParamListEllipseNode;
 	ParamShapeNode * ParamShapeNode;
 	ParamEllipseNode * paramEllipseNode;
-};
+} ParamListEllipseNode;
+
+typedef enum {
+	ET_X_AXIS,	// ellipse type x-axis
+	ET_Y_AXIS	// ellipse type y-axis
+} ParamEllipseType;
+typedef struct {
+	ParamEllipseType type;
+	int x_axis;
+	int y_axis;
+} ParamEllipseNode;
 
 typedef enum{
-	EMPTY,
+	EMPTY_TRIANGLE_LIST,
 	SHAPE,
 	TRIANGLE,
 	SHAPE_TRIANGLE_LIST,
 	TRIANGLE_TRIANGLE_LIST
 } ParamListTriangleType;
-
-typedef struct{
-	int height;
-	int base;
-} ParamTriangleNode;
-
-struct ParamListTriangleNode{
+typedef struct {
 	ParamListTriangleType paramListTriangleType;
 	ParamListTriangleNode * ParamListTriangleNode;
 	ParamShapeNode * ParamShapeNode;
 	ParamTriangleNode * paramTriangleNode;
-};
+} ParamListTriangleNode;
 
-/* Image node */
+typedef enum {
+	TT_HEIGHT,	// triangle type height
+	TT_BASE		// triangle type base
+} ParamTriangleType;
+typedef struct{
+	ParamTriangleType type;
+	int height;
+	int base;
+} ParamTriangleNode;
 
+/* Vector nodes */
+// For images
 typedef struct{
 	char * typeUrl
 } ParamImageNode;
@@ -150,8 +134,7 @@ typedef struct{
 	ParamListImageNode * paramListImageNode;
 } ParamListImageNode;
 
-/* Text parameters nodes */
-
+// For text
 typedef enum {
 	FONT_WIDTH,
 	FONT_FAMILY,
@@ -160,7 +143,6 @@ typedef enum {
 	TEXT_DECORATION,
 	BACKGROUND_COLOR
 } ParamTextType; 
-
 typedef struct{
 	ParamTextType type;
 	int fontWidth;
@@ -177,7 +159,6 @@ typedef struct {
 } ParamListTextNode;
 
 /* Data type nodes */
-
 typedef struct {
 	char * typeColor;
 } ParamTypeColorNode;

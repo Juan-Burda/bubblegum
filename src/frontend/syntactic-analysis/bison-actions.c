@@ -57,14 +57,27 @@ int IntegerConstantGrammarAction(const int value) {
 	return value;
 }
 
-ParamListRectangleNode* EmptyParamListRectangleAction(){
+ParamShapeNode * ParamShapeAction(ParamShapeType type, ParamTypeColorNode * fillColor, ParamTypeColorNode * borderColor, int borderWidth, int rotation) {
+	LogDebug("\tParamShapeAction");
 
-	LogDebug("\tEmptyParamListRectangleAction");
+	ParamShapeNode * paramShapeNode = (ParamShapeNode*) calloc(1,sizeof(ParamShapeNode));
+
+	paramShapeNode->type = type;
+	paramShapeNode->fillColor = fillColor;
+	paramShapeNode->borderColor = borderColor;
+	paramShapeNode->borderWidth = borderWidth;
+	paramShapeNode->rotation = rotation;
+
+	return paramShapeNode;
+}
+
+ParamListRectangleNode* ParamListRectangleEmptyAction() {
+	LogDebug("\tParamListRectangleEmptyAction");
 
 	ParamListRectangleNode * paramListRectangleNode = 
 	(ParamListRectangleNode*)calloc(1,sizeof(ParamListRectangleNode));
 
-	paramListRectangleNode->paramListRectangleType = EMPTY;
+	paramListRectangleNode->paramListRectangleType = RL_EMPTY;
 	paramListRectangleNode->ParamListRectangleNode = NULL;
 	paramListRectangleNode->paramRectangleNode = NULL;
 	paramListRectangleNode->ParamShapeNode = NULL;
@@ -72,14 +85,13 @@ ParamListRectangleNode* EmptyParamListRectangleAction(){
 	return paramListRectangleNode;
 }
 
-ParamListRectangleNode* ParamShapeParamListRectangleAction(ParamShapeNode* paramShape , ParamListRectangleNode* paramListRectangle){
-	
-	LogDebug("\tParamShapeParamListRectangleAction");
+ParamListRectangleNode* ParamListRectangleAddParamShapeAction(ParamShapeNode* paramShape , ParamListRectangleNode* paramListRectangle) {
+	LogDebug("\tParamListRectangleAddParamShapeAction");
 
 	ParamListRectangleNode * paramListRectangleNode = 
 	(ParamListRectangleNode*)calloc(1,sizeof(ParamListRectangleNode));
 
-	paramListRectangleNode->paramListRectangleType = SHAPE_RECTANGLE_LIST;
+	paramListRectangleNode->paramListRectangleType = RL_SHAPE_RECTANGLE_LIST;
 	paramListRectangleNode->ParamListRectangleNode = paramListRectangle;
 	paramListRectangleNode->paramRectangleNode = NULL;
 	paramListRectangleNode->ParamShapeNode = paramShape;
@@ -88,8 +100,8 @@ ParamListRectangleNode* ParamShapeParamListRectangleAction(ParamShapeNode* param
 
 }
 
-ParamListRectangleNode* ParamShapeRectangleAction(ParamShapeNode* paramShape){
-	LogDebug("\tParamShapeParamListRectangleAction");
+ParamListRectangleNode* ParamListRectangleAddParamShapeAndEndAction(ParamShapeNode* paramShape) {
+	LogDebug("\tParamListRectangleAddParamShapeAndEndAction");
 
 	ParamListRectangleNode * paramListRectangleNode = 
 	(ParamListRectangleNode*)calloc(1,sizeof(ParamListRectangleNode));
@@ -102,14 +114,13 @@ ParamListRectangleNode* ParamShapeRectangleAction(ParamShapeNode* paramShape){
 	return paramListRectangleNode;
 }
 
-ParamListRectangleNode * ParamRectangleParamListRectangleAction(ParamRectangleNode* paramRectangle, ParamListRectangleNode*  paramListRectangle){
-	
-	LogDebug("\tParamShapeParamListRectangleAction");
+ParamListRectangleNode * ParamListRectangleAddParamRectangleAction(ParamRectangleNode* paramRectangle, ParamListRectangleNode*  paramListRectangle) {
+	LogDebug("\tParamListRectangleAddParamRectangleAction");
 
 	ParamListRectangleNode * paramListRectangleNode = 
 	(ParamListRectangleNode*)calloc(1,sizeof(ParamListRectangleNode));
 
-	paramListRectangleNode->paramListRectangleType = RECTANGLE_RECTANGLE_LIST;
+	paramListRectangleNode->paramListRectangleType = RL_RECTANGLE_RECTANGLE_LIST;
 	paramListRectangleNode->ParamListRectangleNode = paramListRectangle;
 	paramListRectangleNode->paramRectangleNode =paramRectangle;
 	paramListRectangleNode->ParamShapeNode = NULL;
@@ -117,13 +128,13 @@ ParamListRectangleNode * ParamRectangleParamListRectangleAction(ParamRectangleNo
 	return paramListRectangleNode;
 }
 
-ParamListRectangleNode * ParamRectangleAction(ParamRectangleNode* paramRectangle){
-		LogDebug("\tParamShapeParamListRectangleAction");
+ParamListRectangleNode * ParamListRectangleAddParamRectangleAndEndAction(ParamRectangleNode* paramRectangle) {
+	LogDebug("\tParamListRectangleAddParamRectangleAndEndAction");
 
 	ParamListRectangleNode * paramListRectangleNode = 
 	(ParamListRectangleNode*)calloc(1,sizeof(ParamListRectangleNode));
 
-	paramListRectangleNode->paramListRectangleType = RECTANGLE;
+	paramListRectangleNode->paramListRectangleType = RL_RECTANGLE;
 	paramListRectangleNode->ParamListRectangleNode = NULL;
 	paramListRectangleNode->paramRectangleNode =paramRectangle;
 	paramListRectangleNode->ParamShapeNode = NULL;
@@ -131,14 +142,25 @@ ParamListRectangleNode * ParamRectangleAction(ParamRectangleNode* paramRectangle
 	return paramListRectangleNode;
 }
 
-ParamListEllipseNode* EmptyParamListEllipseAction(){
+ParamRectangleNode * ParamRectangleAction(ParamRectangleType type, int height, int width) {
+	LogDebug("\tParamRectangleAction");
 
-	LogDebug("\tEmptyParamListEllipseAction");
+	ParamRectangleNode * paramRectangleNode = (ParamRectangleNode*)calloc(1,sizeof(ParamRectangleNode));
+
+	paramRectangleNode->type = type;
+	paramRectangleNode->height = height;
+	paramRectangleNode->width = width;
+
+	return paramRectangleNode;
+}
+
+ParamListEllipseNode* ParamListEllipseEmptyAction() {
+	LogDebug("\tParamListEllipseEmptyAction");
 
 	ParamListEllipseNode * paramListEllipseNode = 
 	(ParamListEllipseNode*)calloc(1,sizeof(ParamListEllipseNode));
 
-	paramListEllipseNode->paramListEllipseType = EMPTY;
+	paramListEllipseNode->paramListEllipseType = EL_EMPTY;
 	paramListEllipseNode->ParamListEllipseNode = NULL;
 	paramListEllipseNode->paramEllipseNode = NULL;
 	paramListEllipseNode->ParamShapeNode = NULL;
@@ -146,24 +168,22 @@ ParamListEllipseNode* EmptyParamListEllipseAction(){
 	return paramListEllipseNode;
 }
 
-ParamListEllipseNode* ParamShapeParamListEllipseAction(ParamShapeNode* paramShape , ParamListEllipseNode* paramListEllipse){
-	
-	LogDebug("\tParamShapeParamListEllipseAction");
+ParamListEllipseNode* ParamListEllipseAddParamShapeAction(ParamShapeNode* paramShape , ParamListEllipseNode* paramListEllipse) {
+	LogDebug("\tParamListEllipseAddParamShapeAction");
 
 	ParamListEllipseNode * paramListEllipseNode = 
 	(ParamListEllipseNode*)calloc(1,sizeof(ParamListEllipseNode));
 
-	paramListEllipseNode->paramListEllipseType = SHAPE_ELLIPSE_LIST;
+	paramListEllipseNode->paramListEllipseType = EL_SHAPE_ELLIPSE_LIST;
 	paramListEllipseNode->ParamListEllipseNode = paramListEllipse;
 	paramListEllipseNode->paramEllipseNode = NULL;
 	paramListEllipseNode->ParamShapeNode = paramShape;
 
 	return paramListEllipseNode;
-
 }
 
-ParamListEllipseNode* ParamShapeEllipseAction(ParamShapeNode* paramShape){
-	LogDebug("\tParamShapeParamListEllipseAction");
+ParamListEllipseNode* ParamListEllipseAddParamShapeAndEndAction(ParamShapeNode* paramShape) {
+	LogDebug("\tParamListEllipseAddParamShapeAndEndAction");
 
 	ParamListEllipseNode * paramListEllipseNode = 
 	(ParamListEllipseNode*)calloc(1,sizeof(ParamListEllipseNode));
@@ -176,14 +196,13 @@ ParamListEllipseNode* ParamShapeEllipseAction(ParamShapeNode* paramShape){
 	return paramListEllipseNode;
 }
 
-ParamListEllipseNode* ParamEllipseParamListEllipseAction(ParamEllipseNode* paramEllipse, ParamListEllipseNode*  paramListEllipse){
-	
-	LogDebug("\tParamShapeParamListEllipseAction");
+ParamListEllipseNode* ParamListEllipseAddParamEllipseAction(ParamEllipseNode* paramEllipse, ParamListEllipseNode*  paramListEllipse) {
+	LogDebug("\tParamListEllipseAddParamEllipseAction");
 
 	ParamListEllipseNode * paramListEllipseNode = 
 	(ParamListEllipseNode*)calloc(1,sizeof(ParamListEllipseNode));
 
-	paramListEllipseNode->paramListEllipseType = ELLIPSE_ELLIPSE_LIST;
+	paramListEllipseNode->paramListEllipseType = EL_ELLIPSE_ELLIPSE_LIST;
 	paramListEllipseNode->ParamListEllipseNode = paramListEllipse;
 	paramListEllipseNode->paramEllipseNode = paramEllipse;
 	paramListEllipseNode->ParamShapeNode = NULL;
@@ -191,13 +210,13 @@ ParamListEllipseNode* ParamEllipseParamListEllipseAction(ParamEllipseNode* param
 	return paramListEllipseNode;
 }
 
-ParamListEllipseNode* ParamEllipseAction(ParamEllipseNode* paramEllipse){
-		LogDebug("\tParamShapeParamListEllipseAction");
+ParamListEllipseNode* ParamListEllipseAddParamEllipseAndEndAction(ParamEllipseNode* paramEllipse) {
+	LogDebug("\tParamListEllipseAddParamEllipseAndEndAction");
 
 	ParamListEllipseNode * paramListEllipseNode = 
 	(ParamListEllipseNode*)calloc(1,sizeof(ParamListEllipseNode));
 
-	paramListEllipseNode->paramListEllipseType = ELLIPSE;
+	paramListEllipseNode->paramListEllipseType = EL_ELLIPSE;
 	paramListEllipseNode->ParamListEllipseNode = NULL;
 	paramListEllipseNode->paramEllipseNode = paramEllipse;
 	paramListEllipseNode->ParamShapeNode = NULL;
@@ -205,15 +224,25 @@ ParamListEllipseNode* ParamEllipseAction(ParamEllipseNode* paramEllipse){
 	return paramListEllipseNode;
 }
 
+ParamEllipseNode * ParamEllipseAction(ParamEllipseType type, int xAxis, int yAxis) {
+	LogDebug("\tParamEllipseAction");
 
-ParamListTriangleNode* EmptyParamListTriangleAction(){
+	ParamEllipseNode * paramEllipseNode = (ParamEllipseNode*)calloc(1,sizeof(ParamEllipseNode));
 
-	LogDebug("\tEmptyParamListEllipseAction");
+	paramEllipseNode->type = type;
+	paramEllipseNode->x_axis = xAxis;
+	paramEllipseNode->y_axis = yAxis;
+
+	return paramEllipseNode;
+}
+
+ParamListTriangleNode* ParamListTriangleEmptyAction() {
+	LogDebug("\tParamListTriangleEmptyAction");
 
 	ParamListTriangleNode * paramListTriangleNode = 
 	(ParamListTriangleNode*)calloc(1,sizeof(ParamListTriangleNode));
 
-	paramListTriangleNode->paramListTriangleType = EMPTY;
+	paramListTriangleNode->paramListTriangleType = EMPTY_TRIANGLE_LIST;
 	paramListTriangleNode->ParamListTriangleNode = NULL;
 	paramListTriangleNode->paramTriangleNode = NULL;
 	paramListTriangleNode->ParamShapeNode = NULL;
@@ -221,9 +250,8 @@ ParamListTriangleNode* EmptyParamListTriangleAction(){
 	return paramListTriangleNode;
 }
 
-ParamListTriangleNode* ParamShapeParamListTriangleAction(ParamShapeNode* paramShape , ParamListTriangleNode* paramListTriangle){
-	
-	LogDebug("\tParamShapeParamListTriangleAction");
+ParamListTriangleNode* ParamListTriangleAddParamShapeAction(ParamShapeNode* paramShape , ParamListTriangleNode* paramListTriangle) {
+	LogDebug("\tParamListTriangleAddParamShapeAction");
 
 	ParamListTriangleNode * paramListTriangleNode = 
 	(ParamListTriangleNode*)calloc(1,sizeof(ParamListTriangleNode));
@@ -237,8 +265,8 @@ ParamListTriangleNode* ParamShapeParamListTriangleAction(ParamShapeNode* paramSh
 
 }
 
-ParamListTriangleNode* ParamShapeTriangleAction(ParamShapeNode* paramShape){
-	LogDebug("\tParamShapeParamListTriangleAction");
+ParamListTriangleNode* ParamListTriangleAddParamShapeAndEndAction(ParamShapeNode* paramShape) {
+	LogDebug("\tParamListTriangleAddParamShapeAndEndAction");
 
 	ParamListTriangleNode * paramListTriangleNode = 
 	(ParamListTriangleNode*)calloc(1,sizeof(ParamListTriangleNode));
@@ -251,9 +279,8 @@ ParamListTriangleNode* ParamShapeTriangleAction(ParamShapeNode* paramShape){
 	return paramListTriangleNode;
 }
 
-ParamListTriangleNode* ParamTriangleParamListTriangleAction(ParamTriangleNode* paramTriangle, ParamListTriangleNode*  paramListTriangle){
-	
-	LogDebug("\tParamShapeParamListTriangleAction");
+ParamListTriangleNode* ParamListTriangleAddParamTriangleAction(ParamTriangleNode* paramTriangle, ParamListTriangleNode*  paramListTriangle) {
+	LogDebug("\tParamListTriangleAddParamTriangleAction");
 
 	ParamListTriangleNode * paramListTriangleNode = 
 	(ParamListTriangleNode*)calloc(1,sizeof(ParamListTriangleNode));
@@ -266,8 +293,8 @@ ParamListTriangleNode* ParamTriangleParamListTriangleAction(ParamTriangleNode* p
 	return paramListTriangleNode;
 }
 
-ParamListTriangleNode* ParamTriangleAction(ParamTriangleNode* paramTriangle){
-		LogDebug("\tParamShapeParamListTriangleAction");
+ParamListTriangleNode* ParamListTriangleAddParamTriangleAndEndAction(ParamTriangleNode* paramTriangle) {
+	LogDebug("\tParamListTriangleAddParamTriangleAndEndAction");
 
 	ParamListTriangleNode * paramListTriangleNode = 
 	(ParamListTriangleNode*)calloc(1,sizeof(ParamListTriangleNode));
@@ -280,260 +307,86 @@ ParamListTriangleNode* ParamTriangleAction(ParamTriangleNode* paramTriangle){
 	return paramListTriangleNode;
 }
 
+ParamTriangleNode * ParamTriangleAction(ParamTriangleType type, int base, int height) {
+	LogDebug("\tParamTriangleAction");
 
-ParamRectangleNode * HeightParamRectangleAction(int height){
-	
-	LogDebug("\tHeightParamRectangleAction");
+	ParamTriangleNode * paramTriangleNode = (ParamTriangleNode*)calloc(1,sizeof(ParamTriangleNode));
 
-	ParamRectangleNode * paramRectangleNode = 
-	(ParamRectangleNode*)calloc(1,sizeof(ParamRectangleNode));
-
-	paramRectangleNode->height = height;
-	paramRectangleNode->width = 0;
-
-	return paramRectangleNode;
-}
-
-ParamRectangleNode * WidthParamRectangleAction(int width){
-	
-	LogDebug("\tHeightParamRectangleAction");
-
-	ParamRectangleNode * paramRectangleNode = 
-	(ParamRectangleNode*)calloc(1,sizeof(ParamRectangleNode));
-
-	paramRectangleNode->height = 0;
-	paramRectangleNode->width = width;
-
-	return paramRectangleNode;
-}
-
-ParamEllipseNode * XAxisParamEllipseAction(int xaxis){
-	
-	LogDebug("\tXAxisParamEllipseAction");
-
-	ParamEllipseNode * paramEllipseNode = 
-	(ParamEllipseNode*)calloc(1,sizeof(ParamEllipseNode));
-
-	paramEllipseNode->x_axis = xaxis;
-	paramEllipseNode->y_axis = 0;
-
-	return paramEllipseNode;
-}
-
-ParamEllipseNode * YAxisParamEllipseAction(int yaxis){
-		
-	LogDebug("\tYAxisParamEllipseAction");
-
-	ParamEllipseNode * paramEllipseNode = 
-	(ParamEllipseNode*)calloc(1,sizeof(ParamEllipseNode));
-
-	paramEllipseNode->x_axis = 0;
-	paramEllipseNode->y_axis = yaxis;
-
-	return paramEllipseNode;
-} 
-
-ParamTriangleNode * HeightParamTriangleAction(int height){
-
-	LogDebug("\tHeightParamTriangleAction");
-
-	ParamTriangleNode * paramTriangleNode = 
-	(ParamTriangleNode*)calloc(1,sizeof(ParamTriangleNode));
-
+	paramTriangleNode->type = type;
 	paramTriangleNode->height = height;
-	paramTriangleNode->base = 0;
-
-	return paramTriangleNode;
-}
-
-ParamTriangleNode * BaseParamTriangleAction(int base){
-
-	LogDebug("\tBaseParamTriangleAction");
-
-	ParamTriangleNode * paramTriangleNode = 
-	(ParamTriangleNode*)calloc(1,sizeof(ParamTriangleNode));
-
-	paramTriangleNode->height = 0;
 	paramTriangleNode->base = base;
 
 	return paramTriangleNode;
 }
 
-ParamShapeNode * FillColorParamShapeAction(TypeColorNode * fillColor){
-	
-	LogDebug("\tFillColorParamShapeAction");
-
-	ParamShapeNode * paramShapeNode = 
-	(ParamShapeNode*)calloc(1,sizeof(ParamShapeNode));
-
-	paramShapeNode->ParamShapeType = FILL_COLOR;
-	paramShapeNode->fillColor = fillColor;
-	paramShapeNode->borderColor = NULL;
-	paramShapeNode->borderWith = 0;
-	paramShapeNode->fillColor = 0;
-
-	return paramShapeNode;
-}
-
-ParamShapeNode * BorderColorParamShapeAction(TypeColorNode * borderColor){
-	
-	LogDebug("\tBorderColorParamShapeAction");
-
-	ParamShapeNode * paramShapeNode = 
-	(ParamShapeNode*)calloc(1,sizeof(ParamShapeNode));
-
-	paramShapeNode->ParamShapeType = BORDER_COLOR;
-	paramShapeNode->fillColor = NULL;
-	paramShapeNode->borderColor = borderColor;
-	paramShapeNode->borderWith = 0;
-	paramShapeNode->fillColor = 0;
-
-	return paramShapeNode;
-}
-
-ParamShapeNode * BorderWidthParamShapeAction(int width){
-	
-	LogDebug("\tBorderWidthParamShapeAction");
-
-	ParamShapeNode * paramShapeNode = 
-	(ParamShapeNode*)calloc(1,sizeof(ParamShapeNode));
-
-	paramShapeNode->ParamShapeType = FILL_COLOR;
-	paramShapeNode->fillColor = NULL;
-	paramShapeNode->borderColor = NULL;
-	paramShapeNode->borderWith = width;
-	paramShapeNode->fillColor = 0;
-
-	return paramShapeNode;
-}
-
-ParamShapeNode * RotationParamShapeAction(int rotation){
-	
-	LogDebug("\tRotationParamShapeAction");
-
-	ParamShapeNode * paramShapeNode = 
-	(ParamShapeNode*)calloc(1,sizeof(ParamShapeNode));
-
-	paramShapeNode->ParamShapeType = FILL_COLOR;
-	paramShapeNode->fillColor = NULL;
-	paramShapeNode->borderColor = NULL;
-	paramShapeNode->borderWith = 0;
-	paramShapeNode->fillColor = rotation;
-
-	return paramShapeNode;
-}
-
 /* Image actions*/
 
-ParamListImageNode * ParamListImageMultipleAction(ParamImageNode * paramImageNode, 
-    ParamListImageNode * paramListImageNode){
+ParamListImageNode * ParamListImageMultipleAction(ParamImageNode * paramImageNode, ParamListImageNode * paramListImageNode) {
+	LogDebug("\tParamListImageMultipleAction");
+
 	ParamListImageNode * paramListImageNode = (ParamListImageNode*)calloc(1,sizeof(ParamListImageNode));
 	paramListImageNode->paramImageNode=paramImageNode;
 	paramListImageNode->paramListImageNode = paramListImageNode;
+
 	return paramListImageNode;
 }
 
-ParamListImageNode * ParamListImageAction(ParamImageNode * paramImageNode){
+ParamListImageNode * ParamListImageAction(ParamImageNode * paramImageNode) {
+	LogDebug("\tParamListImageAction");
+
 	ParamListImageNode * paramListImageNode = (ParamListImageNode*)calloc(1,sizeof(ParamListImageNode));
 	paramListImageNode->paramImageNode=paramImageNode;
 	paramListImageNode->paramListImageNode = NULL;
+
 	return paramListImageNode;
 }
 
-ParamImageNode * ParamImageAction(char * typeUrl){
+ParamImageNode * ParamImageAction(char * typeUrl) {
+	LogDebug("\t ParamImageAction");
+
 	ParamImageNode * paramImageNode = (ParamImageNode*)calloc(1,sizeof(ParamImageNode));
 	paramImageNode->typeUrl = typeUrl;
+
 	return paramImageNode;
 }
 
 /* Text parameters actions */
+ParamListTextNode * ParamListTextMultipleAction(ParamTextNode * paramTextNode, ParamListTextNode * paramListTextNode) {
+	LogDebug("\t ParamListTextMultipleAction");
 
-ParamListTextNode * ParamListTextMultipleAction(ParamTextNode * paramTextNode, 
-	ParamListTextNode * paramListTextNode){
 	ParamListTextNode * paramListTextNode = (ParamListTextNode*)calloc(1,sizeof(ParamListTextNode));
 	paramListTextNode->paramTextNode = paramTextNode;
 	paramListTextNode->paramListTextNode = paramListTextNode;
+
+	return paramListTextNode;
 }
+
 ParamListTextNode * ParamListTextAction(ParamTextNode * paramTextNode){
-	ParamListTextNode * paramListTextNode = (ParamListTextNode*)calloc(1,sizeof(ParamListTextNode));
+	LogDebug("\t ParamListTextAction");
+
+	ParamListTextNode * paramListTextNode = (ParamListTextNode*) calloc(1,sizeof(ParamListTextNode));
 	paramListTextNode->paramTextNode = paramTextNode;
 	paramListTextNode->paramListTextNode = NULL;
+
+	return paramListTextNode;
 }
 
-ParamTextNode * ParamFontWidthAction(int fontWidth){
+ParamTextNode * ParamTextAction(ParamTextType type, int fontWidth, fontfamily_t fontFamily, int fontWeight, fontstyle_t fontStyle, textdeco_t textDeco, ParamTypeColorNode * paramTypeColorNode) {
+	LogDebug("\t ParamTextAction");
+
 	ParamTextNode * paramTextNode = (ParamTextNode*)calloc(1,sizeof(ParamTextNode));
-	paramTextNode->type = FONT_WIDTH;
+	paramTextNode->type = type;
 	paramTextNode->fontWidth = fontWidth;
-	paramTextNode->fontFamily = NULL;
-	paramTextNode->fontWeight = NULL;
-	paramTextNode->fontStyle = NULL;
-	paramTextNode->textDecoration = NULL;
-	paramTextNode->paramTypeColorNode = NULL;
-	return paramTextNode;
-}
-
-ParamTextNode * ParamFontFamilyAction(fontfamily_t fontFamily){
-	ParamTextNode * paramTextNode = (ParamTextNode*)calloc(1,sizeof(ParamTextNode));
-	paramTextNode->type = FONT_FAMILY;
-	paramTextNode->fontWidth = NULL;
 	paramTextNode->fontFamily = fontFamily;
-	paramTextNode->fontWeight = NULL;
-	paramTextNode->fontStyle = NULL;
-	paramTextNode->textDecoration = NULL;
-	paramTextNode->paramTypeColorNode = NULL;
-	return paramTextNode;
-}
-
-ParamTextNode * ParamFontWeightAction(int fontWeight){
-	ParamTextNode * paramTextNode = (ParamTextNode*)calloc(1,sizeof(ParamTextNode));
-	paramTextNode->type = FONT_WEIGHT;
-	paramTextNode->fontWidth = NULL;
-	paramTextNode->fontFamily = NULL;
 	paramTextNode->fontWeight = fontWeight;
-	paramTextNode->fontStyle = NULL;
-	paramTextNode->textDecoration = NULL;
-	paramTextNode->paramTypeColorNode = NULL;
-	return paramTextNode;
-}
-
-ParamTextNode * ParamFontStyleAction(fontstyle_t fontStyle){
-	ParamTextNode * paramTextNode = (ParamTextNode*)calloc(1,sizeof(ParamTextNode));
-	paramTextNode->type = FONT_STYLE;
-	paramTextNode->fontWidth = NULL;
-	paramTextNode->fontFamily = NULL;
-	paramTextNode->fontWeight = NULL;
 	paramTextNode->fontStyle = fontStyle;
-	paramTextNode->textDecoration = NULL;
-	paramTextNode->paramTypeColorNode = NULL;
-	return paramTextNode;
-}
-
-ParamTextNode * ParamTextDecorationAction(textdeco_t textDecoration){
-	ParamTextNode * paramTextNode = (ParamTextNode*)calloc(1,sizeof(ParamTextNode));
-	paramTextNode->type = TEXT_DECORATION;
-	paramTextNode->fontWidth = NULL;
-	paramTextNode->fontFamily = NULL;
-	paramTextNode->fontWeight = NULL;
-	paramTextNode->fontStyle = NULL;
-	paramTextNode->textDecoration = textDecoration;
-	paramTextNode->paramTypeColorNode = NULL;
-	return paramTextNode;
-}
-
-ParamTextNode * ParamBackgroundColorAction(ParamTypeColorNode * paramTypeColorNode){
-	ParamTextNode * paramTextNode = (ParamTextNode*)calloc(1,sizeof(ParamTextNode));
-	paramTextNode->type = BACKGROUND_COLOR;
-	paramTextNode->fontWidth = NULL;
-	paramTextNode->fontFamily = NULL;
-	paramTextNode->fontWeight = NULL;
-	paramTextNode->fontStyle = NULL;
-	paramTextNode->textDecoration = NULL;
+	paramTextNode->textDecoration = textDeco;
 	paramTextNode->paramTypeColorNode = paramTypeColorNode;
+
 	return paramTextNode;
 }
 
 /* Data types actions*/
-
 ParamTypeColorNode * ParamTypeColorAction(char * typeColor){
 	ParamTypeColorNode * paramTypeColorNode = (ParamTypeColorNode*)calloc(1,sizeof(ParamTypeColorNode));
 	paramTypeColorNode->typeColor = typeColor;

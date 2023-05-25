@@ -195,7 +195,7 @@
 
 program: expression			{ $$ = ProgramGrammarAction(0); }
 
-expression: /* empty */		{ $$ = Return0(); }
+expression: %empty			{ $$ = Return0(); }
 	| function expression	{ $$ = Return0(); }
 	| assign expression		{ $$ = Return0(); }
 
@@ -238,9 +238,9 @@ vector: IMAGE OPEN_PARENTHESIS paramListImage  CLOSE_PARENTHESIS		{ $$ = Return0
 paramAnimation: PARAM_ALTERNATE COLON TYPE_BOOLEAN	{ $$ = Return0(); }
 	| PARAM_LOOP COLON TYPE_BOOLEAN					{ $$ = Return0(); }
 	| PARAM_DURATION COLON TYPE_INTEGER				{ $$ = Return0(); }
-	| PARAM_DELAY COLON TYPE_INTEGER					{ $$ = Return0(); }
+	| PARAM_DELAY COLON TYPE_INTEGER				{ $$ = Return0(); }
 
-paramListTranslate: /* empty */						{ $$ = Return0(); }
+paramListTranslate: %empty							{ $$ = Return0(); }
 	| paramAnimation COMMA paramListTranslate		{ $$ = Return0(); }
 	| paramAnimation								{ $$ = Return0(); }
 	| paramTranslate COMMA paramListTranslate		{ $$ = Return0(); }
@@ -248,7 +248,7 @@ paramListTranslate: /* empty */						{ $$ = Return0(); }
 
 paramTranslate: PARAM_END_VALUE COLON TYPE_INTEGER	{ $$ = Return0(); }
 
-paramListOpacity: /* empty */						{ $$ = Return0(); }
+paramListOpacity: %empty							{ $$ = Return0(); }
 	| paramAnimation COMMA paramListOpacity			{ $$ = Return0(); }
 	| paramAnimation								{ $$ = Return0(); }
 	| paramOpacity COMMA paramListOpacity			{ $$ = Return0(); }
@@ -257,7 +257,7 @@ paramListOpacity: /* empty */						{ $$ = Return0(); }
 paramOpacity: PARAM_ALPHA COLON TYPE_FLOAT			{ $$ = Return0(); }
 	| PARAM_ALPHA COLON TYPE_INTEGER				{ $$ = Return0(); }
 
-paramListRotate: /* empty */						{ $$ = Return0(); }
+paramListRotate: %empty								{ $$ = Return0(); }
 	| paramAnimation COMMA paramListRotate			{ $$ = Return0(); }
 	| paramAnimation								{ $$ = Return0(); }
 	| paramRotate COMMA paramListRotate				{ $$ = Return0(); }
@@ -265,7 +265,7 @@ paramListRotate: /* empty */						{ $$ = Return0(); }
 
 paramRotate: PARAM_ANGLE COLON TYPE_INTEGER			{ $$ = Return0(); }
 
-paramListResize: /* empty */						{ $$ = Return0(); }
+paramListResize: %empty								{ $$ = Return0(); }
 	| paramAnimation COMMA paramListResize			{ $$ = Return0(); }
 	| paramAnimation								{ $$ = Return0(); }
 	| paramResize COMMA paramListResize				{ $$ = Return0(); }
@@ -273,7 +273,7 @@ paramListResize: /* empty */						{ $$ = Return0(); }
 
 paramResize: PARAM_SCALE COLON TYPE_FLOAT			{ $$ = Return0(); }
 
-paramListMorph: /* empty */							{ $$ = Return0(); }
+paramListMorph: %empty								{ $$ = Return0(); }
 	| paramAnimation COMMA paramListMorph			{ $$ = Return0(); }
 	| paramAnimation								{ $$ = Return0(); }
 	| paramMorph COMMA paramListMorph				{ $$ = Return0(); }
@@ -281,7 +281,7 @@ paramListMorph: /* empty */							{ $$ = Return0(); }
 
 paramMorph: PARAM_POINTS COLON typePoints			{ $$ = Return0(); }
 
-paramListRecolor: /* empty */						{ $$ = Return0(); }
+paramListRecolor: %empty							{ $$ = Return0(); }
 	| paramAnimation COMMA paramListRecolor			{ $$ = Return0(); }
 	| paramAnimation								{ $$ = Return0(); }
 	| paramRecolor COMMA paramListRecolor			{ $$ = Return0(); }
@@ -290,55 +290,55 @@ paramListRecolor: /* empty */						{ $$ = Return0(); }
 paramRecolor: PARAM_END_COLOR COLON typeColor		{ $$ = Return0(); }
 
 // For shapes
-paramShape: PARAM_FILL_COLOR COLON typeColor		{ $$ = FillColorParamShapeAction($3); }
-	| PARAM_BORDER_COLOR COLON typeColor			{ $$ = BorderColorParamShapeAction($3); }
-	| PARAM_BORDER_WIDTH COLON TYPE_INTEGER			{ $$ = BorderWidthParamShapeAction($3); }
-	| PARAM_ROTATION COLON TYPE_INTEGER				{ $$ = RotationParamShapeAction($3); }
+paramShape: PARAM_FILL_COLOR COLON typeColor		{ $$ = ParamShapeAction(FILL_COLOR,		$3,		NULL, 	NULL, 	NULL); }
+	| PARAM_BORDER_COLOR COLON typeColor			{ $$ = ParamShapeAction(BORDER_COLOR, 	NULL, 	$3, 	NULL, 	NULL); }
+	| PARAM_BORDER_WIDTH COLON TYPE_INTEGER			{ $$ = ParamShapeAction(BORDER_WIDTH, 	NULL, 	NULL, 	$3, 	NULL); }
+	| PARAM_ROTATION COLON TYPE_INTEGER				{ $$ = ParamShapeAction(ROTATION, 		NULL, 	NULL, 	NULL, 	$3); }
 
-paramListRectangle: /* empty */						{ $$ = EmptyParamListRectangleAction(); }
-	| paramShape COMMA paramListRectangle			{ $$ = ParamShapeParamListRectangleAction($1,$3); }
-	| paramShape									{ $$ = ParamShapeRectangleAction($1); }
-	| paramRectangle COMMA paramListRectangle		{ $$ = ParamRectangleParamListRectangleAction($1,$3);; }
-	| paramRectangle								{ $$ = ParamRectangleAction($1); }
+paramListRectangle: %empty							{ $$ = ParamListRectangleEmptyAction(); }
+	| paramShape COMMA paramListRectangle			{ $$ = ParamListRectangleAddParamShapeAction($1,$3); }
+	| paramShape									{ $$ = ParamListRectangleAddParamShapeAndEndAction($1); }
+	| paramRectangle COMMA paramListRectangle		{ $$ = ParamListRectangleAddParamRectangleAction($1,$3); }
+	| paramRectangle								{ $$ = ParamListRectangleAddParamRectangleAndEndAction($1); }
 
-paramRectangle: PARAM_HEIGHT COLON TYPE_INTEGER		{ $$ = HeightParamRectangleAction($3); }
-	| PARAM_WIDTH COLON TYPE_INTEGER				{ $$ = WidthParamRectangleAction($3); }
+paramRectangle: PARAM_HEIGHT COLON TYPE_INTEGER		{ $$ = ParamRectangleAction(RT_HEIGHT, 	$3, 	NULL); }
+	| PARAM_WIDTH COLON TYPE_INTEGER				{ $$ = ParamRectangleAction(RT_WIDTH, 	NULL, 	$3); }
 
-paramListEllipse: /* empty */						{ $$ = EmptyParamListEllipseAction(); }
-	| paramShape COMMA paramListEllipse				{ $$ = ParamShapeParamListEllipseAction($1,$3);}
-	| paramShape									{ $$ = ParamShapeEllipseAction($1); }
-	| paramEllipse COMMA paramListEllipse			{ $$ = ParamEllipseParamListEllipseAction($1,$3); }
-	| paramEllipse									{ $$ = ParamEllipseAction($1); }
+paramListEllipse: %empty							{ $$ = ParamListEllipseEmptyAction(); }
+	| paramShape COMMA paramListEllipse				{ $$ = ParamListEllipseAddParamShapeAction($1,$3);}
+	| paramShape									{ $$ = ParamListEllipseAddParamShapeAndEndAction($1); }
+	| paramEllipse COMMA paramListEllipse			{ $$ = ParamListEllipseAddParamEllipseAction($1,$3); }
+	| paramEllipse									{ $$ = ParamListEllipseAddParamEllipseAndEndAction($1); }
 
-paramEllipse: PARAM_X_AXIS COLON TYPE_INTEGER		{ $$ = XAxisParamEllipseAction($3); }
-	| PARAM_Y_AXIS COLON TYPE_INTEGER				{ $$ = YAxisParamEllipseAction($3); }
+paramEllipse: PARAM_X_AXIS COLON TYPE_INTEGER		{ $$ = ParamEllipseAction(ET_X_AXIS,	$3, 	NULL); }
+	| PARAM_Y_AXIS COLON TYPE_INTEGER				{ $$ = ParamEllipseAction(ET_Y_AXIS, 	NULL, 	$3); }
 
-paramListTriangle: /* empty */						{ $$ = EmptyParamListTriangleAction(); }
-	| paramShape COMMA paramListTriangle			{ $$ = ParamShapeParamListTriangleAction($1,$3); }
-	| paramShape									{ $$ = ParamShapeTriangleAction($1); }
-	| paramTriangle COMMA paramListTriangle			{ $$ = ParamTriangleParamListTriangleAction($1,$3); }
-	| paramTriangle									{ $$ = ParamTriangleAction($1); }
+paramListTriangle: %empty							{ $$ = ParamListTriangleEmptyAction(); }
+	| paramShape COMMA paramListTriangle			{ $$ = ParamListTriangleAddParamShapeAction($1,$3); }
+	| paramShape									{ $$ = ParamListTriangleAddParamShapeAndEndAction($1); }
+	| paramTriangle COMMA paramListTriangle			{ $$ = ParamListTriangleAddParamTriangleAction($1,$3); }
+	| paramTriangle									{ $$ = ParamListTriangleAddParamTriangleAndEndAction($1); }
 
-paramTriangle: PARAM_HEIGHT COLON TYPE_INTEGER		{ $$ = HeightParamTriangleAction($3); }
-	| PARAM_BASE COLON TYPE_INTEGER					{ $$ = BaseParamTriangleAction($3); }
+paramTriangle: PARAM_HEIGHT COLON TYPE_INTEGER		{ $$ = ParamTriangleAction(TT_HEIGHT,	$3,		NULL); }
+	| PARAM_BASE COLON TYPE_INTEGER					{ $$ = ParamTriangleAction(TT_BASE,		NULL, 	$3); }
 
 // For vectors
-paramListImage: /* empty */					{ $$ = Return0(); }
+paramListImage: %empty						{ $$ = Return0(); }
 	| paramImage COMMA paramListImage		{ $$ = ParamListImageMultipleAction($1, $3); }
 	| paramImage							{ $$ = ParamListImageAction($1); }
 
-paramImage: PARAM_SRC COLON DOUBLE_QUOTE TYPE_URL DOUBLE_QUOTE { $$ = ParamImageAction($4); }
+paramImage: PARAM_SRC COLON DOUBLE_QUOTE TYPE_URL DOUBLE_QUOTE 	{ $$ = ParamImageAction($4); }
 
-paramListText: /* empty */					{ $$ = Return0(); }
+paramListText: %empty						{ $$ = Return0(); }
 	| paramText COMMA paramListText			{ $$ = ParamListTextMultipleAction($1, $3); }
 	| paramText								{ $$ = ParamListTextAction($1); }
 
-paramText: PARAM_FONT_WIDTH COLON TYPE_INTEGER 				{ $$ = ParamFontWidthAction($3); }
-	| PARAM_FONT_FAMILY COLON TYPE_FONT_FAMILY 				{ $$ = ParamFontFamilyAction($3); }
-	| PARAM_FONT_WEIGHT COLON TYPE_INTEGER 					{ $$ = ParamFontWeightAction($3); }
-	| PARAM_FONT_STYLE COLON TYPE_FONT_STYLE 				{ $$ = ParamFontStyleAction($3); }
-	| PARAM_TEXT_DECORATION COLON TYPE_TEXT_DECORATION 		{ $$ = ParamTextDecorationAction($3); }
-	| PARAM_BACKGROUND_COLOR COLON typeColor 				{ $$ = ParamBackgroundColorAction($3); }
+paramText: PARAM_FONT_WIDTH COLON TYPE_INTEGER 				{ $$ = ParamTextAction(FONT_WIDTH, 		 $3, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL); }
+	| PARAM_FONT_FAMILY COLON TYPE_FONT_FAMILY 				{ $$ = ParamTextAction(FONT_FAMILY, 	 NULL, 	$3, 	NULL, 	NULL, 	NULL, 	NULL); }
+	| PARAM_FONT_WEIGHT COLON TYPE_INTEGER 					{ $$ = ParamTextAction(FONT_WEIGHT, 	 NULL, 	NULL, 	$3, 	NULL, 	NULL, 	NULL); }
+	| PARAM_FONT_STYLE COLON TYPE_FONT_STYLE 				{ $$ = ParamTextAction(FONT_STYLE, 		 NULL, 	NULL, 	NULL, 	$3, 	NULL, 	NULL); }
+	| PARAM_TEXT_DECORATION COLON TYPE_TEXT_DECORATION 		{ $$ = ParamTextAction(TEXT_DECORATION,  NULL, 	NULL, 	NULL, 	NULL, 	$3, 	NULL); }
+	| PARAM_BACKGROUND_COLOR COLON typeColor 				{ $$ = ParamTextAction(BACKGROUND_COLOR, NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	$3); }
 
 /* Data types */
 typeColor: COLOR_HEX			{ $$ = ParamTypeColorAction($1); }
