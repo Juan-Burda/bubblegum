@@ -14,6 +14,10 @@ typedef struct ParamListRectangleNode ParamListRectangleNode;
 typedef struct ParamListEllipseNode ParamListEllipseNode;
 typedef struct ParamListTriangleNode ParamListTriangleNode; 
 
+typedef struct ParamListImageNode ParamListImageNode; 
+typedef struct ParamListTextNode ParamListTextNode; 
+typedef struct ParamFloatNode ParamFloatNode; 
+
 /**
 * Para cada no-terminal se define una nueva estructura que representa su tipo
 * de dato y, por lo tanto, su nodo en el AST (Árbol de Sintaxis Abstracta).
@@ -31,6 +35,19 @@ typedef struct {
 * De este modo, al recorrer el AST, es posible determinar qué nodos hijos
 * posee según el valor de este enumerado.
 */
+typedef struct {
+	int changeme;
+} Program;
+
+/* Data type nodes */
+typedef struct {
+	char * typeColor;
+} ParamTypeColorNode;
+
+struct ParamFloatNode{
+	float floating;
+	ParamFloatNode * paramFloatNode;
+};
 
 /* Parameters */
 // For animations
@@ -52,20 +69,6 @@ typedef struct {
 } ParamShapeNode;
 
 typedef enum {
-	RL_EMPTY,
-	RL_SHAPE,
-	RL_RECTANGLE,
-	RL_SHAPE_RECTANGLE_LIST,
-	RL_RECTANGLE_RECTANGLE_LIST
-} ParamListRectangleType;
-typedef struct {
-	ParamListRectangleType paramListRectangleType;
-	ParamListRectangleNode * ParamListRectangleNode;
-	ParamShapeNode * ParamShapeNode;
-	ParamRectangleNode * paramRectangleNode;
-} ParamListRectangleNode;
-
-typedef enum {
 	RT_HEIGHT,	// rectangle type height
 	RT_WIDTH	// rectangle type width
 } ParamRectangleType;
@@ -76,18 +79,18 @@ typedef struct {
 } ParamRectangleNode;
 
 typedef enum {
-	EL_EMPTY,
-	EL_SHAPE,
-	EL_ELLIPSE,
-	EL_SHAPE_ELLIPSE_LIST,
-	EL_ELLIPSE_ELLIPSE_LIST
-} ParamListEllipseType;
-typedef struct {
-	ParamListEllipseType paramListEllipseType;
-	ParamListEllipseNode * ParamListEllipseNode;
+	RL_EMPTY,
+	RL_SHAPE,
+	RL_RECTANGLE,
+	RL_SHAPE_RECTANGLE_LIST,
+	RL_RECTANGLE_RECTANGLE_LIST
+} ParamListRectangleType;
+struct ParamListRectangleNode{
+	ParamListRectangleType paramListRectangleType;
+	ParamListRectangleNode * ParamListRectangleNode;
 	ParamShapeNode * ParamShapeNode;
-	ParamEllipseNode * paramEllipseNode;
-} ParamListEllipseNode;
+	ParamRectangleNode * paramRectangleNode;
+};
 
 typedef enum {
 	ET_X_AXIS,	// ellipse type x-axis
@@ -99,19 +102,19 @@ typedef struct {
 	int y_axis;
 } ParamEllipseNode;
 
-typedef enum{
-	EMPTY_TRIANGLE_LIST,
-	SHAPE,
-	TRIANGLE,
-	SHAPE_TRIANGLE_LIST,
-	TRIANGLE_TRIANGLE_LIST
-} ParamListTriangleType;
-typedef struct {
-	ParamListTriangleType paramListTriangleType;
-	ParamListTriangleNode * ParamListTriangleNode;
+typedef enum {
+	EL_EMPTY,
+	EL_SHAPE,
+	EL_ELLIPSE,
+	EL_SHAPE_ELLIPSE_LIST,
+	EL_ELLIPSE_ELLIPSE_LIST
+} ParamListEllipseType;
+struct ParamListEllipseNode{
+	ParamListEllipseType paramListEllipseType;
+	ParamListEllipseNode * ParamListEllipseNode;
 	ParamShapeNode * ParamShapeNode;
-	ParamTriangleNode * paramTriangleNode;
-} ParamListTriangleNode;
+	ParamEllipseNode * paramEllipseNode;
+};
 
 typedef enum {
 	TT_HEIGHT,	// triangle type height
@@ -123,16 +126,30 @@ typedef struct{
 	int base;
 } ParamTriangleNode;
 
+typedef enum{
+	TL_EMPTY,
+	TL_SHAPE,
+	TL_TRIANGLE,
+	TL_SHAPE_TRIANGLE_LIST,
+	TL_TRIANGLE_TRIANGLE_LIST
+} ParamListTriangleType;
+struct ParamListTriangleNode{
+	ParamListTriangleType paramListTriangleType;
+	ParamListTriangleNode * ParamListTriangleNode;
+	ParamShapeNode * ParamShapeNode;
+	ParamTriangleNode * paramTriangleNode;
+};
+
 /* Vector nodes */
 // For images
-typedef struct{
-	char * typeUrl
+typedef struct {
+	char * typeUrl;
 } ParamImageNode;
 
-typedef struct{
+struct ParamListImageNode {
 	ParamImageNode * paramImageNode;
 	ParamListImageNode * paramListImageNode;
-} ParamListImageNode;
+};
 
 // For text
 typedef enum {
@@ -143,7 +160,7 @@ typedef enum {
 	TEXT_DECORATION,
 	BACKGROUND_COLOR
 } ParamTextType; 
-typedef struct{
+typedef struct {
 	ParamTextType type;
 	int fontWidth;
 	fontfamily_t fontFamily;
@@ -153,19 +170,9 @@ typedef struct{
 	ParamTypeColorNode * paramTypeColorNode;
 } ParamTextNode;
 
-typedef struct {
+struct ParamListTextNode {
 	ParamTextNode * paramTextNode;
 	ParamListTextNode * paramListTextNode;
-} ParamListTextNode;
-
-/* Data type nodes */
-typedef struct {
-	char * typeColor;
-} ParamTypeColorNode;
-
-typedef struct {
-	float floating;
-	ParamFloatNode paramFloatNode;
-} ParamFloatNode;
+};
 
 #endif

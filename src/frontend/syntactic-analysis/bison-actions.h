@@ -3,7 +3,6 @@
 
 #include "../../backend/support/shared.h"
 #include "../../backend/semantic-analysis/abstract-syntax-tree.h"
-// TO-DO: check if this is correct
 #include "../data-types.h"
 
 /**

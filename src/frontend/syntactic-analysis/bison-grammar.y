@@ -11,13 +11,18 @@
 // Tipos de dato utilizados en las variables semánticas ($$, $1, $2, etc.).
 %union {
 	// No-terminales (backend).
-	/*
-	Program program;
-	Expression expression;
-	Factor factor;
-	Constant constant;
-	...
-	*/
+	ParamShapeNode * paramShape;
+	ParamListRectangleNode * paramListRectangle;
+	ParamRectangleNode * paramRectangle;
+	ParamListEllipseNode * paramListEllipse;
+	ParamEllipseNode * paramEllipse;
+	ParamListTriangleNode * paramListTriangle;
+	ParamTriangleNode * paramTriangle;
+
+	ParamListTextNode * paramListText;
+	ParamTextNode * paramText;
+	ParamListImageNode * paramListImage;
+	ParamImageNode * paramImage;
 
 	// No-terminales (frontend).
 	int program;
@@ -46,20 +51,8 @@
 	int paramListRecolor;
 	int paramRecolor;
 
-	ParamShapeNode* paramShape;
-	ParamListRectangleNode* paramListRectangle;
-	ParamRectangleNode* paramRectangle;
-	ParamListEllipseNode* paramListEllipse;
-	ParamEllipseNode* paramEllipse;
-	ParamListTriangleNode* paramListTriangle;
-	ParamTriangleNode* paramTriangle;
 
-	int paramListText;
-	paramTextNode * paramText;
-	int paramListImage;
-	int paramImage;
-
-	TypeColorNode* typeColor;
+	ParamTypeColorNode* typeColor;
 	int typePoints;
 
 	// Terminales.
@@ -290,10 +283,10 @@ paramListRecolor: %empty							{ $$ = Return0(); }
 paramRecolor: PARAM_END_COLOR COLON typeColor		{ $$ = Return0(); }
 
 // For shapes
-paramShape: PARAM_FILL_COLOR COLON typeColor		{ $$ = ParamShapeAction(FILL_COLOR,		$3,		NULL, 	NULL, 	NULL); }
-	| PARAM_BORDER_COLOR COLON typeColor			{ $$ = ParamShapeAction(BORDER_COLOR, 	NULL, 	$3, 	NULL, 	NULL); }
-	| PARAM_BORDER_WIDTH COLON TYPE_INTEGER			{ $$ = ParamShapeAction(BORDER_WIDTH, 	NULL, 	NULL, 	$3, 	NULL); }
-	| PARAM_ROTATION COLON TYPE_INTEGER				{ $$ = ParamShapeAction(ROTATION, 		NULL, 	NULL, 	NULL, 	$3); }
+paramShape: PARAM_FILL_COLOR COLON typeColor		{ $$ = ParamShapeAction(FILL_COLOR,		$3,		NULL, 	0, 		0); }
+	| PARAM_BORDER_COLOR COLON typeColor			{ $$ = ParamShapeAction(BORDER_COLOR, 	NULL, 	$3, 	0, 		0); }
+	| PARAM_BORDER_WIDTH COLON TYPE_INTEGER			{ $$ = ParamShapeAction(BORDER_WIDTH, 	NULL, 	NULL, 	$3, 	0); }
+	| PARAM_ROTATION COLON TYPE_INTEGER				{ $$ = ParamShapeAction(ROTATION, 		NULL, 	NULL, 	0, 		$3); }
 
 paramListRectangle: %empty							{ $$ = ParamListRectangleEmptyAction(); }
 	| paramShape COMMA paramListRectangle			{ $$ = ParamListRectangleAddParamShapeAction($1,$3); }
@@ -301,8 +294,8 @@ paramListRectangle: %empty							{ $$ = ParamListRectangleEmptyAction(); }
 	| paramRectangle COMMA paramListRectangle		{ $$ = ParamListRectangleAddParamRectangleAction($1,$3); }
 	| paramRectangle								{ $$ = ParamListRectangleAddParamRectangleAndEndAction($1); }
 
-paramRectangle: PARAM_HEIGHT COLON TYPE_INTEGER		{ $$ = ParamRectangleAction(RT_HEIGHT, 	$3, 	NULL); }
-	| PARAM_WIDTH COLON TYPE_INTEGER				{ $$ = ParamRectangleAction(RT_WIDTH, 	NULL, 	$3); }
+paramRectangle: PARAM_HEIGHT COLON TYPE_INTEGER		{ $$ = ParamRectangleAction(RT_HEIGHT, 	$3,	0); }
+	| PARAM_WIDTH COLON TYPE_INTEGER				{ $$ = ParamRectangleAction(RT_WIDTH, 	0,	$3); }
 
 paramListEllipse: %empty							{ $$ = ParamListEllipseEmptyAction(); }
 	| paramShape COMMA paramListEllipse				{ $$ = ParamListEllipseAddParamShapeAction($1,$3);}
@@ -310,8 +303,8 @@ paramListEllipse: %empty							{ $$ = ParamListEllipseEmptyAction(); }
 	| paramEllipse COMMA paramListEllipse			{ $$ = ParamListEllipseAddParamEllipseAction($1,$3); }
 	| paramEllipse									{ $$ = ParamListEllipseAddParamEllipseAndEndAction($1); }
 
-paramEllipse: PARAM_X_AXIS COLON TYPE_INTEGER		{ $$ = ParamEllipseAction(ET_X_AXIS,	$3, 	NULL); }
-	| PARAM_Y_AXIS COLON TYPE_INTEGER				{ $$ = ParamEllipseAction(ET_Y_AXIS, 	NULL, 	$3); }
+paramEllipse: PARAM_X_AXIS COLON TYPE_INTEGER		{ $$ = ParamEllipseAction(ET_X_AXIS,	$3, 0); }
+	| PARAM_Y_AXIS COLON TYPE_INTEGER				{ $$ = ParamEllipseAction(ET_Y_AXIS, 	0, 	$3); }
 
 paramListTriangle: %empty							{ $$ = ParamListTriangleEmptyAction(); }
 	| paramShape COMMA paramListTriangle			{ $$ = ParamListTriangleAddParamShapeAction($1,$3); }
@@ -319,8 +312,8 @@ paramListTriangle: %empty							{ $$ = ParamListTriangleEmptyAction(); }
 	| paramTriangle COMMA paramListTriangle			{ $$ = ParamListTriangleAddParamTriangleAction($1,$3); }
 	| paramTriangle									{ $$ = ParamListTriangleAddParamTriangleAndEndAction($1); }
 
-paramTriangle: PARAM_HEIGHT COLON TYPE_INTEGER		{ $$ = ParamTriangleAction(TT_HEIGHT,	$3,		NULL); }
-	| PARAM_BASE COLON TYPE_INTEGER					{ $$ = ParamTriangleAction(TT_BASE,		NULL, 	$3); }
+paramTriangle: PARAM_HEIGHT COLON TYPE_INTEGER		{ $$ = ParamTriangleAction(TT_HEIGHT,	$3,	0); }
+	| PARAM_BASE COLON TYPE_INTEGER					{ $$ = ParamTriangleAction(TT_BASE,		0, 	$3); }
 
 // For vectors
 paramListImage: %empty						{ $$ = Return0(); }
@@ -333,12 +326,12 @@ paramListText: %empty						{ $$ = Return0(); }
 	| paramText COMMA paramListText			{ $$ = ParamListTextMultipleAction($1, $3); }
 	| paramText								{ $$ = ParamListTextAction($1); }
 
-paramText: PARAM_FONT_WIDTH COLON TYPE_INTEGER 				{ $$ = ParamTextAction(FONT_WIDTH, 		 $3, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL); }
-	| PARAM_FONT_FAMILY COLON TYPE_FONT_FAMILY 				{ $$ = ParamTextAction(FONT_FAMILY, 	 NULL, 	$3, 	NULL, 	NULL, 	NULL, 	NULL); }
-	| PARAM_FONT_WEIGHT COLON TYPE_INTEGER 					{ $$ = ParamTextAction(FONT_WEIGHT, 	 NULL, 	NULL, 	$3, 	NULL, 	NULL, 	NULL); }
-	| PARAM_FONT_STYLE COLON TYPE_FONT_STYLE 				{ $$ = ParamTextAction(FONT_STYLE, 		 NULL, 	NULL, 	NULL, 	$3, 	NULL, 	NULL); }
-	| PARAM_TEXT_DECORATION COLON TYPE_TEXT_DECORATION 		{ $$ = ParamTextAction(TEXT_DECORATION,  NULL, 	NULL, 	NULL, 	NULL, 	$3, 	NULL); }
-	| PARAM_BACKGROUND_COLOR COLON typeColor 				{ $$ = ParamTextAction(BACKGROUND_COLOR, NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	$3); }
+paramText: PARAM_FONT_WIDTH COLON TYPE_INTEGER 				{ $$ = ParamTextAction(FONT_WIDTH, 		 $3, 	FF_NONE, 	0, 	FS_NONE, 	TD_NONE, 	NULL); }
+	| PARAM_FONT_FAMILY COLON TYPE_FONT_FAMILY 				{ $$ = ParamTextAction(FONT_FAMILY, 	 0, 	$3, 		0, 	FS_NONE, 	TD_NONE, 	NULL); }
+	| PARAM_FONT_WEIGHT COLON TYPE_INTEGER 					{ $$ = ParamTextAction(FONT_WEIGHT, 	 0, 	FF_NONE, 	$3, FS_NONE, 	TD_NONE, 	NULL); }
+	| PARAM_FONT_STYLE COLON TYPE_FONT_STYLE 				{ $$ = ParamTextAction(FONT_STYLE, 		 0, 	FF_NONE, 	0, 	$3, 		TD_NONE, 	NULL); }
+	| PARAM_TEXT_DECORATION COLON TYPE_TEXT_DECORATION 		{ $$ = ParamTextAction(TEXT_DECORATION,  0, 	FF_NONE, 	0, 	FS_NONE, 	$3, 		NULL); }
+	| PARAM_BACKGROUND_COLOR COLON typeColor 				{ $$ = ParamTextAction(BACKGROUND_COLOR, 0, 	FF_NONE, 	0, 	FS_NONE, 	TD_NONE, 	$3); }
 
 /* Data types */
 typeColor: COLOR_HEX			{ $$ = ParamTypeColorAction($1); }
