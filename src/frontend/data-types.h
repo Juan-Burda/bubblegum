@@ -19,14 +19,12 @@ typedef enum {
 } boolean_t;
 
 typedef enum {
-    FS_NONE,
     NORMAL,
     ITALIC,
     OBLIQUE
 } fontstyle_t;
 
 typedef enum {
-    FF_NONE,
     ARIAL,
     HELVETICA,
     VERDANA,
@@ -35,7 +33,6 @@ typedef enum {
 } fontfamily_t;
 
 typedef enum {
-    TD_NONE,
     UNDERLINE,
     OVERLINE,
     LINE_THROUGH
