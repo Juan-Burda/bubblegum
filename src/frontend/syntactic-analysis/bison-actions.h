@@ -21,6 +21,21 @@ int Return0();
 int IntegerConstantGrammarAction(const int value);
 
 /* Parameters */
+// For animations
+ParamAnimationNode * ParamAnimationAction(ParamAnimationType type, ParamAnimationUnion value);
+
+ParamTranslateNode * ParamTranslateAction(ParamTranslateType type, ParamTranslateUnion value);
+
+ParamOpacityNode * ParamOpacityAction(ParamOpacityType type, ParamOpacityUnion value);
+
+ParamRotateNode * ParamRotateAction(ParamRotateType type, ParamRotateUnion value);
+
+ParamResizeNode * ParamResizeAction(ParamResizeType type, ParamResizeUnion value);
+
+ParamRecolorNode * ParamRecolorAction(ParamRecolorType type, ParamRecolorUnion value);
+
+ParamMorphNode * ParamMorphAction(ParamMorphType type, ParamMorphUnion value);
+
 // For shapes
 ParamShapeNode * ParamShapeAction(ParamShapeType type, ParamShapeUnion value);
 
@@ -42,6 +57,6 @@ ParamTextNode * ParamTextAction(ParamTextType type, ParamTextUnion value);
 
 // For data types
 ParamTypeColorNode * ParamTypeColorAction(char * typeColor);
-ParamFloatNode * ParamTypePointsAddPointAction(ParamFloatNode * floatNode, float floating);
+ParamTypePointsNode * ParamTypePointsAddPointAction(ParamTypePointsNode * pointsNode, float floating);
 
 #endif

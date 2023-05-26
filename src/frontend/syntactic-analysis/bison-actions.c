@@ -57,6 +57,85 @@ int IntegerConstantGrammarAction(const int value) {
 	return value;
 }
 
+/** Parameters */
+/* Animation */
+ParamAnimationNode * ParamAnimationAction(ParamAnimationType type, ParamAnimationUnion value) {
+	LogDebug("\tParamAnimationAction");
+
+	ParamAnimationNode * result = (ParamAnimationNode*) calloc(1, sizeof(ParamAnimationNode));
+	result->type = type;
+	result->value = value;
+
+	return result;
+}
+
+// For translate
+ParamTranslateNode * ParamTranslateAction(ParamTranslateType type, ParamTranslateUnion value) {
+	LogDebug("\tParamTranslateAction");
+
+	ParamTranslateNode * result = (ParamTranslateNode*) calloc(1, sizeof(ParamTranslateNode));
+	result->type = type;
+	result->value = value;
+
+	return result;
+}
+
+// For opacity
+ParamOpacityNode * ParamOpacityAction(ParamOpacityType type, ParamOpacityUnion value) {
+	LogDebug("\tParamOpacityAction");
+
+	ParamOpacityNode * result = (ParamOpacityNode*) calloc(1, sizeof(ParamOpacityNode));
+	result->type = type;
+	result->value = value;
+
+	return result;
+}
+
+// For rotate
+ParamRotateNode * ParamRotateAction(ParamRotateType type, ParamRotateUnion value) {
+	LogDebug("\tParamRotateAction");
+
+	ParamRotateNode * result = (ParamRotateNode*) calloc(1, sizeof(ParamRotateNode));
+	result->type = type;
+	result->value = value;
+
+	return result;
+}
+
+// For resize
+ParamResizeNode * ParamResizeAction(ParamResizeType type, ParamResizeUnion value) {
+	LogDebug("\tParamResizeAction");
+
+	ParamResizeNode * result = (ParamResizeNode*) calloc(1, sizeof(ParamResizeNode));
+	result->type = type;
+	result->value = value;
+
+	return result;
+}
+
+// For morph
+ParamMorphNode * ParamMorphAction(ParamMorphType type, ParamMorphUnion value) {
+	LogDebug("\tParamMorphAction");
+
+	ParamMorphNode * result = (ParamMorphNode*) calloc(1, sizeof(ParamMorphNode));
+	result->type = type;
+	result->value = value;
+
+	return result;
+}
+
+// For recolor
+ParamRecolorNode * ParamRecolorAction(ParamRecolorType type, ParamRecolorUnion value) {
+	LogDebug("\tParamRecolorAction");
+
+	ParamRecolorNode * result = (ParamRecolorNode*) calloc(1, sizeof(ParamRecolorNode));
+	result->type = type;
+	result->value = value;
+
+	return result;
+}
+
+/* Shapes */
 ParamShapeNode * ParamShapeAction(ParamShapeType type, ParamShapeUnion value) {
 	LogDebug("\tParamShapeAction");
 
@@ -67,6 +146,7 @@ ParamShapeNode * ParamShapeAction(ParamShapeType type, ParamShapeUnion value) {
 	return result;
 }
 
+// For rectangles
 ParamListRectangleNode * ParamListRectangleAddParamAction(ParamListRectangleType type, ParamListRectangleNode* listNode, ParamShapeNode * shapeNode, ParamRectangleNode * rectangleNode) {
 	LogDebug("\tParamListRectangleAddParamAction");
 
@@ -89,6 +169,7 @@ ParamRectangleNode * ParamRectangleAction(ParamRectangleType type, ParamRectangl
 	return result;
 }
 
+// For ellipse
 ParamListEllipseNode * ParamListEllipseAddParamAction(ParamListEllipseType type, ParamListEllipseNode* listNode, ParamShapeNode * shapeNode, ParamEllipseNode * ellipseNode) {
 	LogDebug("\tParamListEllipseAddParamAction");
 
@@ -111,6 +192,7 @@ ParamEllipseNode * ParamEllipseAction(ParamEllipseType type, ParamEllipseUnion v
 	return result;
 }
 
+// For triangle
 ParamListTriangleNode * ParamListTriangleAddParamAction(ParamListTriangleType type, ParamListTriangleNode* listNode, ParamShapeNode * shapeNode, ParamTriangleNode * triangleNode) {
 	LogDebug("\tParamListTriangleAddParamShapeAction");
 
@@ -185,9 +267,9 @@ ParamTypeColorNode * ParamTypeColorAction(char * typeColor){
 	return result;
 }
 
-ParamFloatNode * ParamTypePointsAddPointAction(ParamFloatNode * floatNode, float floating) {
-	ParamFloatNode * result = (ParamFloatNode*) calloc(1, sizeof(ParamFloatNode));
-	result->paramFloatNode = floatNode;
+ParamTypePointsNode * ParamTypePointsAddPointAction(ParamTypePointsNode * pointsNode, float floating) {
+	ParamTypePointsNode * result = (ParamTypePointsNode*) calloc(1, sizeof(ParamTypePointsNode));
+	result->nextPoint = pointsNode;
 	result->floating = floating;
 
 	return result;

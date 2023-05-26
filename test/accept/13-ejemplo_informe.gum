@@ -18,7 +18,7 @@ squaresAnimation = Center() {
 }
 
 circleAnimation = Center() { 
-  Opacity(duration: 200, delay: 100, loop: true, alpha: 0) {
+  Opacity(duration: 200, delay: 100, loop: true, alpha: 0.0) {
     grayCircle 
   }
 } 

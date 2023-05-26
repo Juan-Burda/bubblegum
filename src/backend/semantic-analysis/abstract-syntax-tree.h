@@ -16,7 +16,7 @@ typedef struct ParamListTriangleNode ParamListTriangleNode;
 
 typedef struct ParamListImageNode ParamListImageNode; 
 typedef struct ParamListTextNode ParamListTextNode; 
-typedef struct ParamFloatNode ParamFloatNode; 
+typedef struct ParamTypePointsNode ParamTypePointsNode; 
 
 /**
 * Para cada no-terminal se define una nueva estructura que representa su tipo
@@ -45,13 +45,108 @@ typedef struct {
 	char * typeColor;
 } ParamTypeColorNode;
 
-struct ParamFloatNode{
+struct ParamTypePointsNode {
 	float floating;
-	ParamFloatNode * paramFloatNode;
+	ParamTypePointsNode * nextPoint;
 };
 
 /* Animation nodes */
-// TODO
+// Animation
+typedef union {
+	boolean_t alternate;
+	boolean_t loop;
+	int duration;
+	int delay;
+} ParamAnimationUnion;
+
+typedef enum {
+	ALTERNATE,
+	LOOP,
+	DURATION,
+	DELAY
+} ParamAnimationType;
+typedef struct {
+	ParamAnimationType type;
+	ParamAnimationUnion value;
+} ParamAnimationNode;
+
+// Translate
+typedef union {
+	int endValue;
+} ParamTranslateUnion;
+
+typedef enum {
+	END_VALUE
+} ParamTranslateType;
+typedef struct {
+	ParamTranslateType type;
+	ParamTranslateUnion value;
+} ParamTranslateNode;
+
+// Opacity
+typedef union {
+	float alpha;
+} ParamOpacityUnion;
+
+typedef enum {
+	ALPHA
+} ParamOpacityType;
+typedef struct {
+	ParamOpacityType type;
+	ParamOpacityUnion value;
+} ParamOpacityNode;
+
+// Rotate
+typedef union {
+	int angle;
+} ParamRotateUnion;
+
+typedef enum {
+	ANGLE
+} ParamRotateType;
+typedef struct {
+	ParamRotateType type;
+	ParamRotateUnion value;
+} ParamRotateNode;
+
+// Resize
+typedef union {
+	float scale;
+} ParamResizeUnion;
+
+typedef enum {
+	SCALE
+} ParamResizeType;
+typedef struct {
+	ParamResizeType type;
+	ParamResizeUnion value;
+} ParamResizeNode;
+
+// Morph
+typedef union {
+	ParamTypePointsNode * points;
+} ParamMorphUnion;
+
+typedef enum {
+	POINT
+} ParamMorphType;
+typedef struct {
+	ParamMorphType type;
+	ParamMorphUnion value;
+} ParamMorphNode;
+
+// Recolor
+typedef union {
+	ParamTypeColorNode * endColor;
+} ParamRecolorUnion;
+
+typedef enum {
+	END_COLOR
+} ParamRecolorType;
+typedef struct {
+	ParamRecolorType type;
+	ParamRecolorUnion value;
+} ParamRecolorNode;
 
 /* Shape nodes */ 
 // Shape

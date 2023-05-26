@@ -11,6 +11,14 @@
 // Tipos de dato utilizados en las variables semánticas ($$, $1, $2, etc.).
 %union {
 	// No-terminales (backend).
+	ParamAnimationNode * paramAnimation;
+	ParamTranslateNode * paramTranslate;
+	ParamOpacityNode * paramOpacity;
+	ParamRotateNode * paramRotate;
+	ParamResizeNode * paramResize;
+	ParamMorphNode * paramMorph;
+	ParamRecolorNode * paramRecolor;
+
 	ParamShapeNode * paramShape;
 	ParamListRectangleNode * paramListRectangle;
 	ParamRectangleNode * paramRectangle;
@@ -24,8 +32,8 @@
 	ParamListImageNode * paramListImage;
 	ParamImageNode * paramImage;
 
-	ParamTypeColorNode* typeColor;
-	ParamFloatNode * typePoints;
+	ParamTypeColorNode * typeColor;
+	ParamTypePointsNode * typePoints;
 
 	// No-terminales (frontend).
 	int program;
@@ -40,19 +48,12 @@
 	int shape;
 	int vector;
 
-	int paramAnimation;
 	int paramListTranslate;
-	int paramTranslate;
 	int paramListOpacity;
-	int paramOpacity;
 	int paramListRotate;
-	int paramRotate;
 	int paramListResize;
-	int paramResize;
 	int paramListMorph;
-	int paramMorph;
 	int paramListRecolor;
-	int paramRecolor;
 
 	// Terminales.
 	token token;
@@ -227,10 +228,10 @@ vector: IMAGE OPEN_PARENTHESIS paramListImage  CLOSE_PARENTHESIS		{ $$ = Return0
 
 /* Parameters */
 // For animations
-paramAnimation: PARAM_ALTERNATE COLON TYPE_BOOLEAN	{ $$ = Return0(); }
-	| PARAM_LOOP COLON TYPE_BOOLEAN					{ $$ = Return0(); }
-	| PARAM_DURATION COLON TYPE_INTEGER				{ $$ = Return0(); }
-	| PARAM_DELAY COLON TYPE_INTEGER				{ $$ = Return0(); }
+paramAnimation: PARAM_ALTERNATE COLON TYPE_BOOLEAN	{ $$ = ParamAnimationAction(ALTERNATE, (ParamAnimationUnion) { .alternate = $3 }); }
+	| PARAM_LOOP COLON TYPE_BOOLEAN					{ $$ = ParamAnimationAction(LOOP, (ParamAnimationUnion) { .loop = $3 }); }
+	| PARAM_DURATION COLON TYPE_INTEGER				{ $$ = ParamAnimationAction(DURATION, (ParamAnimationUnion) { .duration = $3 }); }
+	| PARAM_DELAY COLON TYPE_INTEGER				{ $$ = ParamAnimationAction(DELAY, (ParamAnimationUnion) { .delay = $3 }); }
 
 paramListTranslate: %empty							{ $$ = Return0(); }
 	| paramAnimation COMMA paramListTranslate		{ $$ = Return0(); }
@@ -238,7 +239,7 @@ paramListTranslate: %empty							{ $$ = Return0(); }
 	| paramTranslate COMMA paramListTranslate		{ $$ = Return0(); }
 	| paramTranslate								{ $$ = Return0(); }
 
-paramTranslate: PARAM_END_VALUE COLON TYPE_INTEGER	{ $$ = Return0(); }
+paramTranslate: PARAM_END_VALUE COLON TYPE_INTEGER	{ $$ = ParamTranslateAction(END_VALUE, (ParamTranslateUnion) { .endValue = $3 }); }
 
 paramListOpacity: %empty							{ $$ = Return0(); }
 	| paramAnimation COMMA paramListOpacity			{ $$ = Return0(); }
@@ -246,8 +247,7 @@ paramListOpacity: %empty							{ $$ = Return0(); }
 	| paramOpacity COMMA paramListOpacity			{ $$ = Return0(); }
 	| paramOpacity									{ $$ = Return0(); }
 
-paramOpacity: PARAM_ALPHA COLON TYPE_FLOAT			{ $$ = Return0(); }
-	| PARAM_ALPHA COLON TYPE_INTEGER				{ $$ = Return0(); }
+paramOpacity: PARAM_ALPHA COLON TYPE_FLOAT			{ $$ = ParamOpacityAction(ALPHA, (ParamOpacityUnion) { .alpha = $3 }); }
 
 paramListRotate: %empty								{ $$ = Return0(); }
 	| paramAnimation COMMA paramListRotate			{ $$ = Return0(); }
@@ -255,7 +255,7 @@ paramListRotate: %empty								{ $$ = Return0(); }
 	| paramRotate COMMA paramListRotate				{ $$ = Return0(); }
 	| paramRotate									{ $$ = Return0(); }
 
-paramRotate: PARAM_ANGLE COLON TYPE_INTEGER			{ $$ = Return0(); }
+paramRotate: PARAM_ANGLE COLON TYPE_INTEGER			{ $$ = ParamRotateAction(ANGLE, (ParamRotateUnion) { .angle = $3 }); }
 
 paramListResize: %empty								{ $$ = Return0(); }
 	| paramAnimation COMMA paramListResize			{ $$ = Return0(); }
@@ -263,7 +263,7 @@ paramListResize: %empty								{ $$ = Return0(); }
 	| paramResize COMMA paramListResize				{ $$ = Return0(); }
 	| paramResize									{ $$ = Return0(); }
 
-paramResize: PARAM_SCALE COLON TYPE_FLOAT			{ $$ = Return0(); }
+paramResize: PARAM_SCALE COLON TYPE_FLOAT			{ $$ = ParamResizeAction(SCALE, (ParamResizeUnion) { .scale = $3 }); }
 
 paramListMorph: %empty								{ $$ = Return0(); }
 	| paramAnimation COMMA paramListMorph			{ $$ = Return0(); }
@@ -271,7 +271,7 @@ paramListMorph: %empty								{ $$ = Return0(); }
 	| paramMorph COMMA paramListMorph				{ $$ = Return0(); }
 	| paramMorph									{ $$ = Return0(); }
 
-paramMorph: PARAM_POINTS COLON typePoints			{ $$ = Return0(); }
+paramMorph: PARAM_POINTS COLON typePoints			{ $$ = ParamMorphAction(POINT, (ParamMorphUnion) { .points = $3 }); }
 
 paramListRecolor: %empty							{ $$ = Return0(); }
 	| paramAnimation COMMA paramListRecolor			{ $$ = Return0(); }
@@ -279,7 +279,7 @@ paramListRecolor: %empty							{ $$ = Return0(); }
 	| paramRecolor COMMA paramListRecolor			{ $$ = Return0(); }
 	| paramRecolor									{ $$ = Return0(); }
 
-paramRecolor: PARAM_END_COLOR COLON typeColor		{ $$ = Return0(); }
+paramRecolor: PARAM_END_COLOR COLON typeColor		{ $$ = ParamRecolorAction(END_VALUE, (ParamRecolorUnion) { .endColor = $3 }); }
 
 // For shapes
 paramShape: PARAM_FILL_COLOR COLON typeColor		{ $$ = ParamShapeAction(FILL_COLOR,	(ParamShapeUnion) { .fillColor = $3 }); }
