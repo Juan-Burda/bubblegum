@@ -58,6 +58,11 @@ int IntegerConstantGrammarAction(const int value) {
 }
 
 /** Parameters */
+/**
+ * For parameters we always have the same pattern:
+ * 	- We need to save a certain parameter's value -> this is done in Param<sth>Node
+ * 	- We need to add a new paramter -> this is done in ParamList<sth>Node
+*/
 /* Animation */
 ParamAnimationNode * ParamAnimationAction(ParamAnimationType type, ParamAnimationUnion value) {
 	LogDebug("\tParamAnimationAction");
@@ -74,8 +79,8 @@ ParamListTranslateNode * ParamListTranslateAddParamAction(ParamListTranslateType
 	LogDebug("\tParamListTranslateAddParamAction");
 
 	ParamListTranslateNode * result = (ParamListTranslateNode*) calloc(1, sizeof(ParamListTranslateNode));
-	result->paramListTranslateType = type;
-	result->paramListTranslateNode = listNode;
+	result->type = type;
+	result->listNode = listNode;
 	result->value = value;
 
 	return result;
@@ -96,8 +101,8 @@ ParamListOpacityNode * ParamListOpacityAddParamAction(ParamListOpacityType type,
 	LogDebug("\tParamListOpacityAddParamAction");
 
 	ParamListOpacityNode * result = (ParamListOpacityNode*) calloc(1, sizeof(ParamListOpacityNode));
-	result->paramListOpacityType = type;
-	result->paramListOpacityNode = listNode;
+	result->type = type;
+	result->listNode = listNode;
 	result->value = value;
 
 	return result;
@@ -118,8 +123,8 @@ ParamListRotateNode * ParamListRotateAddParamAction(ParamListRotateType type, Pa
 	LogDebug("\tParamListRotateAddParamAction");
 
 	ParamListRotateNode * result = (ParamListRotateNode*) calloc(1, sizeof(ParamListRotateNode));
-	result->paramListRotateType = type;
-	result->paramListRotateNode = listNode;
+	result->type = type;
+	result->listNode = listNode;
 	result->value = value;
 
 	return result;
@@ -140,8 +145,8 @@ ParamListResizeNode * ParamListResizeAddParamAction(ParamListResizeType type, Pa
 	LogDebug("\tParamListResizeAddParamAction");
 
 	ParamListResizeNode * result = (ParamListResizeNode*) calloc(1, sizeof(ParamListResizeNode));
-	result->paramListResizeType = type;
-	result->paramListResizeNode = listNode;
+	result->type = type;
+	result->listNode = listNode;
 	result->value = value;
 
 	return result;
@@ -162,8 +167,8 @@ ParamListMorphNode * ParamListMorphAddParamAction(ParamListMorphType type, Param
 	LogDebug("\tParamListMorphAddParamAction");
 
 	ParamListMorphNode * result = (ParamListMorphNode*) calloc(1, sizeof(ParamListMorphNode));
-	result->paramListMorphType = type;
-	result->paramListMorphNode = listNode;
+	result->type = type;
+	result->listNode = listNode;
 	result->value = value;
 
 	return result;
@@ -184,8 +189,8 @@ ParamListRecolorNode * ParamListRecolorAddParamAction(ParamListRecolorType type,
 	LogDebug("\tParamListRecolorAddParamAction");
 
 	ParamListRecolorNode * result = (ParamListRecolorNode*) calloc(1, sizeof(ParamListRecolorNode));
-	result->paramListRecolorType = type;
-	result->paramListRecolorNode = listNode;
+	result->type = type;
+	result->listNode = listNode;
 	result->value = value;
 
 	return result;
@@ -217,8 +222,8 @@ ParamListRectangleNode * ParamListRectangleAddParamAction(ParamListRectangleType
 	LogDebug("\tParamListRectangleAddParamAction");
 
 	ParamListRectangleNode * result = (ParamListRectangleNode*) calloc(1, sizeof(ParamListRectangleNode));
-	result->paramListRectangleType = type;
-	result->paramListRectangleNode = listNode;
+	result->type = type;
+	result->listNode = listNode;
 	result->value = value;
 
 	return result;
@@ -239,8 +244,8 @@ ParamListEllipseNode * ParamListEllipseAddParamAction(ParamListEllipseType type,
 	LogDebug("\tParamListEllipseAddParamAction");
 
 	ParamListEllipseNode * result = (ParamListEllipseNode*) calloc(1, sizeof(ParamListEllipseNode));
-	result->paramListEllipseType = type;
-	result->paramListEllipseNode = listNode;
+	result->type = type;
+	result->listNode = listNode;
 	result->value = value;
 
 	return result;
@@ -261,8 +266,8 @@ ParamListTriangleNode * ParamListTriangleAddParamAction(ParamListTriangleType ty
 	LogDebug("\tParamListTriangleAddParamShapeAction");
 
 	ParamListTriangleNode * result = (ParamListTriangleNode*) calloc(1, sizeof(ParamListTriangleNode));
-	result->paramListTriangleType = type;
-	result->paramListTriangleNode = listNode;
+	result->type = type;
+	result->listNode = listNode;
 	result->value = value;
 
 	return result;
@@ -286,7 +291,7 @@ ParamListImageNode * ParamListImageAddParamAction(ParamListImageNode * listNode,
 	LogDebug("\tParamListImageMultipleAction");
 
 	ParamListImageNode * result = (ParamListImageNode *) calloc(1, sizeof(ParamListImageNode));
-	result->paramListImageNode = listNode;
+	result->listNode = listNode;
 	result->paramImageNode = imageNode;
 
 	return result;
@@ -306,7 +311,7 @@ ParamListTextNode * ParamListTextAddParamAction(ParamListTextNode * listNode, Pa
 	LogDebug("\t ParamListTextMultipleAction");
 
 	ParamListTextNode * result = (ParamListTextNode*)calloc(1,sizeof(ParamListTextNode));
-	result->paramListTextNode = listNode;
+	result->listNode = listNode;
 	result->paramTextNode = textNode;
 
 	return result;
