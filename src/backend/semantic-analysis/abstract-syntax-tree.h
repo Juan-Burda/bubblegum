@@ -80,10 +80,10 @@ typedef struct {
 
 typedef enum {
 	RL_EMPTY,
+	RL_SHAPE_LIST,
 	RL_SHAPE,
-	RL_RECTANGLE,
-	RL_SHAPE_RECTANGLE_LIST,
-	RL_RECTANGLE_RECTANGLE_LIST
+	RL_RECTANGLE_LIST,
+	RL_RECTANGLE
 } ParamListRectangleType;
 struct ParamListRectangleNode{
 	ParamListRectangleType paramListRectangleType;
@@ -104,10 +104,10 @@ typedef struct {
 
 typedef enum {
 	EL_EMPTY,
+	EL_SHAPE_LIST,
 	EL_SHAPE,
-	EL_ELLIPSE,
-	EL_SHAPE_ELLIPSE_LIST,
-	EL_ELLIPSE_ELLIPSE_LIST
+	EL_ELLIPSE_LIST,
+	EL_ELLIPSE
 } ParamListEllipseType;
 struct ParamListEllipseNode{
 	ParamListEllipseType paramListEllipseType;
@@ -128,10 +128,10 @@ typedef struct{
 
 typedef enum{
 	TL_EMPTY,
+	TL_SHAPE_LIST,
 	TL_SHAPE,
-	TL_TRIANGLE,
-	TL_SHAPE_TRIANGLE_LIST,
-	TL_TRIANGLE_TRIANGLE_LIST
+	TL_TRIANGLE_LIST,
+	TL_TRIANGLE
 } ParamListTriangleType;
 struct ParamListTriangleNode{
 	ParamListTriangleType paramListTriangleType;

@@ -24,45 +24,27 @@ int IntegerConstantGrammarAction(const int value);
 // For shapes
 ParamShapeNode * ParamShapeAction(ParamShapeType type, ParamTypeColorNode * fillColor, ParamTypeColorNode * borderColor, int borderWidth, int rotation);
 
-ParamListRectangleNode * ParamListRectangleEmptyAction();
-ParamListRectangleNode * ParamListRectangleAddParamShapeAction(ParamShapeNode* , ParamListRectangleNode*);
-ParamListRectangleNode * ParamListRectangleAddParamShapeAndEndAction(ParamShapeNode*);
-ParamListRectangleNode * ParamListRectangleAddParamRectangleAction(ParamRectangleNode*, ParamListRectangleNode*);
-ParamListRectangleNode * ParamListRectangleAddParamRectangleAndEndAction(ParamRectangleNode*);
-
+ParamListRectangleNode * ParamListRectangleAddParamAction(ParamListRectangleType type, ParamListRectangleNode * listNode, ParamShapeNode * shapeNode, ParamRectangleNode * rectangleNode);
 ParamRectangleNode * ParamRectangleAction(ParamRectangleType type, int height, int width);
 
-ParamListEllipseNode * ParamListEllipseEmptyAction();
-ParamListEllipseNode * ParamListEllipseAddParamShapeAction(ParamShapeNode* , ParamListEllipseNode*);
-ParamListEllipseNode * ParamListEllipseAddParamShapeAndEndAction(ParamShapeNode*);
-ParamListEllipseNode * ParamListEllipseAddParamEllipseAction(ParamEllipseNode*, ParamListEllipseNode*);
-ParamListEllipseNode * ParamListEllipseAddParamEllipseAndEndAction(ParamEllipseNode*);
-
+ParamListEllipseNode * ParamListEllipseAddParamAction(ParamListEllipseType type, ParamListEllipseNode * listNode, ParamShapeNode * shapeNode, ParamEllipseNode * ellipseNode);
 ParamEllipseNode * ParamEllipseAction(ParamEllipseType type, int xAxis, int yAxis);
 
-ParamListTriangleNode * ParamListTriangleEmptyAction();
-ParamListTriangleNode * ParamListTriangleAddParamShapeAction(ParamShapeNode* , ParamListTriangleNode*);
-ParamListTriangleNode * ParamListTriangleAddParamShapeAndEndAction(ParamShapeNode*);
-ParamListTriangleNode * ParamListTriangleAddParamTriangleAction(ParamTriangleNode*, ParamListTriangleNode*);
-ParamListTriangleNode * ParamListTriangleAddParamTriangleAndEndAction(ParamTriangleNode*);
-
+ParamListTriangleNode * ParamListTriangleAddParamAction(ParamListTriangleType type, ParamListTriangleNode * listNode, ParamShapeNode * shapeNode, ParamTriangleNode * ellipseNode);
 ParamTriangleNode * ParamTriangleAction(ParamTriangleType type, int height, int base);
 
 
 /* Vector actions */
 // For images
-ParamListImageNode * ParamListImageMultipleAction(ParamImageNode * paramImageNode, ParamListImageNode * paramListImageNode);
-ParamListImageNode * ParamListImageAction(ParamImageNode * paramImageNode);
+ParamListImageNode * ParamListImageAddParamAction(ParamListImageNode * listNode, ParamImageNode * imageNode);
 ParamImageNode * ParamImageAction(char * typeUrl);
 
 // For text
-ParamListTextNode * ParamListTextMultipleAction(ParamTextNode * paramTextNode, ParamListTextNode * paramListTextNode);
-ParamListTextNode * ParamListTextAction(ParamTextNode * paramTextNode);
+ParamListTextNode * ParamListTextAddParamAction(ParamListTextNode * listNode, ParamTextNode * textNode);
 ParamTextNode * ParamTextAction(ParamTextType type, int fontWidth, fontfamily_t fontFamily, int fontWeight, fontstyle_t fontStyle, textdeco_t textDeco, ParamTypeColorNode * paramTypeColorNode);
 
 /* Data types actions*/
 ParamTypeColorNode * ParamTypeColorAction(char * typeColor);
-ParamFloatNode * ParamTypeFloatMultipleAction(float floating, ParamFloatNode * paramFloatNode);
-ParamFloatNode * ParamTypeFloatAction(float floating);
+ParamFloatNode * ParamTypePointsAddPointAction(ParamFloatNode * floatNode, float floating);
 
 #endif

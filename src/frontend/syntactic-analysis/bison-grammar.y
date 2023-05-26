@@ -24,6 +24,9 @@
 	ParamListImageNode * paramListImage;
 	ParamImageNode * paramImage;
 
+	ParamTypeColorNode* typeColor;
+	ParamFloatNode * typePoints;
+
 	// No-terminales (frontend).
 	int program;
 	int expression;
@@ -50,10 +53,6 @@
 	int paramMorph;
 	int paramListRecolor;
 	int paramRecolor;
-
-
-	ParamTypeColorNode* typeColor;
-	int typePoints;
 
 	// Terminales.
 	token token;
@@ -134,8 +133,8 @@
 %token <textdeco> TYPE_TEXT_DECORATION
 %token <fontfamily> TYPE_FONT_FAMILY
 %token <fontstyle> TYPE_FONT_STYLE
-%token <token> TYPE_URL
-%token <token> COLOR_HEX
+%token <string> TYPE_URL
+%token <string> COLOR_HEX
 
 // Tipos de dato para los no-terminales generados desde Bison.
 %type <program> program;
@@ -288,43 +287,43 @@ paramShape: PARAM_FILL_COLOR COLON typeColor		{ $$ = ParamShapeAction(FILL_COLOR
 	| PARAM_BORDER_WIDTH COLON TYPE_INTEGER			{ $$ = ParamShapeAction(BORDER_WIDTH, 	NULL, 	NULL, 	$3, 	0); }
 	| PARAM_ROTATION COLON TYPE_INTEGER				{ $$ = ParamShapeAction(ROTATION, 		NULL, 	NULL, 	0, 		$3); }
 
-paramListRectangle: %empty							{ $$ = ParamListRectangleEmptyAction(); }
-	| paramShape COMMA paramListRectangle			{ $$ = ParamListRectangleAddParamShapeAction($1,$3); }
-	| paramShape									{ $$ = ParamListRectangleAddParamShapeAndEndAction($1); }
-	| paramRectangle COMMA paramListRectangle		{ $$ = ParamListRectangleAddParamRectangleAction($1,$3); }
-	| paramRectangle								{ $$ = ParamListRectangleAddParamRectangleAndEndAction($1); }
+paramListRectangle: %empty							{ $$ = ParamListRectangleAddParamAction(RL_EMPTY, 			NULL, 	NULL, 	NULL); }
+	| paramShape COMMA paramListRectangle			{ $$ = ParamListRectangleAddParamAction(RL_SHAPE_LIST, 		$3, 	$1, 	NULL); }
+	| paramShape									{ $$ = ParamListRectangleAddParamAction(RL_SHAPE, 			NULL,	$1, 	NULL); }
+	| paramRectangle COMMA paramListRectangle		{ $$ = ParamListRectangleAddParamAction(RL_RECTANGLE_LIST, 	$3,		NULL,	$1); }
+	| paramRectangle								{ $$ = ParamListRectangleAddParamAction(RL_RECTANGLE, 		NULL,	NULL,	$1); }
 
 paramRectangle: PARAM_HEIGHT COLON TYPE_INTEGER		{ $$ = ParamRectangleAction(RT_HEIGHT, 	$3,	0); }
 	| PARAM_WIDTH COLON TYPE_INTEGER				{ $$ = ParamRectangleAction(RT_WIDTH, 	0,	$3); }
 
-paramListEllipse: %empty							{ $$ = ParamListEllipseEmptyAction(); }
-	| paramShape COMMA paramListEllipse				{ $$ = ParamListEllipseAddParamShapeAction($1,$3);}
-	| paramShape									{ $$ = ParamListEllipseAddParamShapeAndEndAction($1); }
-	| paramEllipse COMMA paramListEllipse			{ $$ = ParamListEllipseAddParamEllipseAction($1,$3); }
-	| paramEllipse									{ $$ = ParamListEllipseAddParamEllipseAndEndAction($1); }
+paramListEllipse: %empty							{ $$ = ParamListEllipseAddParamAction(EL_EMPTY, 		NULL, 	NULL, 	NULL); }
+	| paramShape COMMA paramListEllipse				{ $$ = ParamListEllipseAddParamAction(EL_SHAPE_LIST, 	$3, 	$1, 	NULL); }
+	| paramShape									{ $$ = ParamListEllipseAddParamAction(EL_SHAPE, 		NULL,	$1, 	NULL); }
+	| paramEllipse COMMA paramListEllipse			{ $$ = ParamListEllipseAddParamAction(EL_ELLIPSE_LIST, 	$3,		NULL,	$1); }
+	| paramEllipse									{ $$ = ParamListEllipseAddParamAction(EL_ELLIPSE, 		NULL,	NULL,	$1); }
 
 paramEllipse: PARAM_X_AXIS COLON TYPE_INTEGER		{ $$ = ParamEllipseAction(ET_X_AXIS,	$3, 0); }
 	| PARAM_Y_AXIS COLON TYPE_INTEGER				{ $$ = ParamEllipseAction(ET_Y_AXIS, 	0, 	$3); }
 
-paramListTriangle: %empty							{ $$ = ParamListTriangleEmptyAction(); }
-	| paramShape COMMA paramListTriangle			{ $$ = ParamListTriangleAddParamShapeAction($1,$3); }
-	| paramShape									{ $$ = ParamListTriangleAddParamShapeAndEndAction($1); }
-	| paramTriangle COMMA paramListTriangle			{ $$ = ParamListTriangleAddParamTriangleAction($1,$3); }
-	| paramTriangle									{ $$ = ParamListTriangleAddParamTriangleAndEndAction($1); }
+paramListTriangle: %empty							{ $$ = ParamListTriangleAddParamAction(TL_EMPTY, 			NULL, 	NULL, 	NULL); }
+	| paramShape COMMA paramListTriangle			{ $$ = ParamListTriangleAddParamAction(TL_SHAPE_LIST, 		$3, 	$1, 	NULL); }
+	| paramShape									{ $$ = ParamListTriangleAddParamAction(TL_SHAPE, 			NULL,	$1, 	NULL); }
+	| paramTriangle COMMA paramListTriangle			{ $$ = ParamListTriangleAddParamAction(TL_TRIANGLE_LIST, 	$3,		NULL,	$1); }
+	| paramTriangle									{ $$ = ParamListTriangleAddParamAction(TL_TRIANGLE, 		NULL,	NULL,	$1); }
 
 paramTriangle: PARAM_HEIGHT COLON TYPE_INTEGER		{ $$ = ParamTriangleAction(TT_HEIGHT,	$3,	0); }
 	| PARAM_BASE COLON TYPE_INTEGER					{ $$ = ParamTriangleAction(TT_BASE,		0, 	$3); }
 
 // For vectors
-paramListImage: %empty						{ $$ = Return0(); }
-	| paramImage COMMA paramListImage		{ $$ = ParamListImageMultipleAction($1, $3); }
-	| paramImage							{ $$ = ParamListImageAction($1); }
+paramListImage: %empty						{ $$ = ParamListImageAddParamAction(NULL, 	NULL); }
+	| paramImage COMMA paramListImage		{ $$ = ParamListImageAddParamAction($3, 	$1); }
+	| paramImage							{ $$ = ParamListImageAddParamAction(NULL, 	$1); }
 
 paramImage: PARAM_SRC COLON DOUBLE_QUOTE TYPE_URL DOUBLE_QUOTE 	{ $$ = ParamImageAction($4); }
 
-paramListText: %empty						{ $$ = Return0(); }
-	| paramText COMMA paramListText			{ $$ = ParamListTextMultipleAction($1, $3); }
-	| paramText								{ $$ = ParamListTextAction($1); }
+paramListText: %empty						{ $$ = ParamListTextAddParamAction(NULL, 	NULL); }
+	| paramText COMMA paramListText			{ $$ = ParamListTextAddParamAction($3, 		$1); }
+	| paramText								{ $$ = ParamListTextAddParamAction(NULL, 	$1); }
 
 paramText: PARAM_FONT_WIDTH COLON TYPE_INTEGER 				{ $$ = ParamTextAction(FONT_WIDTH, 		 $3, 	FF_NONE, 	0, 	FS_NONE, 	TD_NONE, 	NULL); }
 	| PARAM_FONT_FAMILY COLON TYPE_FONT_FAMILY 				{ $$ = ParamTextAction(FONT_FAMILY, 	 0, 	$3, 		0, 	FS_NONE, 	TD_NONE, 	NULL); }
@@ -336,7 +335,7 @@ paramText: PARAM_FONT_WIDTH COLON TYPE_INTEGER 				{ $$ = ParamTextAction(FONT_W
 /* Data types */
 typeColor: COLOR_HEX			{ $$ = ParamTypeColorAction($1); }
 
-typePoints: TYPE_FLOAT typePoints 		{ $$ = ParamTypeFloatMultipleAction($1, $2); }
-	| TYPE_FLOAT 						{ $$ = ParamTypeFloatAction($1); }
+typePoints: TYPE_FLOAT typePoints 		{ $$ = ParamTypePointsAddPointAction($2, 	$1); }
+	| TYPE_FLOAT 						{ $$ = ParamTypePointsAddPointAction(NULL, 	$1); }
 
 %%
