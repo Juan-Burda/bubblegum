@@ -22,16 +22,16 @@ int IntegerConstantGrammarAction(const int value);
 
 /* Parameters */
 // For shapes
-ParamShapeNode * ParamShapeAction(ParamShapeType type, ParamTypeColorNode * fillColor, ParamTypeColorNode * borderColor, int borderWidth, int rotation);
+ParamShapeNode * ParamShapeAction(ParamShapeType type, ParamShapeUnion value);
 
 ParamListRectangleNode * ParamListRectangleAddParamAction(ParamListRectangleType type, ParamListRectangleNode * listNode, ParamShapeNode * shapeNode, ParamRectangleNode * rectangleNode);
-ParamRectangleNode * ParamRectangleAction(ParamRectangleType type, int height, int width);
+ParamRectangleNode * ParamRectangleAction(ParamRectangleType type, ParamRectangleUnion value);
 
 ParamListEllipseNode * ParamListEllipseAddParamAction(ParamListEllipseType type, ParamListEllipseNode * listNode, ParamShapeNode * shapeNode, ParamEllipseNode * ellipseNode);
-ParamEllipseNode * ParamEllipseAction(ParamEllipseType type, int xAxis, int yAxis);
+ParamEllipseNode * ParamEllipseAction(ParamEllipseType type, ParamEllipseUnion value);
 
 ParamListTriangleNode * ParamListTriangleAddParamAction(ParamListTriangleType type, ParamListTriangleNode * listNode, ParamShapeNode * shapeNode, ParamTriangleNode * ellipseNode);
-ParamTriangleNode * ParamTriangleAction(ParamTriangleType type, int height, int base);
+ParamTriangleNode * ParamTriangleAction(ParamTriangleType type, ParamTriangleUnion value);
 
 
 /* Vector actions */
@@ -41,7 +41,7 @@ ParamImageNode * ParamImageAction(char * typeUrl);
 
 // For text
 ParamListTextNode * ParamListTextAddParamAction(ParamListTextNode * listNode, ParamTextNode * textNode);
-ParamTextNode * ParamTextAction(ParamTextType type, int fontWidth, fontfamily_t fontFamily, int fontWeight, fontstyle_t fontStyle, textdeco_t textDeco, ParamTypeColorNode * paramTypeColorNode);
+ParamTextNode * ParamTextAction(ParamTextType type, ParamTextUnion value);
 
 /* Data types actions*/
 ParamTypeColorNode * ParamTypeColorAction(char * typeColor);

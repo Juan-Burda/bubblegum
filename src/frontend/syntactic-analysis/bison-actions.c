@@ -57,15 +57,12 @@ int IntegerConstantGrammarAction(const int value) {
 	return value;
 }
 
-ParamShapeNode * ParamShapeAction(ParamShapeType type, ParamTypeColorNode * fillColor, ParamTypeColorNode * borderColor, int borderWidth, int rotation) {
+ParamShapeNode * ParamShapeAction(ParamShapeType type, ParamShapeUnion value) {
 	LogDebug("\tParamShapeAction");
 
 	ParamShapeNode * result = (ParamShapeNode*) calloc(1, sizeof(ParamShapeNode));
 	result->type = type;
-	result->fillColor = fillColor;
-	result->borderColor = borderColor;
-	result->borderWidth = borderWidth;
-	result->rotation = rotation;
+	result->value = value;
 
 	return result;
 }
@@ -82,13 +79,12 @@ ParamListRectangleNode * ParamListRectangleAddParamAction(ParamListRectangleType
 	return result;
 }
 
-ParamRectangleNode * ParamRectangleAction(ParamRectangleType type, int height, int width) {
+ParamRectangleNode * ParamRectangleAction(ParamRectangleType type, ParamRectangleUnion value) {
 	LogDebug("\tParamRectangleAction");
 
 	ParamRectangleNode * result = (ParamRectangleNode*) calloc(1, sizeof(ParamRectangleNode));
 	result->type = type;
-	result->height = height;
-	result->width = width;
+	result->value = value;
 
 	return result;
 }
@@ -105,13 +101,12 @@ ParamListEllipseNode * ParamListEllipseAddParamAction(ParamListEllipseType type,
 	return result;
 }
 
-ParamEllipseNode * ParamEllipseAction(ParamEllipseType type, int xAxis, int yAxis) {
+ParamEllipseNode * ParamEllipseAction(ParamEllipseType type, ParamEllipseUnion value) {
 	LogDebug("\tParamEllipseAction");
 
 	ParamEllipseNode * result = (ParamEllipseNode*)calloc(1,sizeof(ParamEllipseNode));
 	result->type = type;
-	result->x_axis = xAxis;
-	result->y_axis = yAxis;
+	result->value = value;
 
 	return result;
 }
@@ -128,14 +123,13 @@ ParamListTriangleNode * ParamListTriangleAddParamAction(ParamListTriangleType ty
 	return result;
 }
 
-ParamTriangleNode * ParamTriangleAction(ParamTriangleType type, int base, int height) {
+ParamTriangleNode * ParamTriangleAction(ParamTriangleType type, ParamTriangleUnion value) {
 	LogDebug("\tParamTriangleAction");
 
 	ParamTriangleNode * result = (ParamTriangleNode*)calloc(1,sizeof(ParamTriangleNode));
 
 	result->type = type;
-	result->height = height;
-	result->base = base;
+	result->value = value;
 
 	return result;
 }
@@ -173,17 +167,12 @@ ParamListTextNode * ParamListTextAddParamAction(ParamListTextNode * listNode, Pa
 	return result;
 }
 
-ParamTextNode * ParamTextAction(ParamTextType type, int fontWidth, fontfamily_t fontFamily, int fontWeight, fontstyle_t fontStyle, textdeco_t textDeco, ParamTypeColorNode * paramTypeColorNode) {
+ParamTextNode * ParamTextAction(ParamTextType type, ParamTextUnion value) {
 	LogDebug("\t ParamTextAction");
 
 	ParamTextNode * result = (ParamTextNode*)calloc(1,sizeof(ParamTextNode));
 	result->type = type;
-	result->fontWidth = fontWidth;
-	result->fontFamily = fontFamily;
-	result->fontWeight = fontWeight;
-	result->fontStyle = fontStyle;
-	result->textDecoration = textDeco;
-	result->paramTypeColorNode = paramTypeColorNode;
+	result->value = value;
 
 	return result;
 }

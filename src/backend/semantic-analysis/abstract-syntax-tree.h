@@ -54,6 +54,13 @@ struct ParamFloatNode{
 // TODO
 
 // For shapes
+typedef union {
+	ParamTypeColorNode * fillColor;
+	ParamTypeColorNode * borderColor;
+	int borderWidth;
+	int rotation;
+} ParamShapeUnion;
+
 typedef enum {
 	FILL_COLOR,
 	BORDER_COLOR,
@@ -62,11 +69,13 @@ typedef enum {
 } ParamShapeType;
 typedef struct {
 	ParamShapeType type;
-	ParamTypeColorNode * fillColor;
-	ParamTypeColorNode * borderColor;
-	int borderWidth;
-	int rotation;
+	ParamShapeUnion value;
 } ParamShapeNode;
+
+typedef union {
+	int height;
+	int width;
+} ParamRectangleUnion;
 
 typedef enum {
 	RT_HEIGHT,	// rectangle type height
@@ -74,8 +83,7 @@ typedef enum {
 } ParamRectangleType;
 typedef struct {
 	ParamRectangleType type;
-	int height;
-	int width;
+	ParamRectangleUnion value;
 } ParamRectangleNode;
 
 typedef enum {
@@ -92,14 +100,18 @@ struct ParamListRectangleNode{
 	ParamRectangleNode * paramRectangleNode;
 };
 
+typedef union {
+	int xAxis;
+	int yAxis;
+} ParamEllipseUnion;
+
 typedef enum {
 	ET_X_AXIS,	// ellipse type x-axis
 	ET_Y_AXIS	// ellipse type y-axis
 } ParamEllipseType;
 typedef struct {
 	ParamEllipseType type;
-	int x_axis;
-	int y_axis;
+	ParamEllipseUnion value;
 } ParamEllipseNode;
 
 typedef enum {
@@ -116,14 +128,18 @@ struct ParamListEllipseNode{
 	ParamEllipseNode * paramEllipseNode;
 };
 
+typedef union {
+	int height;
+	int base;
+} ParamTriangleUnion;
+
 typedef enum {
 	TT_HEIGHT,	// triangle type height
 	TT_BASE		// triangle type base
 } ParamTriangleType;
 typedef struct{
 	ParamTriangleType type;
-	int height;
-	int base;
+	ParamTriangleUnion value;
 } ParamTriangleNode;
 
 typedef enum{
@@ -152,6 +168,15 @@ struct ParamListImageNode {
 };
 
 // For text
+typedef union {
+	int fontWidth;
+	fontfamily_t fontFamily;
+	int fontWeight;
+	fontstyle_t fontStyle;
+	textdeco_t textDecoration;
+	ParamTypeColorNode * paramTypeColorNode;
+} ParamTextUnion;
+
 typedef enum {
 	FONT_WIDTH,
 	FONT_FAMILY,
@@ -162,12 +187,7 @@ typedef enum {
 } ParamTextType; 
 typedef struct {
 	ParamTextType type;
-	int fontWidth;
-	fontfamily_t fontFamily;
-	int fontWeight;
-	fontstyle_t fontStyle;
-	textdeco_t textDecoration;
-	ParamTypeColorNode * paramTypeColorNode;
+	ParamTextUnion value;
 } ParamTextNode;
 
 struct ParamListTextNode {

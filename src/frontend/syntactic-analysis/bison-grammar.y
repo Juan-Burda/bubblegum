@@ -282,10 +282,10 @@ paramListRecolor: %empty							{ $$ = Return0(); }
 paramRecolor: PARAM_END_COLOR COLON typeColor		{ $$ = Return0(); }
 
 // For shapes
-paramShape: PARAM_FILL_COLOR COLON typeColor		{ $$ = ParamShapeAction(FILL_COLOR,		$3,		NULL, 	0, 		0); }
-	| PARAM_BORDER_COLOR COLON typeColor			{ $$ = ParamShapeAction(BORDER_COLOR, 	NULL, 	$3, 	0, 		0); }
-	| PARAM_BORDER_WIDTH COLON TYPE_INTEGER			{ $$ = ParamShapeAction(BORDER_WIDTH, 	NULL, 	NULL, 	$3, 	0); }
-	| PARAM_ROTATION COLON TYPE_INTEGER				{ $$ = ParamShapeAction(ROTATION, 		NULL, 	NULL, 	0, 		$3); }
+paramShape: PARAM_FILL_COLOR COLON typeColor		{ $$ = ParamShapeAction(FILL_COLOR,	(ParamShapeUnion) { .fillColor = $3 }); }
+	| PARAM_BORDER_COLOR COLON typeColor			{ $$ = ParamShapeAction(BORDER_COLOR, (ParamShapeUnion) { .borderColor = $3 }); }
+	| PARAM_BORDER_WIDTH COLON TYPE_INTEGER			{ $$ = ParamShapeAction(BORDER_WIDTH, (ParamShapeUnion) { .borderWidth = $3 }); }
+	| PARAM_ROTATION COLON TYPE_INTEGER				{ $$ = ParamShapeAction(ROTATION, (ParamShapeUnion) { .rotation = $3 }); }
 
 paramListRectangle: %empty							{ $$ = ParamListRectangleAddParamAction(RL_EMPTY, 			NULL, 	NULL, 	NULL); }
 	| paramShape COMMA paramListRectangle			{ $$ = ParamListRectangleAddParamAction(RL_SHAPE_LIST, 		$3, 	$1, 	NULL); }
@@ -293,8 +293,8 @@ paramListRectangle: %empty							{ $$ = ParamListRectangleAddParamAction(RL_EMPT
 	| paramRectangle COMMA paramListRectangle		{ $$ = ParamListRectangleAddParamAction(RL_RECTANGLE_LIST, 	$3,		NULL,	$1); }
 	| paramRectangle								{ $$ = ParamListRectangleAddParamAction(RL_RECTANGLE, 		NULL,	NULL,	$1); }
 
-paramRectangle: PARAM_HEIGHT COLON TYPE_INTEGER		{ $$ = ParamRectangleAction(RT_HEIGHT, 	$3,	0); }
-	| PARAM_WIDTH COLON TYPE_INTEGER				{ $$ = ParamRectangleAction(RT_WIDTH, 	0,	$3); }
+paramRectangle: PARAM_HEIGHT COLON TYPE_INTEGER		{ $$ = ParamRectangleAction(RT_HEIGHT, 	(ParamRectangleUnion) { .height = $3 }); }
+	| PARAM_WIDTH COLON TYPE_INTEGER				{ $$ = ParamRectangleAction(RT_WIDTH, 	(ParamRectangleUnion) { .width = $3 }); }
 
 paramListEllipse: %empty							{ $$ = ParamListEllipseAddParamAction(EL_EMPTY, 		NULL, 	NULL, 	NULL); }
 	| paramShape COMMA paramListEllipse				{ $$ = ParamListEllipseAddParamAction(EL_SHAPE_LIST, 	$3, 	$1, 	NULL); }
@@ -302,8 +302,8 @@ paramListEllipse: %empty							{ $$ = ParamListEllipseAddParamAction(EL_EMPTY, 	
 	| paramEllipse COMMA paramListEllipse			{ $$ = ParamListEllipseAddParamAction(EL_ELLIPSE_LIST, 	$3,		NULL,	$1); }
 	| paramEllipse									{ $$ = ParamListEllipseAddParamAction(EL_ELLIPSE, 		NULL,	NULL,	$1); }
 
-paramEllipse: PARAM_X_AXIS COLON TYPE_INTEGER		{ $$ = ParamEllipseAction(ET_X_AXIS,	$3, 0); }
-	| PARAM_Y_AXIS COLON TYPE_INTEGER				{ $$ = ParamEllipseAction(ET_Y_AXIS, 	0, 	$3); }
+paramEllipse: PARAM_X_AXIS COLON TYPE_INTEGER		{ $$ = ParamEllipseAction(ET_X_AXIS, (ParamEllipseUnion) { .xAxis = $3 }); }
+	| PARAM_Y_AXIS COLON TYPE_INTEGER				{ $$ = ParamEllipseAction(ET_Y_AXIS, (ParamEllipseUnion) { .yAxis = $3 }); }
 
 paramListTriangle: %empty							{ $$ = ParamListTriangleAddParamAction(TL_EMPTY, 			NULL, 	NULL, 	NULL); }
 	| paramShape COMMA paramListTriangle			{ $$ = ParamListTriangleAddParamAction(TL_SHAPE_LIST, 		$3, 	$1, 	NULL); }
@@ -311,8 +311,8 @@ paramListTriangle: %empty							{ $$ = ParamListTriangleAddParamAction(TL_EMPTY,
 	| paramTriangle COMMA paramListTriangle			{ $$ = ParamListTriangleAddParamAction(TL_TRIANGLE_LIST, 	$3,		NULL,	$1); }
 	| paramTriangle									{ $$ = ParamListTriangleAddParamAction(TL_TRIANGLE, 		NULL,	NULL,	$1); }
 
-paramTriangle: PARAM_HEIGHT COLON TYPE_INTEGER		{ $$ = ParamTriangleAction(TT_HEIGHT,	$3,	0); }
-	| PARAM_BASE COLON TYPE_INTEGER					{ $$ = ParamTriangleAction(TT_BASE,		0, 	$3); }
+paramTriangle: PARAM_HEIGHT COLON TYPE_INTEGER		{ $$ = ParamTriangleAction(TT_HEIGHT, (ParamTriangleUnion) { .height = $3 }); }
+	| PARAM_BASE COLON TYPE_INTEGER					{ $$ = ParamTriangleAction(TT_BASE,	(ParamTriangleUnion) { .base = $3 }); }
 
 // For vectors
 paramListImage: %empty						{ $$ = ParamListImageAddParamAction(NULL, 	NULL); }
@@ -325,12 +325,12 @@ paramListText: %empty						{ $$ = ParamListTextAddParamAction(NULL, 	NULL); }
 	| paramText COMMA paramListText			{ $$ = ParamListTextAddParamAction($3, 		$1); }
 	| paramText								{ $$ = ParamListTextAddParamAction(NULL, 	$1); }
 
-paramText: PARAM_FONT_WIDTH COLON TYPE_INTEGER 				{ $$ = ParamTextAction(FONT_WIDTH, 		 $3, 	FF_NONE, 	0, 	FS_NONE, 	TD_NONE, 	NULL); }
-	| PARAM_FONT_FAMILY COLON TYPE_FONT_FAMILY 				{ $$ = ParamTextAction(FONT_FAMILY, 	 0, 	$3, 		0, 	FS_NONE, 	TD_NONE, 	NULL); }
-	| PARAM_FONT_WEIGHT COLON TYPE_INTEGER 					{ $$ = ParamTextAction(FONT_WEIGHT, 	 0, 	FF_NONE, 	$3, FS_NONE, 	TD_NONE, 	NULL); }
-	| PARAM_FONT_STYLE COLON TYPE_FONT_STYLE 				{ $$ = ParamTextAction(FONT_STYLE, 		 0, 	FF_NONE, 	0, 	$3, 		TD_NONE, 	NULL); }
-	| PARAM_TEXT_DECORATION COLON TYPE_TEXT_DECORATION 		{ $$ = ParamTextAction(TEXT_DECORATION,  0, 	FF_NONE, 	0, 	FS_NONE, 	$3, 		NULL); }
-	| PARAM_BACKGROUND_COLOR COLON typeColor 				{ $$ = ParamTextAction(BACKGROUND_COLOR, 0, 	FF_NONE, 	0, 	FS_NONE, 	TD_NONE, 	$3); }
+paramText: PARAM_FONT_WIDTH COLON TYPE_INTEGER 				{ $$ = ParamTextAction(FONT_WIDTH, 	(ParamTextUnion) { .fontWidth = $3 }); }
+	| PARAM_FONT_FAMILY COLON TYPE_FONT_FAMILY 				{ $$ = ParamTextAction(FONT_FAMILY, (ParamTextUnion) { .fontFamily = $3 }); }
+	| PARAM_FONT_WEIGHT COLON TYPE_INTEGER 					{ $$ = ParamTextAction(FONT_WEIGHT, (ParamTextUnion) { .fontWeight = $3 }); }
+	| PARAM_FONT_STYLE COLON TYPE_FONT_STYLE 				{ $$ = ParamTextAction(FONT_STYLE, 	(ParamTextUnion) { .fontStyle = $3 }); }
+	| PARAM_TEXT_DECORATION COLON TYPE_TEXT_DECORATION 		{ $$ = ParamTextAction(TEXT_DECORATION, (ParamTextUnion) { .textDecoration = $3 }); }
+	| PARAM_BACKGROUND_COLOR COLON typeColor 				{ $$ = ParamTextAction(BACKGROUND_COLOR, (ParamTextUnion) { .paramTypeColorNode = $3 }); }
 
 /* Data types */
 typeColor: COLOR_HEX			{ $$ = ParamTypeColorAction($1); }
