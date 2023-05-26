@@ -39,13 +39,13 @@ ParamMorphNode * ParamMorphAction(ParamMorphType type, ParamMorphUnion value);
 // For shapes
 ParamShapeNode * ParamShapeAction(ParamShapeType type, ParamShapeUnion value);
 
-ParamListRectangleNode * ParamListRectangleAddParamAction(ParamListRectangleType type, ParamListRectangleNode * listNode, ParamShapeNode * shapeNode, ParamRectangleNode * rectangleNode);
+ParamListRectangleNode * ParamListRectangleAddParamAction(ParamListRectangleType type, ParamListRectangleNode * listNode, ParamListRectangleUnion value);
 ParamRectangleNode * ParamRectangleAction(ParamRectangleType type, ParamRectangleUnion value);
 
-ParamListEllipseNode * ParamListEllipseAddParamAction(ParamListEllipseType type, ParamListEllipseNode * listNode, ParamShapeNode * shapeNode, ParamEllipseNode * ellipseNode);
+ParamListEllipseNode * ParamListEllipseAddParamAction(ParamListEllipseType type, ParamListEllipseNode * listNode, ParamListEllipseUnion value);
 ParamEllipseNode * ParamEllipseAction(ParamEllipseType type, ParamEllipseUnion value);
 
-ParamListTriangleNode * ParamListTriangleAddParamAction(ParamListTriangleType type, ParamListTriangleNode * listNode, ParamShapeNode * shapeNode, ParamTriangleNode * ellipseNode);
+ParamListTriangleNode * ParamListTriangleAddParamAction(ParamListTriangleType type, ParamListTriangleNode * listNode, ParamListTriangleUnion value);
 ParamTriangleNode * ParamTriangleAction(ParamTriangleType type, ParamTriangleUnion value);
 
 // For vectors

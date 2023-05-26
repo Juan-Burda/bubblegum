@@ -147,14 +147,13 @@ ParamShapeNode * ParamShapeAction(ParamShapeType type, ParamShapeUnion value) {
 }
 
 // For rectangles
-ParamListRectangleNode * ParamListRectangleAddParamAction(ParamListRectangleType type, ParamListRectangleNode* listNode, ParamShapeNode * shapeNode, ParamRectangleNode * rectangleNode) {
+ParamListRectangleNode * ParamListRectangleAddParamAction(ParamListRectangleType type, ParamListRectangleNode* listNode, ParamListRectangleUnion value) {
 	LogDebug("\tParamListRectangleAddParamAction");
 
 	ParamListRectangleNode * result = (ParamListRectangleNode*) calloc(1, sizeof(ParamListRectangleNode));
 	result->paramListRectangleType = type;
 	result->ParamListRectangleNode = listNode;
-	result->ParamShapeNode = shapeNode;
-	result->paramRectangleNode = rectangleNode;
+	result->value = value;
 
 	return result;
 }
@@ -170,14 +169,13 @@ ParamRectangleNode * ParamRectangleAction(ParamRectangleType type, ParamRectangl
 }
 
 // For ellipse
-ParamListEllipseNode * ParamListEllipseAddParamAction(ParamListEllipseType type, ParamListEllipseNode* listNode, ParamShapeNode * shapeNode, ParamEllipseNode * ellipseNode) {
+ParamListEllipseNode * ParamListEllipseAddParamAction(ParamListEllipseType type, ParamListEllipseNode* listNode, ParamListEllipseUnion value) {
 	LogDebug("\tParamListEllipseAddParamAction");
 
 	ParamListEllipseNode * result = (ParamListEllipseNode*) calloc(1, sizeof(ParamListEllipseNode));
 	result->paramListEllipseType = type;
 	result->ParamListEllipseNode = listNode;
-	result->ParamShapeNode = shapeNode;
-	result->paramEllipseNode = ellipseNode;
+	result->value = value;
 
 	return result;
 }
@@ -193,14 +191,13 @@ ParamEllipseNode * ParamEllipseAction(ParamEllipseType type, ParamEllipseUnion v
 }
 
 // For triangle
-ParamListTriangleNode * ParamListTriangleAddParamAction(ParamListTriangleType type, ParamListTriangleNode* listNode, ParamShapeNode * shapeNode, ParamTriangleNode * triangleNode) {
+ParamListTriangleNode * ParamListTriangleAddParamAction(ParamListTriangleType type, ParamListTriangleNode* listNode, ParamListTriangleUnion value) {
 	LogDebug("\tParamListTriangleAddParamShapeAction");
 
 	ParamListTriangleNode * result = (ParamListTriangleNode*) calloc(1, sizeof(ParamListTriangleNode));
 	result->paramListTriangleType = type;
 	result->ParamListTriangleNode = listNode;
-	result->ParamShapeNode = shapeNode;
-	result->paramTriangleNode = triangleNode;
+	result->value = value;
 
 	return result;
 }

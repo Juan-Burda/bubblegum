@@ -287,29 +287,29 @@ paramShape: PARAM_FILL_COLOR COLON typeColor		{ $$ = ParamShapeAction(FILL_COLOR
 	| PARAM_BORDER_WIDTH COLON TYPE_INTEGER			{ $$ = ParamShapeAction(BORDER_WIDTH, (ParamShapeUnion) { .borderWidth = $3 }); }
 	| PARAM_ROTATION COLON TYPE_INTEGER				{ $$ = ParamShapeAction(ROTATION, (ParamShapeUnion) { .rotation = $3 }); }
 
-paramListRectangle: %empty							{ $$ = ParamListRectangleAddParamAction(RL_EMPTY, 			NULL, 	NULL, 	NULL); }
-	| paramShape COMMA paramListRectangle			{ $$ = ParamListRectangleAddParamAction(RL_SHAPE_LIST, 		$3, 	$1, 	NULL); }
-	| paramShape									{ $$ = ParamListRectangleAddParamAction(RL_SHAPE, 			NULL,	$1, 	NULL); }
-	| paramRectangle COMMA paramListRectangle		{ $$ = ParamListRectangleAddParamAction(RL_RECTANGLE_LIST, 	$3,		NULL,	$1); }
-	| paramRectangle								{ $$ = ParamListRectangleAddParamAction(RL_RECTANGLE, 		NULL,	NULL,	$1); }
+paramListRectangle: %empty							{ $$ = ParamListRectangleAddParamAction(RL_EMPTY, 		NULL, 	(ParamListRectangleUnion) { .shapeNode = NULL }); }
+	| paramShape COMMA paramListRectangle			{ $$ = ParamListRectangleAddParamAction(RL_SHAPE, 		$3, 	(ParamListRectangleUnion) { .shapeNode = $1 }); }
+	| paramShape									{ $$ = ParamListRectangleAddParamAction(RL_SHAPE, 		NULL,	(ParamListRectangleUnion) { .shapeNode = $1 }); }
+	| paramRectangle COMMA paramListRectangle		{ $$ = ParamListRectangleAddParamAction(RL_RECTANGLE, 	$3,		(ParamListRectangleUnion) { .rectangleNode = $1 }); }
+	| paramRectangle								{ $$ = ParamListRectangleAddParamAction(RL_RECTANGLE, 	NULL,	(ParamListRectangleUnion) { .rectangleNode = $1 }); }
 
 paramRectangle: PARAM_HEIGHT COLON TYPE_INTEGER		{ $$ = ParamRectangleAction(RT_HEIGHT, 	(ParamRectangleUnion) { .height = $3 }); }
 	| PARAM_WIDTH COLON TYPE_INTEGER				{ $$ = ParamRectangleAction(RT_WIDTH, 	(ParamRectangleUnion) { .width = $3 }); }
 
-paramListEllipse: %empty							{ $$ = ParamListEllipseAddParamAction(EL_EMPTY, 		NULL, 	NULL, 	NULL); }
-	| paramShape COMMA paramListEllipse				{ $$ = ParamListEllipseAddParamAction(EL_SHAPE_LIST, 	$3, 	$1, 	NULL); }
-	| paramShape									{ $$ = ParamListEllipseAddParamAction(EL_SHAPE, 		NULL,	$1, 	NULL); }
-	| paramEllipse COMMA paramListEllipse			{ $$ = ParamListEllipseAddParamAction(EL_ELLIPSE_LIST, 	$3,		NULL,	$1); }
-	| paramEllipse									{ $$ = ParamListEllipseAddParamAction(EL_ELLIPSE, 		NULL,	NULL,	$1); }
+paramListEllipse: %empty							{ $$ = ParamListEllipseAddParamAction(EL_EMPTY, 	NULL, 	(ParamListEllipseUnion) { .shapeNode = NULL }); }
+	| paramShape COMMA paramListEllipse				{ $$ = ParamListEllipseAddParamAction(EL_SHAPE, 	$3, 	(ParamListEllipseUnion)	{ .shapeNode = $1 }); }
+	| paramShape									{ $$ = ParamListEllipseAddParamAction(EL_SHAPE, 	NULL,	(ParamListEllipseUnion)	{ .shapeNode = $1 }); }
+	| paramEllipse COMMA paramListEllipse			{ $$ = ParamListEllipseAddParamAction(EL_ELLIPSE, 	$3,		(ParamListEllipseUnion) { .ellipseNode = $1 }); }
+	| paramEllipse									{ $$ = ParamListEllipseAddParamAction(EL_ELLIPSE, 	NULL,	(ParamListEllipseUnion) { .ellipseNode = $1 }); }
 
 paramEllipse: PARAM_X_AXIS COLON TYPE_INTEGER		{ $$ = ParamEllipseAction(ET_X_AXIS, (ParamEllipseUnion) { .xAxis = $3 }); }
 	| PARAM_Y_AXIS COLON TYPE_INTEGER				{ $$ = ParamEllipseAction(ET_Y_AXIS, (ParamEllipseUnion) { .yAxis = $3 }); }
 
-paramListTriangle: %empty							{ $$ = ParamListTriangleAddParamAction(TL_EMPTY, 			NULL, 	NULL, 	NULL); }
-	| paramShape COMMA paramListTriangle			{ $$ = ParamListTriangleAddParamAction(TL_SHAPE_LIST, 		$3, 	$1, 	NULL); }
-	| paramShape									{ $$ = ParamListTriangleAddParamAction(TL_SHAPE, 			NULL,	$1, 	NULL); }
-	| paramTriangle COMMA paramListTriangle			{ $$ = ParamListTriangleAddParamAction(TL_TRIANGLE_LIST, 	$3,		NULL,	$1); }
-	| paramTriangle									{ $$ = ParamListTriangleAddParamAction(TL_TRIANGLE, 		NULL,	NULL,	$1); }
+paramListTriangle: %empty							{ $$ = ParamListTriangleAddParamAction(TL_EMPTY, 	NULL, 	(ParamListTriangleUnion) { .shapeNode = NULL }); }
+	| paramShape COMMA paramListTriangle			{ $$ = ParamListTriangleAddParamAction(TL_SHAPE, 	$3, 	(ParamListTriangleUnion) { .shapeNode = $1 }); }
+	| paramShape									{ $$ = ParamListTriangleAddParamAction(TL_SHAPE, 	NULL,	(ParamListTriangleUnion) { .shapeNode = $1 }); }
+	| paramTriangle COMMA paramListTriangle			{ $$ = ParamListTriangleAddParamAction(TL_TRIANGLE, $3,		(ParamListTriangleUnion) { .triangleNode = $1 }); }
+	| paramTriangle									{ $$ = ParamListTriangleAddParamAction(TL_TRIANGLE, NULL,	(ParamListTriangleUnion) { .triangleNode = $1 }); }
 
 paramTriangle: PARAM_HEIGHT COLON TYPE_INTEGER		{ $$ = ParamTriangleAction(TT_HEIGHT, (ParamTriangleUnion) { .height = $3 }); }
 	| PARAM_BASE COLON TYPE_INTEGER					{ $$ = ParamTriangleAction(TT_BASE,	(ParamTriangleUnion) { .base = $3 }); }

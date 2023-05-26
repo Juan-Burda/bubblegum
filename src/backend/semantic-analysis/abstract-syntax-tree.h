@@ -185,16 +185,17 @@ typedef struct {
 
 typedef enum {
 	RL_EMPTY,
-	RL_SHAPE_LIST,
 	RL_SHAPE,
-	RL_RECTANGLE_LIST,
 	RL_RECTANGLE
 } ParamListRectangleType;
+typedef union {
+	ParamShapeNode * shapeNode;
+	ParamRectangleNode * rectangleNode;
+} ParamListRectangleUnion;
 struct ParamListRectangleNode{
 	ParamListRectangleType paramListRectangleType;
 	ParamListRectangleNode * ParamListRectangleNode;
-	ParamShapeNode * ParamShapeNode;
-	ParamRectangleNode * paramRectangleNode;
+	ParamListRectangleUnion value;
 };
 
 // Ellipse
@@ -214,16 +215,17 @@ typedef struct {
 
 typedef enum {
 	EL_EMPTY,
-	EL_SHAPE_LIST,
 	EL_SHAPE,
-	EL_ELLIPSE_LIST,
 	EL_ELLIPSE
 } ParamListEllipseType;
+typedef union {
+	ParamShapeNode * shapeNode;
+	ParamEllipseNode * ellipseNode;
+} ParamListEllipseUnion;
 struct ParamListEllipseNode{
 	ParamListEllipseType paramListEllipseType;
 	ParamListEllipseNode * ParamListEllipseNode;
-	ParamShapeNode * ParamShapeNode;
-	ParamEllipseNode * paramEllipseNode;
+	ParamListEllipseUnion value;
 };
 
 // Triangle
@@ -248,11 +250,14 @@ typedef enum{
 	TL_TRIANGLE_LIST,
 	TL_TRIANGLE
 } ParamListTriangleType;
+typedef union {
+	ParamShapeNode * shapeNode;
+	ParamTriangleNode * triangleNode;
+} ParamListTriangleUnion;
 struct ParamListTriangleNode{
 	ParamListTriangleType paramListTriangleType;
 	ParamListTriangleNode * ParamListTriangleNode;
-	ParamShapeNode * ParamShapeNode;
-	ParamTriangleNode * paramTriangleNode;
+	ParamListTriangleUnion value;
 };
 
 /* Vector nodes */
