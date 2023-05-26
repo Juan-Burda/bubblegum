@@ -39,6 +39,7 @@ typedef struct {
 	int changeme;
 } Program;
 
+/** Parameters */
 /* Data type nodes */
 typedef struct {
 	char * typeColor;
@@ -49,11 +50,11 @@ struct ParamFloatNode{
 	ParamFloatNode * paramFloatNode;
 };
 
-/* Parameters */
-// For animations
+/* Animation nodes */
 // TODO
 
-// For shapes
+/* Shape nodes */ 
+// Shape
 typedef union {
 	ParamTypeColorNode * fillColor;
 	ParamTypeColorNode * borderColor;
@@ -72,6 +73,7 @@ typedef struct {
 	ParamShapeUnion value;
 } ParamShapeNode;
 
+// Rectangle
 typedef union {
 	int height;
 	int width;
@@ -100,6 +102,7 @@ struct ParamListRectangleNode{
 	ParamRectangleNode * paramRectangleNode;
 };
 
+// Ellipse
 typedef union {
 	int xAxis;
 	int yAxis;
@@ -128,6 +131,7 @@ struct ParamListEllipseNode{
 	ParamEllipseNode * paramEllipseNode;
 };
 
+// Triangle
 typedef union {
 	int height;
 	int base;
@@ -157,7 +161,7 @@ struct ParamListTriangleNode{
 };
 
 /* Vector nodes */
-// For images
+// Images
 typedef struct {
 	char * typeUrl;
 } ParamImageNode;
@@ -167,7 +171,7 @@ struct ParamListImageNode {
 	ParamListImageNode * paramListImageNode;
 };
 
-// For text
+// Text
 typedef union {
 	int fontWidth;
 	fontfamily_t fontFamily;

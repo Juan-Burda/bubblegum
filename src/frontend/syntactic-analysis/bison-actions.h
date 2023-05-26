@@ -33,17 +33,14 @@ ParamEllipseNode * ParamEllipseAction(ParamEllipseType type, ParamEllipseUnion v
 ParamListTriangleNode * ParamListTriangleAddParamAction(ParamListTriangleType type, ParamListTriangleNode * listNode, ParamShapeNode * shapeNode, ParamTriangleNode * ellipseNode);
 ParamTriangleNode * ParamTriangleAction(ParamTriangleType type, ParamTriangleUnion value);
 
-
-/* Vector actions */
-// For images
+// For vectors
 ParamListImageNode * ParamListImageAddParamAction(ParamListImageNode * listNode, ParamImageNode * imageNode);
 ParamImageNode * ParamImageAction(char * typeUrl);
 
-// For text
 ParamListTextNode * ParamListTextAddParamAction(ParamListTextNode * listNode, ParamTextNode * textNode);
 ParamTextNode * ParamTextAction(ParamTextType type, ParamTextUnion value);
 
-/* Data types actions*/
+// For data types
 ParamTypeColorNode * ParamTypeColorAction(char * typeColor);
 ParamFloatNode * ParamTypePointsAddPointAction(ParamFloatNode * floatNode, float floating);
 
