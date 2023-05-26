@@ -70,6 +70,17 @@ ParamAnimationNode * ParamAnimationAction(ParamAnimationType type, ParamAnimatio
 }
 
 // For translate
+ParamListTranslateNode * ParamListTranslateAddParamAction(ParamListTranslateType type, ParamListTranslateNode* listNode, ParamListTranslateUnion value) {
+	LogDebug("\tParamListTranslateAddParamAction");
+
+	ParamListTranslateNode * result = (ParamListTranslateNode*) calloc(1, sizeof(ParamListTranslateNode));
+	result->paramListTranslateType = type;
+	result->paramListTranslateNode = listNode;
+	result->value = value;
+
+	return result;
+}
+
 ParamTranslateNode * ParamTranslateAction(ParamTranslateType type, ParamTranslateUnion value) {
 	LogDebug("\tParamTranslateAction");
 
@@ -81,6 +92,17 @@ ParamTranslateNode * ParamTranslateAction(ParamTranslateType type, ParamTranslat
 }
 
 // For opacity
+ParamListOpacityNode * ParamListOpacityAddParamAction(ParamListOpacityType type, ParamListOpacityNode* listNode, ParamListOpacityUnion value) {
+	LogDebug("\tParamListOpacityAddParamAction");
+
+	ParamListOpacityNode * result = (ParamListOpacityNode*) calloc(1, sizeof(ParamListOpacityNode));
+	result->paramListOpacityType = type;
+	result->paramListOpacityNode = listNode;
+	result->value = value;
+
+	return result;
+}
+
 ParamOpacityNode * ParamOpacityAction(ParamOpacityType type, ParamOpacityUnion value) {
 	LogDebug("\tParamOpacityAction");
 
@@ -92,6 +114,17 @@ ParamOpacityNode * ParamOpacityAction(ParamOpacityType type, ParamOpacityUnion v
 }
 
 // For rotate
+ParamListRotateNode * ParamListRotateAddParamAction(ParamListRotateType type, ParamListRotateNode* listNode, ParamListRotateUnion value) {
+	LogDebug("\tParamListRotateAddParamAction");
+
+	ParamListRotateNode * result = (ParamListRotateNode*) calloc(1, sizeof(ParamListRotateNode));
+	result->paramListRotateType = type;
+	result->paramListRotateNode = listNode;
+	result->value = value;
+
+	return result;
+}
+
 ParamRotateNode * ParamRotateAction(ParamRotateType type, ParamRotateUnion value) {
 	LogDebug("\tParamRotateAction");
 
@@ -103,6 +136,17 @@ ParamRotateNode * ParamRotateAction(ParamRotateType type, ParamRotateUnion value
 }
 
 // For resize
+ParamListResizeNode * ParamListResizeAddParamAction(ParamListResizeType type, ParamListResizeNode* listNode, ParamListResizeUnion value) {
+	LogDebug("\tParamListResizeAddParamAction");
+
+	ParamListResizeNode * result = (ParamListResizeNode*) calloc(1, sizeof(ParamListResizeNode));
+	result->paramListResizeType = type;
+	result->paramListResizeNode = listNode;
+	result->value = value;
+
+	return result;
+}
+
 ParamResizeNode * ParamResizeAction(ParamResizeType type, ParamResizeUnion value) {
 	LogDebug("\tParamResizeAction");
 
@@ -114,6 +158,17 @@ ParamResizeNode * ParamResizeAction(ParamResizeType type, ParamResizeUnion value
 }
 
 // For morph
+ParamListMorphNode * ParamListMorphAddParamAction(ParamListMorphType type, ParamListMorphNode* listNode, ParamListMorphUnion value) {
+	LogDebug("\tParamListMorphAddParamAction");
+
+	ParamListMorphNode * result = (ParamListMorphNode*) calloc(1, sizeof(ParamListMorphNode));
+	result->paramListMorphType = type;
+	result->paramListMorphNode = listNode;
+	result->value = value;
+
+	return result;
+}
+
 ParamMorphNode * ParamMorphAction(ParamMorphType type, ParamMorphUnion value) {
 	LogDebug("\tParamMorphAction");
 
@@ -125,6 +180,17 @@ ParamMorphNode * ParamMorphAction(ParamMorphType type, ParamMorphUnion value) {
 }
 
 // For recolor
+ParamListRecolorNode * ParamListRecolorAddParamAction(ParamListRecolorType type, ParamListRecolorNode* listNode, ParamListRecolorUnion value) {
+	LogDebug("\tParamListRecolorAddParamAction");
+
+	ParamListRecolorNode * result = (ParamListRecolorNode*) calloc(1, sizeof(ParamListRecolorNode));
+	result->paramListRecolorType = type;
+	result->paramListRecolorNode = listNode;
+	result->value = value;
+
+	return result;
+}
+
 ParamRecolorNode * ParamRecolorAction(ParamRecolorType type, ParamRecolorUnion value) {
 	LogDebug("\tParamRecolorAction");
 
@@ -152,7 +218,7 @@ ParamListRectangleNode * ParamListRectangleAddParamAction(ParamListRectangleType
 
 	ParamListRectangleNode * result = (ParamListRectangleNode*) calloc(1, sizeof(ParamListRectangleNode));
 	result->paramListRectangleType = type;
-	result->ParamListRectangleNode = listNode;
+	result->paramListRectangleNode = listNode;
 	result->value = value;
 
 	return result;
@@ -174,7 +240,7 @@ ParamListEllipseNode * ParamListEllipseAddParamAction(ParamListEllipseType type,
 
 	ParamListEllipseNode * result = (ParamListEllipseNode*) calloc(1, sizeof(ParamListEllipseNode));
 	result->paramListEllipseType = type;
-	result->ParamListEllipseNode = listNode;
+	result->paramListEllipseNode = listNode;
 	result->value = value;
 
 	return result;
@@ -196,7 +262,7 @@ ParamListTriangleNode * ParamListTriangleAddParamAction(ParamListTriangleType ty
 
 	ParamListTriangleNode * result = (ParamListTriangleNode*) calloc(1, sizeof(ParamListTriangleNode));
 	result->paramListTriangleType = type;
-	result->ParamListTriangleNode = listNode;
+	result->paramListTriangleNode = listNode;
 	result->value = value;
 
 	return result;

@@ -24,17 +24,23 @@ int IntegerConstantGrammarAction(const int value);
 // For animations
 ParamAnimationNode * ParamAnimationAction(ParamAnimationType type, ParamAnimationUnion value);
 
+ParamListTranslateNode * ParamListTranslateAddParamAction(ParamListTranslateType type, ParamListTranslateNode * listNode, ParamListTranslateUnion value);
 ParamTranslateNode * ParamTranslateAction(ParamTranslateType type, ParamTranslateUnion value);
 
+ParamListOpacityNode * ParamListOpacityAddParamAction(ParamListOpacityType type, ParamListOpacityNode * listNode, ParamListOpacityUnion value);
 ParamOpacityNode * ParamOpacityAction(ParamOpacityType type, ParamOpacityUnion value);
 
+ParamListRotateNode * ParamListRotateAddParamAction(ParamListRotateType type, ParamListRotateNode * listNode, ParamListRotateUnion value);
 ParamRotateNode * ParamRotateAction(ParamRotateType type, ParamRotateUnion value);
 
+ParamListResizeNode * ParamListResizeAddParamAction(ParamListResizeType type, ParamListResizeNode * listNode, ParamListResizeUnion value);
 ParamResizeNode * ParamResizeAction(ParamResizeType type, ParamResizeUnion value);
 
-ParamRecolorNode * ParamRecolorAction(ParamRecolorType type, ParamRecolorUnion value);
-
+ParamListMorphNode * ParamListMorphAddParamAction(ParamListMorphType type, ParamListMorphNode * listNode, ParamListMorphUnion value);
 ParamMorphNode * ParamMorphAction(ParamMorphType type, ParamMorphUnion value);
+
+ParamListRecolorNode * ParamListRecolorAddParamAction(ParamListRecolorType type, ParamListRecolorNode * listNode, ParamListRecolorUnion value);
+ParamRecolorNode * ParamRecolorAction(ParamRecolorType type, ParamRecolorUnion value);
 
 // For shapes
 ParamShapeNode * ParamShapeAction(ParamShapeType type, ParamShapeUnion value);
