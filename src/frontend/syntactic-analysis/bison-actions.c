@@ -23,20 +23,27 @@ void yyerror(const char * string) {
 	LogErrorRaw("\n\n");
 }
 
+/** Others */
+// Program
 /**
 * Esta acción se corresponde con el no-terminal que representa el símbolo
 * inicial de la gramática, y por ende, es el último en ser ejecutado, lo que
 * indica que efectivamente el programa de entrada se pudo generar con esta
 * gramática, o lo que es lo mismo, que el programa pertenece al lenguaje.
 */
-int ProgramGrammarAction(const int value) {
-	LogDebug("\tProgramGrammarAction(%d)", value);
+Program * ProgramAction(ExpressionNode * expression) {
+	LogDebug("\tProgramAction");
+
+	Program * result = (Program*) calloc(1, sizeof(Program));
+	result->expression = expression;
+
 	/*
 	* "state" es una variable global que almacena el estado del compilador,
 	* cuyo campo "succeed" indica si la compilación fue o no exitosa, la cual
 	* es utilizada en la función "main".
 	*/
 	state.succeed = true;
+
 	/*
 	* Por otro lado, "result" contiene el resultado de aplicar el análisis
 	* sintáctico mediante Bison, y almacenar el nood raíz del AST construido
@@ -44,17 +51,120 @@ int ProgramGrammarAction(const int value) {
 	* la expresión se computa on-the-fly, y es la razón por la cual esta
 	* variable es un simple entero, en lugar de un nodo.
 	*/
-	state.result = value;
-	return value;
+	state.result = 0;
+
+	return result;
 }
 
-int Return0() {
-	return 0;
+// Expression
+ExpressionNode * ExpressionAction(ExpressionType type, ExpressionUnion value, ExpressionNode * expression) {
+	LogDebug("\tExpressionNodeAction");
+
+	ExpressionNode * result = (ExpressionNode*) calloc(1, sizeof(ExpressionNode));
+	result->type = type;
+	result->value = value;
+	result->nextExpression = expression;
+
+	return result;
 }
 
-int IntegerConstantGrammarAction(const int value) {
-	LogDebug("\tIntegerConstantGrammarAction(%d)", value);
-	return value;
+// Assign
+AssignNode * AssignAction(char * varname, FunctionNode * function) {
+	LogDebug("\tAssignNodeAction");
+
+	AssignNode * result = (AssignNode*) calloc(1, sizeof(AssignNode));
+	result->varname = varname;
+	result->function = function;
+
+	return result;
+}
+
+
+// Function
+FunctionNode * FunctionAction(FunctionType type, FunctionUnion value) {
+	LogDebug("\tFunctionNodeAction");
+
+	FunctionNode * result = (FunctionNode*) calloc(1, sizeof(FunctionNode));
+	result->type = type;
+	result->value = value;
+
+	return result;
+}
+
+FunctionListNode * FunctionListAction(FunctionListType type, FunctionListNode * listNode, FunctionListUnion value) {
+	LogDebug("\tFunctionListNodeAction");
+
+	FunctionListNode * result = (FunctionListNode*) calloc(1, sizeof(FunctionListNode));
+	result->type = type;
+	result->listNode = listNode;
+	result->value = value;
+
+	return result;
+}
+
+
+/** Animations */
+AnimationCompoundStatementNode * AnimationCompoundStatementAction(AnimationCompoundStatementType type, AnimationCompoundStatementUnion value) {
+	LogDebug("\tAnimationCompoundStatementNodeAction");
+
+	AnimationCompoundStatementNode * result = (AnimationCompoundStatementNode*) calloc(1, sizeof(AnimationCompoundStatementNode));
+	result->type = type;
+	result->value = value;
+
+	return result;
+}
+
+AnimationNode * AnimationAction(AnimationType type, AnimationUnion value) {
+	LogDebug("\tAnimationNodeAction");
+
+	AnimationNode * result = (AnimationNode*) calloc(1, sizeof(AnimationNode));
+	result->type = type;
+	result->value = value;
+
+	return result;
+}
+
+/** Layouts */
+LayoutCompoundStatementNode * LayoutCompoundStatementAction(FunctionListNode *  listNode) {
+	LogDebug("\tLayoutCompoundStatementNodeAction");
+
+	LayoutCompoundStatementNode * result = (LayoutCompoundStatementNode*) calloc(1, sizeof(LayoutCompoundStatementNode));
+	result->functionList = listNode;
+
+	return result;
+}
+
+LayoutNode * LayoutAction(layout_t layout, LayoutCompoundStatementNode * compoundStatement) {
+	LogDebug("\tLayoutAction");
+
+	LayoutNode * result = (LayoutNode*) calloc(1, sizeof(LayoutNode));
+	result->layout = layout;
+	result->compoundStatement = compoundStatement;
+
+	return result;
+}
+
+
+/** Shapes */
+ShapeNode * ShapeAction(ShapeType type, ShapeUnion value) {
+	LogDebug("\tShapeNodeAction");
+
+	ShapeNode * result = (ShapeNode*) calloc(1, sizeof(ShapeNode));
+	result->type = type;
+	result->value = value;
+
+	return result;
+}
+
+/** Vectors */
+VectorNode * VectorAction(VectorType type, VectorUnion value) {
+	LogDebug("\tVectorNodeAction");
+
+	VectorNode * result = (VectorNode*) calloc(1, sizeof(VectorNode));
+	result->type = type;
+	result->value = value;
+
+	return result;
 }
 
 /** Parameters */
@@ -277,7 +387,6 @@ ParamTriangleNode * ParamTriangleAction(ParamTriangleType type, ParamTriangleUni
 	LogDebug("\tParamTriangleAction");
 
 	ParamTriangleNode * result = (ParamTriangleNode*)calloc(1,sizeof(ParamTriangleNode));
-
 	result->type = type;
 	result->value = value;
 

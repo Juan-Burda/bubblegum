@@ -10,6 +10,8 @@
  * 	- <TYPE> can have the following prefixes:
  * 		- PL: Param list
  * 		- P: Param
+ * 		- CS: Compound Statement
+ * 		- emtpy: in any other case
  * 	and is followed by the type: 
  * 		- A: animation
  * 		- S: shape
@@ -25,11 +27,11 @@
  * order they are declared.
 */
 
-/**
-* Se realiza este tipo de definiciones cuando el tipo de dato debe
-* auto-referenciarse, como es el caso de una "Expression", que está compuesta
-* de otras 2 expresiones.
-*/
+// Self-referencing structs
+typedef struct ExpressionNode ExpressionNode;
+typedef struct FunctionListNode FunctionListNode;
+typedef struct FunctionNode FunctionNode;
+
 typedef struct ParamListTranslateNode ParamListTranslateNode;
 typedef struct ParamListOpacityNode ParamListOpacityNode;
 typedef struct ParamListRotateNode ParamListRotateNode;
@@ -51,11 +53,7 @@ typedef struct ParamTypePointsNode ParamTypePointsNode;
 * de dato y, por lo tanto, su nodo en el AST (Árbol de Sintaxis Abstracta).
 */
 typedef struct {
-	int value;
-} Constant;
-
-typedef struct {
-	int changeme;
+	ExpressionNode * expression;
 } Program;
 
 /** Parameters */
@@ -392,6 +390,137 @@ typedef struct {
 struct ParamListTextNode {
 	ParamTextNode * paramTextNode;
 	ParamListTextNode * listNode;
+};
+
+/** Animations */
+typedef enum {
+	CS_A_FUNCTION,
+	CS_A_VARNAME
+} AnimationCompoundStatementType;
+typedef union {
+	FunctionNode * functionNode;
+	char * varname;
+} AnimationCompoundStatementUnion;
+typedef struct {
+	AnimationCompoundStatementType type;
+	AnimationCompoundStatementUnion value;
+} AnimationCompoundStatementNode;
+
+typedef union {
+	ParamListTranslateNode * translateParamList;
+	ParamListOpacityNode * opacityParamList;
+	ParamListRecolorNode * recolorParamList;
+	ParamListRotateNode * rotateParamList;
+	ParamListResizeNode * resizeParamList;
+	ParamListMorphNode * morphParamList;
+} AnimationUnion;
+typedef enum {
+	A_TRANSLATE_X,
+	A_TRANSLATE_Y,
+	A_OPACITY,
+	A_RECOLOR,
+	A_ROTATE,
+	A_RESIZE,
+	A_MORPH
+} AnimationType;
+typedef struct {
+	AnimationType type;
+	AnimationUnion value;
+} AnimationNode;
+
+/** Layouts */
+typedef struct {
+	FunctionListNode * functionList;
+} LayoutCompoundStatementNode;
+
+typedef struct {
+	layout_t layout;
+	LayoutCompoundStatementNode * compoundStatement;
+} LayoutNode;
+
+/** Shapes */
+typedef union {
+	ParamListRectangleNode * rectangleParamList;
+	ParamListEllipseNode * ellipseParamList;
+	ParamListTriangleNode * triangleParamList;
+} ShapeUnion;
+typedef enum {
+	S_RECTANGLE,
+	S_ELLIPSE,
+	S_TRIANGLE
+} ShapeType;
+typedef struct {
+	ShapeType type;
+	ShapeUnion value;
+} ShapeNode;
+
+/** Vectors */
+typedef union {
+	ParamListTextNode * textParamList;
+	ParamListImageNode * imageParamList;
+} VectorUnion;
+typedef enum {
+	V_TEXT,
+	V_IMAGE
+} VectorType;
+typedef struct {
+	VectorType type;
+	VectorUnion value;
+} VectorNode;
+
+/** Others */
+// Function
+typedef union {
+	AnimationNode * animationNode;
+	LayoutNode * layoutNode;
+	ShapeNode * shapeNode;
+	VectorNode * vectorNode;
+} FunctionUnion;
+typedef enum {
+	F_ANIMATION,
+	F_LAYOUT,
+	F_SHAPE,
+	F_VECTOR
+} FunctionType;
+struct FunctionNode {
+	FunctionType type;
+	FunctionUnion value;
+};
+
+typedef union {
+	FunctionNode * functionNode;
+	char * varname;
+} FunctionListUnion;
+typedef enum {
+	FL_FUNCTION,
+	FL_VARNAME
+} FunctionListType;
+struct FunctionListNode{
+	FunctionListType type;
+	FunctionListUnion value;
+	FunctionListNode * listNode;
+};
+
+// Assign 
+typedef struct {
+	char * varname;
+	FunctionNode * function;
+} AssignNode;
+
+// Expression
+typedef union {
+	FunctionNode * functionNode;
+	AssignNode * assignNode;
+} ExpressionUnion;
+typedef enum {
+	E_EMPTY,
+	E_FUNCTION,
+	E_ASSIGN
+} ExpressionType;
+struct ExpressionNode {
+	ExpressionType type;
+	ExpressionUnion value;
+	ExpressionNode * nextExpression;
 };
 
 #endif

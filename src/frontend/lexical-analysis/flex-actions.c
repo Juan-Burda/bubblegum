@@ -28,9 +28,9 @@ void EndCommentPatternAction() {
 }
 
 /* Layouts */
-token LayoutPatternAction(const char * lexeme, const layout_t layout) {
+token LayoutPatternAction(const char * lexeme, const layout_t layoutType) {
 	LogDebug("LayoutPatternAction: '%s' ", lexeme);
-	yylval.layout = layout;
+	yylval.layoutType = layoutType;
 	return LAYOUT;
 }
 

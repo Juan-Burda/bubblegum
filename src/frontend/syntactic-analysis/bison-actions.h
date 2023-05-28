@@ -12,13 +12,29 @@
  * abstracta (i.e., el AST).
  */
 
-// Programa.
-int ProgramGrammarAction(const int value);
+/* Others */
+Program * ProgramAction(ExpressionNode * expression);
 
-int Return0();
+ExpressionNode * ExpressionAction(ExpressionType type, ExpressionUnion value, ExpressionNode * expression);
 
-// Constantes.
-int IntegerConstantGrammarAction(const int value);
+FunctionListNode * FunctionListAction(FunctionListType type, FunctionListNode * listNode, FunctionListUnion value);
+FunctionNode * FunctionAction(FunctionType type, FunctionUnion value);
+
+AssignNode * AssignAction(char * varname, FunctionNode * function);
+
+/* Animations */
+AnimationCompoundStatementNode * AnimationCompoundStatementAction(AnimationCompoundStatementType type, AnimationCompoundStatementUnion value);
+AnimationNode * AnimationAction(AnimationType type, AnimationUnion value);
+
+/* Layouts */
+LayoutCompoundStatementNode * LayoutCompoundStatementAction(FunctionListNode * listNode);
+LayoutNode * LayoutAction(layout_t layout, LayoutCompoundStatementNode * compoundStatement);
+
+/* Shapes */
+ShapeNode * ShapeAction(ShapeType type, ShapeUnion value);
+
+/* Vectors */
+VectorNode * VectorAction(VectorType type, VectorUnion value);
 
 /* Parameters */
 // For animations
