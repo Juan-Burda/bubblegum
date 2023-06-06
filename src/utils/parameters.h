@@ -1,0 +1,35 @@
+#ifndef _PARAMETERS_H_
+#define _PARAMETERS_H_
+
+typedef enum {
+    PA_A_ALTERNATE,
+    PA_A_LOOP,
+    PA_A_DURATION,
+    PA_A_DELAY,
+    PA_T_END_VALUE,
+    PA_O_ALPHA,
+    PA_R_ANGLE,
+    PA_RE_SCALE,
+    PA_M_POINT,
+    PA_REC_END_COLOR,
+
+    PS_S_FILL_COLOR,
+    PS_S_BORDER_COLOR,
+    PS_S_BORDER_WIDTH,
+    PS_S_ROTATION,
+    PS_R_HEIGHT,
+    PS_R_WIDTH,
+    PS_E_X_AXIS,
+    PS_E_Y_AXIS,
+    PS_T_HEIGHT,
+    PS_T_BASE,
+
+    PV_T_FONT_WIDTH,
+    PV_T_FONT_FAMILY,
+    PV_T_FONT_WEIGHT,
+    PV_T_FONT_STYLE,
+    PV_T_TEXT_DECORATION,
+    PV_T_BACKGROUND_COLOR,
+} ParameterType;
+
+#endif  // _PARAMETERS_H_

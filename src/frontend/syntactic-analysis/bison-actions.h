@@ -1,9 +1,9 @@
 #ifndef BISON_ACTIONS_HEADER
 #define BISON_ACTIONS_HEADER
 
-#include "../../backend/support/shared.h"
 #include "../../backend/semantic-analysis/abstract-syntax-tree.h"
-#include "../data-types.h"
+#include "../../backend/support/shared.h"
+#include "../../utils/data-types.h"
 
 /**
  * Se definen las acciones a ejecutar sobre cada regla de producción de la
@@ -13,72 +13,72 @@
  */
 
 /* Others */
-Program * ProgramAction(ExpressionNode * expression);
+Program* ProgramAction(ExpressionNode* expression);
 
-ExpressionNode * ExpressionAction(ExpressionType type, ExpressionUnion value, ExpressionNode * expression);
+ExpressionNode* ExpressionAction(ExpressionType type, ExpressionUnion value, ExpressionNode* expression);
 
-FunctionListNode * FunctionListAction(FunctionListType type, FunctionListNode * listNode, FunctionListUnion value);
-FunctionNode * FunctionAction(FunctionType type, FunctionUnion value);
+FunctionListNode* FunctionListAction(FunctionListType type, FunctionListNode* listNode, FunctionListUnion value);
+FunctionNode* FunctionAction(FunctionType type, FunctionUnion value);
 
-AssignNode * AssignAction(char * varname, FunctionNode * function);
+AssignNode* AssignAction(char* varname, FunctionNode* function);
 
 /* Animations */
-AnimationCompoundStatementNode * AnimationCompoundStatementAction(AnimationCompoundStatementType type, AnimationCompoundStatementUnion value);
-AnimationNode * AnimationAction(AnimationType type, AnimationUnion value);
+AnimationCompoundStatementNode* AnimationCompoundStatementAction(AnimationCompoundStatementType type, AnimationCompoundStatementUnion value);
+AnimationNode* AnimationAction(AnimationType type, AnimationUnion value);
 
 /* Layouts */
-LayoutCompoundStatementNode * LayoutCompoundStatementAction(FunctionListNode * listNode);
-LayoutNode * LayoutAction(layout_t layout, LayoutCompoundStatementNode * compoundStatement);
+LayoutCompoundStatementNode* LayoutCompoundStatementAction(FunctionListNode* listNode);
+LayoutNode* LayoutAction(layout_t layout, LayoutCompoundStatementNode* compoundStatement);
 
 /* Shapes */
-ShapeNode * ShapeAction(ShapeType type, ShapeUnion value);
+ShapeNode* ShapeAction(ShapeType type, ShapeUnion value);
 
 /* Vectors */
-VectorNode * VectorAction(VectorType type, VectorUnion value);
+VectorNode* VectorAction(VectorType type, VectorUnion value);
 
 /* Parameters */
 // For animations
-ParamAnimationNode * ParamAnimationAction(ParamAnimationType type, ParamAnimationUnion value);
+ParamAnimationNode* ParamAnimationAction(ParameterType type, ParamAnimationUnion value);
 
-ParamListTranslateNode * ParamListTranslateAddParamAction(ParamListTranslateType type, ParamListTranslateNode * listNode, ParamListTranslateUnion value);
-ParamTranslateNode * ParamTranslateAction(ParamTranslateType type, ParamTranslateUnion value);
+ParamListTranslateNode* ParamListTranslateAddParamAction(ParamListTranslateType type, ParamListTranslateNode* listNode, ParamListTranslateUnion value);
+ParamTranslateNode* ParamTranslateAction(ParameterType type, ParamTranslateUnion value);
 
-ParamListOpacityNode * ParamListOpacityAddParamAction(ParamListOpacityType type, ParamListOpacityNode * listNode, ParamListOpacityUnion value);
-ParamOpacityNode * ParamOpacityAction(ParamOpacityType type, ParamOpacityUnion value);
+ParamListOpacityNode* ParamListOpacityAddParamAction(ParamListOpacityType type, ParamListOpacityNode* listNode, ParamListOpacityUnion value);
+ParamOpacityNode* ParamOpacityAction(ParameterType type, ParamOpacityUnion value);
 
-ParamListRotateNode * ParamListRotateAddParamAction(ParamListRotateType type, ParamListRotateNode * listNode, ParamListRotateUnion value);
-ParamRotateNode * ParamRotateAction(ParamRotateType type, ParamRotateUnion value);
+ParamListRotateNode* ParamListRotateAddParamAction(ParamListRotateType type, ParamListRotateNode* listNode, ParamListRotateUnion value);
+ParamRotateNode* ParamRotateAction(ParameterType type, ParamRotateUnion value);
 
-ParamListResizeNode * ParamListResizeAddParamAction(ParamListResizeType type, ParamListResizeNode * listNode, ParamListResizeUnion value);
-ParamResizeNode * ParamResizeAction(ParamResizeType type, ParamResizeUnion value);
+ParamListResizeNode* ParamListResizeAddParamAction(ParamListResizeType type, ParamListResizeNode* listNode, ParamListResizeUnion value);
+ParamResizeNode* ParamResizeAction(ParameterType type, ParamResizeUnion value);
 
-ParamListMorphNode * ParamListMorphAddParamAction(ParamListMorphType type, ParamListMorphNode * listNode, ParamListMorphUnion value);
-ParamMorphNode * ParamMorphAction(ParamMorphType type, ParamMorphUnion value);
+ParamListMorphNode* ParamListMorphAddParamAction(ParamListMorphType type, ParamListMorphNode* listNode, ParamListMorphUnion value);
+ParamMorphNode* ParamMorphAction(ParameterType type, ParamMorphUnion value);
 
-ParamListRecolorNode * ParamListRecolorAddParamAction(ParamListRecolorType type, ParamListRecolorNode * listNode, ParamListRecolorUnion value);
-ParamRecolorNode * ParamRecolorAction(ParamRecolorType type, ParamRecolorUnion value);
+ParamListRecolorNode* ParamListRecolorAddParamAction(ParamListRecolorType type, ParamListRecolorNode* listNode, ParamListRecolorUnion value);
+ParamRecolorNode* ParamRecolorAction(ParameterType type, ParamRecolorUnion value);
 
 // For shapes
-ParamShapeNode * ParamShapeAction(ParamShapeType type, ParamShapeUnion value);
+ParamShapeNode* ParamShapeAction(ParameterType type, ParamShapeUnion value);
 
-ParamListRectangleNode * ParamListRectangleAddParamAction(ParamListRectangleType type, ParamListRectangleNode * listNode, ParamListRectangleUnion value);
-ParamRectangleNode * ParamRectangleAction(ParamRectangleType type, ParamRectangleUnion value);
+ParamListRectangleNode* ParamListRectangleAddParamAction(ParamListRectangleType type, ParamListRectangleNode* listNode, ParamListRectangleUnion value);
+ParamRectangleNode* ParamRectangleAction(ParameterType type, ParamRectangleUnion value);
 
-ParamListEllipseNode * ParamListEllipseAddParamAction(ParamListEllipseType type, ParamListEllipseNode * listNode, ParamListEllipseUnion value);
-ParamEllipseNode * ParamEllipseAction(ParamEllipseType type, ParamEllipseUnion value);
+ParamListEllipseNode* ParamListEllipseAddParamAction(ParamListEllipseType type, ParamListEllipseNode* listNode, ParamListEllipseUnion value);
+ParamEllipseNode* ParamEllipseAction(ParameterType type, ParamEllipseUnion value);
 
-ParamListTriangleNode * ParamListTriangleAddParamAction(ParamListTriangleType type, ParamListTriangleNode * listNode, ParamListTriangleUnion value);
-ParamTriangleNode * ParamTriangleAction(ParamTriangleType type, ParamTriangleUnion value);
+ParamListTriangleNode* ParamListTriangleAddParamAction(ParamListTriangleType type, ParamListTriangleNode* listNode, ParamListTriangleUnion value);
+ParamTriangleNode* ParamTriangleAction(ParameterType type, ParamTriangleUnion value);
 
 // For vectors
-ParamListImageNode * ParamListImageAddParamAction(ParamListImageNode * listNode, ParamImageNode * imageNode);
-ParamImageNode * ParamImageAction(char * typeUrl);
+ParamListImageNode* ParamListImageAddParamAction(ParamListImageNode* listNode, ParamImageNode* imageNode);
+ParamImageNode* ParamImageAction(char* typeUrl);
 
-ParamListTextNode * ParamListTextAddParamAction(ParamListTextNode * listNode, ParamTextNode * textNode);
-ParamTextNode * ParamTextAction(ParamTextType type, ParamTextUnion value);
+ParamListTextNode* ParamListTextAddParamAction(ParamListTextNode* listNode, ParamTextNode* textNode);
+ParamTextNode* ParamTextAction(ParameterType type, ParamTextUnion value);
 
 // For data types
-ParamTypeColorNode * ParamTypeColorAction(char * typeColor);
-ParamTypePointsNode * ParamTypePointsAddPointAction(ParamTypePointsNode * pointsNode, float floating);
+ParamTypeColorNode* ParamTypeColorAction(char* typeColor);
+ParamTypePointsNode* ParamTypePointsAddPointAction(ParamTypePointsNode* pointsNode, float floating);
 
 #endif

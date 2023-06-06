@@ -5,7 +5,7 @@
 %}
 
 %code requires {
-	#include "../data-types.h"
+	#include "../../utils/data-types.h"
 }
 
 // Tipos de dato utilizados en las variables semánticas ($$, $1, $2, etc.).

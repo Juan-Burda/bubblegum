@@ -1,170 +1,167 @@
-#include "../../backend/domain-specific/calculator.h"
-#include "../../backend/support/logger.h"
 #include "bison-actions.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "../../backend/domain-specific/calculator.h"
+#include "../../backend/support/logger.h"
 
 /**
  * Implementación de "bison-grammar.h".
  */
 
 /**
-* Esta función se ejecuta cada vez que se emite un error de sintaxis.
-*/
-void yyerror(const char * string) {
-	LogError("Mensaje: '%s' debido a '%s' (linea %d).", string, yytext, yylineno);
-	LogError("En ASCII es:");
-	LogErrorRaw("\t");
-	const int length = strlen(yytext);
-	for (int i = 0; i < length; ++i) {
-		LogErrorRaw("[%d]", yytext[i]);
-	}
-	LogErrorRaw("\n\n");
+ * Esta función se ejecuta cada vez que se emite un error de sintaxis.
+ */
+void yyerror(const char* string) {
+    LogError("Mensaje: '%s' debido a '%s' (linea %d).", string, yytext, yylineno);
+    LogError("En ASCII es:");
+    LogErrorRaw("\t");
+    const int length = strlen(yytext);
+    for (int i = 0; i < length; ++i) {
+        LogErrorRaw("[%d]", yytext[i]);
+    }
+    LogErrorRaw("\n\n");
 }
 
 /** Others */
 // Program
 /**
-* Esta acción se corresponde con el no-terminal que representa el símbolo
-* inicial de la gramática, y por ende, es el último en ser ejecutado, lo que
-* indica que efectivamente el programa de entrada se pudo generar con esta
-* gramática, o lo que es lo mismo, que el programa pertenece al lenguaje.
-*/
-Program * ProgramAction(ExpressionNode * expression) {
-	LogDebug("\tProgramAction");
+ * Esta acción se corresponde con el no-terminal que representa el símbolo
+ * inicial de la gramática, y por ende, es el último en ser ejecutado, lo que
+ * indica que efectivamente el programa de entrada se pudo generar con esta
+ * gramática, o lo que es lo mismo, que el programa pertenece al lenguaje.
+ */
+Program* ProgramAction(ExpressionNode* expression) {
+    LogDebug("\tProgramAction");
 
-	Program * result = (Program*) calloc(1, sizeof(Program));
-	result->expression = expression;
+    Program* result = (Program*)calloc(1, sizeof(Program));
+    result->expression = expression;
 
-	/*
-	* "state" es una variable global que almacena el estado del compilador,
-	* cuyo campo "succeed" indica si la compilación fue o no exitosa, la cual
-	* es utilizada en la función "main".
-	*/
-	state.succeed = true;
+    /*
+     * "state" es una variable global que almacena el estado del compilador,
+     * cuyo campo "succeed" indica si la compilación fue o no exitosa, la cual
+     * es utilizada en la función "main".
+     */
+    state.succeed = true;
 
-	/*
-	* Por otro lado, "result" contiene el resultado de aplicar el análisis
-	* sintáctico mediante Bison, y almacenar el nood raíz del AST construido
-	* en esta variable. Para el ejemplo de la calculadora, no hay AST porque
-	* la expresión se computa on-the-fly, y es la razón por la cual esta
-	* variable es un simple entero, en lugar de un nodo.
-	*/
-	state.result = 0;
+    /*
+     * Por otro lado, "result" contiene el resultado de aplicar el análisis
+     * sintáctico mediante Bison, y almacenar el nood raíz del AST construido
+     * en esta variable. Para el ejemplo de la calculadora, no hay AST porque
+     * la expresión se computa on-the-fly, y es la razón por la cual esta
+     * variable es un simple entero, en lugar de un nodo.
+     */
+    state.result = 0;
 
-	return result;
+    return result;
 }
 
 // Expression
-ExpressionNode * ExpressionAction(ExpressionType type, ExpressionUnion value, ExpressionNode * expression) {
-	LogDebug("\tExpressionNodeAction");
+ExpressionNode* ExpressionAction(ExpressionType type, ExpressionUnion value, ExpressionNode* expression) {
+    LogDebug("\tExpressionNodeAction");
 
-	ExpressionNode * result = (ExpressionNode*) calloc(1, sizeof(ExpressionNode));
-	result->type = type;
-	result->value = value;
-	result->nextExpression = expression;
+    ExpressionNode* result = (ExpressionNode*)calloc(1, sizeof(ExpressionNode));
+    result->type = type;
+    result->value = value;
+    result->nextExpression = expression;
 
-	return result;
+    return result;
 }
 
 // Assign
-AssignNode * AssignAction(char * varname, FunctionNode * function) {
-	LogDebug("\tAssignNodeAction");
+AssignNode* AssignAction(char* varname, FunctionNode* function) {
+    LogDebug("\tAssignNodeAction");
 
-	AssignNode * result = (AssignNode*) calloc(1, sizeof(AssignNode));
-	result->varname = varname;
-	result->function = function;
+    AssignNode* result = (AssignNode*)calloc(1, sizeof(AssignNode));
+    result->varname = varname;
+    result->function = function;
 
-	return result;
+    return result;
 }
-
 
 // Function
-FunctionNode * FunctionAction(FunctionType type, FunctionUnion value) {
-	LogDebug("\tFunctionNodeAction");
+FunctionNode* FunctionAction(FunctionType type, FunctionUnion value) {
+    LogDebug("\tFunctionNodeAction");
 
-	FunctionNode * result = (FunctionNode*) calloc(1, sizeof(FunctionNode));
-	result->type = type;
-	result->value = value;
+    FunctionNode* result = (FunctionNode*)calloc(1, sizeof(FunctionNode));
+    result->type = type;
+    result->value = value;
 
-	return result;
+    return result;
 }
 
-FunctionListNode * FunctionListAction(FunctionListType type, FunctionListNode * listNode, FunctionListUnion value) {
-	LogDebug("\tFunctionListNodeAction");
+FunctionListNode* FunctionListAction(FunctionListType type, FunctionListNode* listNode, FunctionListUnion value) {
+    LogDebug("\tFunctionListNodeAction");
 
-	FunctionListNode * result = (FunctionListNode*) calloc(1, sizeof(FunctionListNode));
-	result->type = type;
-	result->listNode = listNode;
-	result->value = value;
+    FunctionListNode* result = (FunctionListNode*)calloc(1, sizeof(FunctionListNode));
+    result->type = type;
+    result->listNode = listNode;
+    result->value = value;
 
-	return result;
+    return result;
 }
-
 
 /** Animations */
-AnimationCompoundStatementNode * AnimationCompoundStatementAction(AnimationCompoundStatementType type, AnimationCompoundStatementUnion value) {
-	LogDebug("\tAnimationCompoundStatementNodeAction");
+AnimationCompoundStatementNode* AnimationCompoundStatementAction(AnimationCompoundStatementType type, AnimationCompoundStatementUnion value) {
+    LogDebug("\tAnimationCompoundStatementNodeAction");
 
-	AnimationCompoundStatementNode * result = (AnimationCompoundStatementNode*) calloc(1, sizeof(AnimationCompoundStatementNode));
-	result->type = type;
-	result->value = value;
+    AnimationCompoundStatementNode* result = (AnimationCompoundStatementNode*)calloc(1, sizeof(AnimationCompoundStatementNode));
+    result->type = type;
+    result->value = value;
 
-	return result;
+    return result;
 }
 
-AnimationNode * AnimationAction(AnimationType type, AnimationUnion value) {
-	LogDebug("\tAnimationNodeAction");
+AnimationNode* AnimationAction(AnimationType type, AnimationUnion value) {
+    LogDebug("\tAnimationNodeAction");
 
-	AnimationNode * result = (AnimationNode*) calloc(1, sizeof(AnimationNode));
-	result->type = type;
-	result->value = value;
+    AnimationNode* result = (AnimationNode*)calloc(1, sizeof(AnimationNode));
+    result->type = type;
+    result->value = value;
 
-	return result;
+    return result;
 }
 
 /** Layouts */
-LayoutCompoundStatementNode * LayoutCompoundStatementAction(FunctionListNode *  listNode) {
-	LogDebug("\tLayoutCompoundStatementNodeAction");
+LayoutCompoundStatementNode* LayoutCompoundStatementAction(FunctionListNode* listNode) {
+    LogDebug("\tLayoutCompoundStatementNodeAction");
 
-	LayoutCompoundStatementNode * result = (LayoutCompoundStatementNode*) calloc(1, sizeof(LayoutCompoundStatementNode));
-	result->functionList = listNode;
+    LayoutCompoundStatementNode* result = (LayoutCompoundStatementNode*)calloc(1, sizeof(LayoutCompoundStatementNode));
+    result->functionList = listNode;
 
-	return result;
+    return result;
 }
 
-LayoutNode * LayoutAction(layout_t layout, LayoutCompoundStatementNode * compoundStatement) {
-	LogDebug("\tLayoutAction");
+LayoutNode* LayoutAction(layout_t layout, LayoutCompoundStatementNode* compoundStatement) {
+    LogDebug("\tLayoutAction");
 
-	LayoutNode * result = (LayoutNode*) calloc(1, sizeof(LayoutNode));
-	result->layout = layout;
-	result->compoundStatement = compoundStatement;
+    LayoutNode* result = (LayoutNode*)calloc(1, sizeof(LayoutNode));
+    result->layout = layout;
+    result->compoundStatement = compoundStatement;
 
-	return result;
+    return result;
 }
-
 
 /** Shapes */
-ShapeNode * ShapeAction(ShapeType type, ShapeUnion value) {
-	LogDebug("\tShapeNodeAction");
+ShapeNode* ShapeAction(ShapeType type, ShapeUnion value) {
+    LogDebug("\tShapeNodeAction");
 
-	ShapeNode * result = (ShapeNode*) calloc(1, sizeof(ShapeNode));
-	result->type = type;
-	result->value = value;
+    ShapeNode* result = (ShapeNode*)calloc(1, sizeof(ShapeNode));
+    result->type = type;
+    result->value = value;
 
-	return result;
+    return result;
 }
 
 /** Vectors */
-VectorNode * VectorAction(VectorType type, VectorUnion value) {
-	LogDebug("\tVectorNodeAction");
+VectorNode* VectorAction(VectorType type, VectorUnion value) {
+    LogDebug("\tVectorNodeAction");
 
-	VectorNode * result = (VectorNode*) calloc(1, sizeof(VectorNode));
-	result->type = type;
-	result->value = value;
+    VectorNode* result = (VectorNode*)calloc(1, sizeof(VectorNode));
+    result->type = type;
+    result->value = value;
 
-	return result;
+    return result;
 }
 
 /** Parameters */
@@ -172,282 +169,281 @@ VectorNode * VectorAction(VectorType type, VectorUnion value) {
  * For parameters we always have the same pattern:
  * 	- We need to save a certain parameter's value -> this is done in Param<sth>Node
  * 	- We need to add a new paramter -> this is done in ParamList<sth>Node
-*/
+ */
 /* Animation */
-ParamAnimationNode * ParamAnimationAction(ParamAnimationType type, ParamAnimationUnion value) {
-	LogDebug("\tParamAnimationAction");
+ParamAnimationNode* ParamAnimationAction(ParameterType type, ParamAnimationUnion value) {
+    LogDebug("\tParamAnimationAction");
 
-	ParamAnimationNode * result = (ParamAnimationNode*) calloc(1, sizeof(ParamAnimationNode));
-	result->type = type;
-	result->value = value;
+    ParamAnimationNode* result = (ParamAnimationNode*)calloc(1, sizeof(ParamAnimationNode));
+    result->type = type;
+    result->value = value;
 
-	return result;
+    return result;
 }
 
 // For translate
-ParamListTranslateNode * ParamListTranslateAddParamAction(ParamListTranslateType type, ParamListTranslateNode* listNode, ParamListTranslateUnion value) {
-	LogDebug("\tParamListTranslateAddParamAction");
+ParamListTranslateNode* ParamListTranslateAddParamAction(ParamListTranslateType type, ParamListTranslateNode* listNode, ParamListTranslateUnion value) {
+    LogDebug("\tParamListTranslateAddParamAction");
 
-	ParamListTranslateNode * result = (ParamListTranslateNode*) calloc(1, sizeof(ParamListTranslateNode));
-	result->type = type;
-	result->listNode = listNode;
-	result->value = value;
+    ParamListTranslateNode* result = (ParamListTranslateNode*)calloc(1, sizeof(ParamListTranslateNode));
+    result->type = type;
+    result->listNode = listNode;
+    result->value = value;
 
-	return result;
+    return result;
 }
 
-ParamTranslateNode * ParamTranslateAction(ParamTranslateType type, ParamTranslateUnion value) {
-	LogDebug("\tParamTranslateAction");
+ParamTranslateNode* ParamTranslateAction(ParameterType type, ParamTranslateUnion value) {
+    LogDebug("\tParamTranslateAction");
 
-	ParamTranslateNode * result = (ParamTranslateNode*) calloc(1, sizeof(ParamTranslateNode));
-	result->type = type;
-	result->value = value;
+    ParamTranslateNode* result = (ParamTranslateNode*)calloc(1, sizeof(ParamTranslateNode));
+    result->type = type;
+    result->value = value;
 
-	return result;
+    return result;
 }
 
 // For opacity
-ParamListOpacityNode * ParamListOpacityAddParamAction(ParamListOpacityType type, ParamListOpacityNode* listNode, ParamListOpacityUnion value) {
-	LogDebug("\tParamListOpacityAddParamAction");
+ParamListOpacityNode* ParamListOpacityAddParamAction(ParamListOpacityType type, ParamListOpacityNode* listNode, ParamListOpacityUnion value) {
+    LogDebug("\tParamListOpacityAddParamAction");
 
-	ParamListOpacityNode * result = (ParamListOpacityNode*) calloc(1, sizeof(ParamListOpacityNode));
-	result->type = type;
-	result->listNode = listNode;
-	result->value = value;
+    ParamListOpacityNode* result = (ParamListOpacityNode*)calloc(1, sizeof(ParamListOpacityNode));
+    result->type = type;
+    result->listNode = listNode;
+    result->value = value;
 
-	return result;
+    return result;
 }
 
-ParamOpacityNode * ParamOpacityAction(ParamOpacityType type, ParamOpacityUnion value) {
-	LogDebug("\tParamOpacityAction");
+ParamOpacityNode* ParamOpacityAction(ParameterType type, ParamOpacityUnion value) {
+    LogDebug("\tParamOpacityAction");
 
-	ParamOpacityNode * result = (ParamOpacityNode*) calloc(1, sizeof(ParamOpacityNode));
-	result->type = type;
-	result->value = value;
+    ParamOpacityNode* result = (ParamOpacityNode*)calloc(1, sizeof(ParamOpacityNode));
+    result->type = type;
+    result->value = value;
 
-	return result;
+    return result;
 }
 
 // For rotate
-ParamListRotateNode * ParamListRotateAddParamAction(ParamListRotateType type, ParamListRotateNode* listNode, ParamListRotateUnion value) {
-	LogDebug("\tParamListRotateAddParamAction");
+ParamListRotateNode* ParamListRotateAddParamAction(ParamListRotateType type, ParamListRotateNode* listNode, ParamListRotateUnion value) {
+    LogDebug("\tParamListRotateAddParamAction");
 
-	ParamListRotateNode * result = (ParamListRotateNode*) calloc(1, sizeof(ParamListRotateNode));
-	result->type = type;
-	result->listNode = listNode;
-	result->value = value;
+    ParamListRotateNode* result = (ParamListRotateNode*)calloc(1, sizeof(ParamListRotateNode));
+    result->type = type;
+    result->listNode = listNode;
+    result->value = value;
 
-	return result;
+    return result;
 }
 
-ParamRotateNode * ParamRotateAction(ParamRotateType type, ParamRotateUnion value) {
-	LogDebug("\tParamRotateAction");
+ParamRotateNode* ParamRotateAction(ParameterType type, ParamRotateUnion value) {
+    LogDebug("\tParamRotateAction");
 
-	ParamRotateNode * result = (ParamRotateNode*) calloc(1, sizeof(ParamRotateNode));
-	result->type = type;
-	result->value = value;
+    ParamRotateNode* result = (ParamRotateNode*)calloc(1, sizeof(ParamRotateNode));
+    result->type = type;
+    result->value = value;
 
-	return result;
+    return result;
 }
 
 // For resize
-ParamListResizeNode * ParamListResizeAddParamAction(ParamListResizeType type, ParamListResizeNode* listNode, ParamListResizeUnion value) {
-	LogDebug("\tParamListResizeAddParamAction");
+ParamListResizeNode* ParamListResizeAddParamAction(ParamListResizeType type, ParamListResizeNode* listNode, ParamListResizeUnion value) {
+    LogDebug("\tParamListResizeAddParamAction");
 
-	ParamListResizeNode * result = (ParamListResizeNode*) calloc(1, sizeof(ParamListResizeNode));
-	result->type = type;
-	result->listNode = listNode;
-	result->value = value;
+    ParamListResizeNode* result = (ParamListResizeNode*)calloc(1, sizeof(ParamListResizeNode));
+    result->type = type;
+    result->listNode = listNode;
+    result->value = value;
 
-	return result;
+    return result;
 }
 
-ParamResizeNode * ParamResizeAction(ParamResizeType type, ParamResizeUnion value) {
-	LogDebug("\tParamResizeAction");
+ParamResizeNode* ParamResizeAction(ParameterType type, ParamResizeUnion value) {
+    LogDebug("\tParamResizeAction");
 
-	ParamResizeNode * result = (ParamResizeNode*) calloc(1, sizeof(ParamResizeNode));
-	result->type = type;
-	result->value = value;
+    ParamResizeNode* result = (ParamResizeNode*)calloc(1, sizeof(ParamResizeNode));
+    result->type = type;
+    result->value = value;
 
-	return result;
+    return result;
 }
 
 // For morph
-ParamListMorphNode * ParamListMorphAddParamAction(ParamListMorphType type, ParamListMorphNode* listNode, ParamListMorphUnion value) {
-	LogDebug("\tParamListMorphAddParamAction");
+ParamListMorphNode* ParamListMorphAddParamAction(ParamListMorphType type, ParamListMorphNode* listNode, ParamListMorphUnion value) {
+    LogDebug("\tParamListMorphAddParamAction");
 
-	ParamListMorphNode * result = (ParamListMorphNode*) calloc(1, sizeof(ParamListMorphNode));
-	result->type = type;
-	result->listNode = listNode;
-	result->value = value;
+    ParamListMorphNode* result = (ParamListMorphNode*)calloc(1, sizeof(ParamListMorphNode));
+    result->type = type;
+    result->listNode = listNode;
+    result->value = value;
 
-	return result;
+    return result;
 }
 
-ParamMorphNode * ParamMorphAction(ParamMorphType type, ParamMorphUnion value) {
-	LogDebug("\tParamMorphAction");
+ParamMorphNode* ParamMorphAction(ParameterType type, ParamMorphUnion value) {
+    LogDebug("\tParamMorphAction");
 
-	ParamMorphNode * result = (ParamMorphNode*) calloc(1, sizeof(ParamMorphNode));
-	result->type = type;
-	result->value = value;
+    ParamMorphNode* result = (ParamMorphNode*)calloc(1, sizeof(ParamMorphNode));
+    result->type = type;
+    result->value = value;
 
-	return result;
+    return result;
 }
 
 // For recolor
-ParamListRecolorNode * ParamListRecolorAddParamAction(ParamListRecolorType type, ParamListRecolorNode* listNode, ParamListRecolorUnion value) {
-	LogDebug("\tParamListRecolorAddParamAction");
+ParamListRecolorNode* ParamListRecolorAddParamAction(ParamListRecolorType type, ParamListRecolorNode* listNode, ParamListRecolorUnion value) {
+    LogDebug("\tParamListRecolorAddParamAction");
 
-	ParamListRecolorNode * result = (ParamListRecolorNode*) calloc(1, sizeof(ParamListRecolorNode));
-	result->type = type;
-	result->listNode = listNode;
-	result->value = value;
+    ParamListRecolorNode* result = (ParamListRecolorNode*)calloc(1, sizeof(ParamListRecolorNode));
+    result->type = type;
+    result->listNode = listNode;
+    result->value = value;
 
-	return result;
+    return result;
 }
 
-ParamRecolorNode * ParamRecolorAction(ParamRecolorType type, ParamRecolorUnion value) {
-	LogDebug("\tParamRecolorAction");
+ParamRecolorNode* ParamRecolorAction(ParameterType type, ParamRecolorUnion value) {
+    LogDebug("\tParamRecolorAction");
 
-	ParamRecolorNode * result = (ParamRecolorNode*) calloc(1, sizeof(ParamRecolorNode));
-	result->type = type;
-	result->value = value;
+    ParamRecolorNode* result = (ParamRecolorNode*)calloc(1, sizeof(ParamRecolorNode));
+    result->type = type;
+    result->value = value;
 
-	return result;
+    return result;
 }
 
 /* Shapes */
-ParamShapeNode * ParamShapeAction(ParamShapeType type, ParamShapeUnion value) {
-	LogDebug("\tParamShapeAction");
+ParamShapeNode* ParamShapeAction(ParameterType type, ParamShapeUnion value) {
+    LogDebug("\tParamShapeAction");
 
-	ParamShapeNode * result = (ParamShapeNode*) calloc(1, sizeof(ParamShapeNode));
-	result->type = type;
-	result->value = value;
+    ParamShapeNode* result = (ParamShapeNode*)calloc(1, sizeof(ParamShapeNode));
+    result->type = type;
+    result->value = value;
 
-	return result;
+    return result;
 }
 
 // For rectangles
-ParamListRectangleNode * ParamListRectangleAddParamAction(ParamListRectangleType type, ParamListRectangleNode* listNode, ParamListRectangleUnion value) {
-	LogDebug("\tParamListRectangleAddParamAction");
+ParamListRectangleNode* ParamListRectangleAddParamAction(ParamListRectangleType type, ParamListRectangleNode* listNode, ParamListRectangleUnion value) {
+    LogDebug("\tParamListRectangleAddParamAction");
 
-	ParamListRectangleNode * result = (ParamListRectangleNode*) calloc(1, sizeof(ParamListRectangleNode));
-	result->type = type;
-	result->listNode = listNode;
-	result->value = value;
+    ParamListRectangleNode* result = (ParamListRectangleNode*)calloc(1, sizeof(ParamListRectangleNode));
+    result->type = type;
+    result->listNode = listNode;
+    result->value = value;
 
-	return result;
+    return result;
 }
 
-ParamRectangleNode * ParamRectangleAction(ParamRectangleType type, ParamRectangleUnion value) {
-	LogDebug("\tParamRectangleAction");
+ParamRectangleNode* ParamRectangleAction(ParameterType type, ParamRectangleUnion value) {
+    LogDebug("\tParamRectangleAction");
 
-	ParamRectangleNode * result = (ParamRectangleNode*) calloc(1, sizeof(ParamRectangleNode));
-	result->type = type;
-	result->value = value;
+    ParamRectangleNode* result = (ParamRectangleNode*)calloc(1, sizeof(ParamRectangleNode));
+    result->type = type;
+    result->value = value;
 
-	return result;
+    return result;
 }
 
 // For ellipse
-ParamListEllipseNode * ParamListEllipseAddParamAction(ParamListEllipseType type, ParamListEllipseNode* listNode, ParamListEllipseUnion value) {
-	LogDebug("\tParamListEllipseAddParamAction");
+ParamListEllipseNode* ParamListEllipseAddParamAction(ParamListEllipseType type, ParamListEllipseNode* listNode, ParamListEllipseUnion value) {
+    LogDebug("\tParamListEllipseAddParamAction");
 
-	ParamListEllipseNode * result = (ParamListEllipseNode*) calloc(1, sizeof(ParamListEllipseNode));
-	result->type = type;
-	result->listNode = listNode;
-	result->value = value;
+    ParamListEllipseNode* result = (ParamListEllipseNode*)calloc(1, sizeof(ParamListEllipseNode));
+    result->type = type;
+    result->listNode = listNode;
+    result->value = value;
 
-	return result;
+    return result;
 }
 
-ParamEllipseNode * ParamEllipseAction(ParamEllipseType type, ParamEllipseUnion value) {
-	LogDebug("\tParamEllipseAction");
+ParamEllipseNode* ParamEllipseAction(ParameterType type, ParamEllipseUnion value) {
+    LogDebug("\tParamEllipseAction");
 
-	ParamEllipseNode * result = (ParamEllipseNode*)calloc(1,sizeof(ParamEllipseNode));
-	result->type = type;
-	result->value = value;
+    ParamEllipseNode* result = (ParamEllipseNode*)calloc(1, sizeof(ParamEllipseNode));
+    result->type = type;
+    result->value = value;
 
-	return result;
+    return result;
 }
 
 // For triangle
-ParamListTriangleNode * ParamListTriangleAddParamAction(ParamListTriangleType type, ParamListTriangleNode* listNode, ParamListTriangleUnion value) {
-	LogDebug("\tParamListTriangleAddParamShapeAction");
+ParamListTriangleNode* ParamListTriangleAddParamAction(ParamListTriangleType type, ParamListTriangleNode* listNode, ParamListTriangleUnion value) {
+    LogDebug("\tParamListTriangleAddParamShapeAction");
 
-	ParamListTriangleNode * result = (ParamListTriangleNode*) calloc(1, sizeof(ParamListTriangleNode));
-	result->type = type;
-	result->listNode = listNode;
-	result->value = value;
+    ParamListTriangleNode* result = (ParamListTriangleNode*)calloc(1, sizeof(ParamListTriangleNode));
+    result->type = type;
+    result->listNode = listNode;
+    result->value = value;
 
-	return result;
+    return result;
 }
 
-ParamTriangleNode * ParamTriangleAction(ParamTriangleType type, ParamTriangleUnion value) {
-	LogDebug("\tParamTriangleAction");
+ParamTriangleNode* ParamTriangleAction(ParameterType type, ParamTriangleUnion value) {
+    LogDebug("\tParamTriangleAction");
 
-	ParamTriangleNode * result = (ParamTriangleNode*)calloc(1,sizeof(ParamTriangleNode));
-	result->type = type;
-	result->value = value;
+    ParamTriangleNode* result = (ParamTriangleNode*)calloc(1, sizeof(ParamTriangleNode));
+    result->type = type;
+    result->value = value;
 
-	return result;
+    return result;
 }
-
 
 /* Vectors */
 // For images
-ParamListImageNode * ParamListImageAddParamAction(ParamListImageNode * listNode, ParamImageNode * imageNode) {
-	LogDebug("\tParamListImageMultipleAction");
+ParamListImageNode* ParamListImageAddParamAction(ParamListImageNode* listNode, ParamImageNode* imageNode) {
+    LogDebug("\tParamListImageMultipleAction");
 
-	ParamListImageNode * result = (ParamListImageNode *) calloc(1, sizeof(ParamListImageNode));
-	result->listNode = listNode;
-	result->paramImageNode = imageNode;
+    ParamListImageNode* result = (ParamListImageNode*)calloc(1, sizeof(ParamListImageNode));
+    result->listNode = listNode;
+    result->paramImageNode = imageNode;
 
-	return result;
+    return result;
 }
 
-ParamImageNode * ParamImageAction(char * typeUrl) {
-	LogDebug("\t ParamImageAction");
+ParamImageNode* ParamImageAction(char* typeUrl) {
+    LogDebug("\t ParamImageAction");
 
-	ParamImageNode * result = (ParamImageNode*) calloc(1, sizeof(ParamImageNode));
-	result->typeUrl = typeUrl;
+    ParamImageNode* result = (ParamImageNode*)calloc(1, sizeof(ParamImageNode));
+    result->typeUrl = typeUrl;
 
-	return result;
+    return result;
 }
 
 // For text
-ParamListTextNode * ParamListTextAddParamAction(ParamListTextNode * listNode, ParamTextNode * textNode) {
-	LogDebug("\t ParamListTextMultipleAction");
+ParamListTextNode* ParamListTextAddParamAction(ParamListTextNode* listNode, ParamTextNode* textNode) {
+    LogDebug("\t ParamListTextMultipleAction");
 
-	ParamListTextNode * result = (ParamListTextNode*)calloc(1,sizeof(ParamListTextNode));
-	result->listNode = listNode;
-	result->paramTextNode = textNode;
+    ParamListTextNode* result = (ParamListTextNode*)calloc(1, sizeof(ParamListTextNode));
+    result->listNode = listNode;
+    result->paramTextNode = textNode;
 
-	return result;
+    return result;
 }
 
-ParamTextNode * ParamTextAction(ParamTextType type, ParamTextUnion value) {
-	LogDebug("\t ParamTextAction");
+ParamTextNode* ParamTextAction(ParameterType type, ParamTextUnion value) {
+    LogDebug("\t ParamTextAction");
 
-	ParamTextNode * result = (ParamTextNode*)calloc(1,sizeof(ParamTextNode));
-	result->type = type;
-	result->value = value;
+    ParamTextNode* result = (ParamTextNode*)calloc(1, sizeof(ParamTextNode));
+    result->type = type;
+    result->value = value;
 
-	return result;
+    return result;
 }
 
 /* Data types actions*/
-ParamTypeColorNode * ParamTypeColorAction(char * typeColor){
-	ParamTypeColorNode * result = (ParamTypeColorNode*) calloc(1, sizeof(ParamTypeColorNode));
-	result->typeColor = typeColor;
+ParamTypeColorNode* ParamTypeColorAction(char* typeColor) {
+    ParamTypeColorNode* result = (ParamTypeColorNode*)calloc(1, sizeof(ParamTypeColorNode));
+    result->typeColor = typeColor;
 
-	return result;
+    return result;
 }
 
-ParamTypePointsNode * ParamTypePointsAddPointAction(ParamTypePointsNode * pointsNode, float floating) {
-	ParamTypePointsNode * result = (ParamTypePointsNode*) calloc(1, sizeof(ParamTypePointsNode));
-	result->nextPoint = pointsNode;
-	result->floating = floating;
+ParamTypePointsNode* ParamTypePointsAddPointAction(ParamTypePointsNode* pointsNode, float floating) {
+    ParamTypePointsNode* result = (ParamTypePointsNode*)calloc(1, sizeof(ParamTypePointsNode));
+    result->nextPoint = pointsNode;
+    result->floating = floating;
 
-	return result;
+    return result;
 }

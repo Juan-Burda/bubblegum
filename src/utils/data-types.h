@@ -38,4 +38,4 @@ typedef enum {
     LINE_THROUGH
 } textdeco_t;
 
-#endif // DATA_TYPES_H_
+#endif  // DATA_TYPES_H_
