@@ -11,7 +11,9 @@
 typedef union {
     boolean_t boolean;
     int integer;
+    float floating;
     char* color;
+    char* points;
 } ParameterValue;
 typedef struct {
     ParameterType type;  // key
@@ -40,6 +42,6 @@ void stDestroy();
 
 int stAddVariable(char varname[VARNAME_MAX_LENGTH], VariableType type, ParameterMap** parameters);
 int stAddParametersToShape(ParameterMap** map, ShapeNode* shapeNode);
-int stAddParametersToAnimation(ParameterMap** map, AnimationNode* animationNode);
+int stAddParametersToAnimation(ParameterMap** map, AnimationNode* node);
 
 #endif  // _SYMBOL_TABLE_H_

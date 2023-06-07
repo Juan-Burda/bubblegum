@@ -25,26 +25,10 @@
 	VectorNode * vector;
 
 	ParamAnimationNode * paramAnimation;
-	ParamListTranslateNode * paramListTranslate;
-	ParamTranslateNode * paramTranslate;
-	ParamListOpacityNode * paramListOpacity;
-	ParamOpacityNode * paramOpacity;
-	ParamListRotateNode * paramListRotate;
-	ParamRotateNode * paramRotate;
-	ParamListResizeNode * paramListResize;
-	ParamResizeNode * paramResize;
-	ParamListMorphNode * paramListMorph;
-	ParamMorphNode * paramMorph;
-	ParamListRecolorNode * paramListRecolor;
-	ParamRecolorNode * paramRecolor;
+	ParamListAnimationNode * paramListAnimation;
 
 	ParamShapeNode * paramShape;
-	ParamListRectangleNode * paramListRectangle;
-	ParamRectangleNode * paramRectangle;
-	ParamListEllipseNode * paramListEllipse;
-	ParamEllipseNode * paramEllipse;
-	ParamListTriangleNode * paramListTriangle;
-	ParamTriangleNode * paramTriangle;
+	ParamListShapeNode* paramListShape;
 
 	ParamListTextNode * paramListText;
 	ParamTextNode * paramText;
@@ -151,26 +135,26 @@
 %type <vector> vector;
 
 %type <paramAnimation> paramAnimation;
-%type <paramListTranslate> paramListTranslate;
-%type <paramTranslate> paramTranslate;
-%type <paramListOpacity> paramListOpacity;
-%type <paramOpacity> paramOpacity;
-%type <paramListRotate> paramListRotate;
-%type <paramRotate> paramRotate;
-%type <paramListResize> paramListResize;
-%type <paramResize> paramResize;
-%type <paramListMorph> paramListMorph;
-%type <paramMorph> paramMorph;
-%type <paramListRecolor> paramListRecolor;
-%type <paramRecolor> paramRecolor;
+%type <paramListAnimation> paramListTranslate;
+%type <paramAnimation> paramTranslate;
+%type <paramListAnimation> paramListOpacity;
+%type <paramAnimation> paramOpacity;
+%type <paramListAnimation> paramListRotate;
+%type <paramAnimation> paramRotate;
+%type <paramListAnimation> paramListResize;
+%type <paramAnimation> paramResize;
+%type <paramListAnimation> paramListMorph;
+%type <paramAnimation> paramMorph;
+%type <paramListAnimation> paramListRecolor;
+%type <paramAnimation> paramRecolor;
 
 %type <paramShape> paramShape;
-%type <paramListRectangle> paramListRectangle;
-%type <paramRectangle> paramRectangle;
-%type <paramListEllipse> paramListEllipse;
-%type <paramEllipse> paramEllipse;
-%type <paramListTriangle> paramListTriangle;
-%type <paramTriangle> paramTriangle;
+%type <paramListShape> paramListRectangle;
+%type <paramShape> paramRectangle;
+%type <paramListShape> paramListEllipse;
+%type <paramShape> paramEllipse;
+%type <paramListShape> paramListTriangle;
+%type <paramShape> paramTriangle;
 
 %type <paramListText> paramListText;
 %type <paramText> paramText;
@@ -203,13 +187,13 @@ functionList: function COMMA functionList		{ $$ = FunctionListAction(FL_FUNCTION
 
 assign: VARNAME ASSIGN function 		{ $$ = AssignAction($1, $3); }
 
-animation: TRANSLATE_X OPEN_PARENTHESIS paramListTranslate CLOSE_PARENTHESIS animationCompoundStatement		{ $$ = AnimationAction(A_TRANSLATE_X,	(AnimationUnion) { .translateParamList = $3 }); }
-	| TRANSLATE_Y OPEN_PARENTHESIS paramListTranslate CLOSE_PARENTHESIS animationCompoundStatement			{ $$ = AnimationAction(A_TRANSLATE_Y,	(AnimationUnion) { .translateParamList = $3 }); }
-	| OPACITY OPEN_PARENTHESIS paramListOpacity CLOSE_PARENTHESIS animationCompoundStatement				{ $$ = AnimationAction(A_OPACITY, 		(AnimationUnion) { .opacityParamList = $3 }); }
-	| RECOLOR OPEN_PARENTHESIS paramListRecolor CLOSE_PARENTHESIS animationCompoundStatement				{ $$ = AnimationAction(A_RECOLOR, 		(AnimationUnion) { .recolorParamList = $3 }); }
-	| ROTATE OPEN_PARENTHESIS paramListRotate CLOSE_PARENTHESIS animationCompoundStatement					{ $$ = AnimationAction(A_ROTATE, 		(AnimationUnion) { .rotateParamList = $3 }); }
-	| RESIZE OPEN_PARENTHESIS paramListResize CLOSE_PARENTHESIS animationCompoundStatement					{ $$ = AnimationAction(A_RESIZE, 		(AnimationUnion) { .resizeParamList = $3 }); }
-	| MORPH OPEN_PARENTHESIS paramListMorph CLOSE_PARENTHESIS animationCompoundStatement					{ $$ = AnimationAction(A_MORPH, 		(AnimationUnion) { .morphParamList = $3 }); }
+animation: TRANSLATE_X OPEN_PARENTHESIS paramListTranslate CLOSE_PARENTHESIS animationCompoundStatement		{ $$ = AnimationAction(A_TRANSLATE_X,	$3); }
+	| TRANSLATE_Y OPEN_PARENTHESIS paramListTranslate CLOSE_PARENTHESIS animationCompoundStatement			{ $$ = AnimationAction(A_TRANSLATE_Y,	$3); }
+	| OPACITY OPEN_PARENTHESIS paramListOpacity CLOSE_PARENTHESIS animationCompoundStatement				{ $$ = AnimationAction(A_OPACITY, 		$3); }
+	| RECOLOR OPEN_PARENTHESIS paramListRecolor CLOSE_PARENTHESIS animationCompoundStatement				{ $$ = AnimationAction(A_RECOLOR, 		$3); }
+	| ROTATE OPEN_PARENTHESIS paramListRotate CLOSE_PARENTHESIS animationCompoundStatement					{ $$ = AnimationAction(A_ROTATE, 		$3); }
+	| RESIZE OPEN_PARENTHESIS paramListResize CLOSE_PARENTHESIS animationCompoundStatement					{ $$ = AnimationAction(A_RESIZE, 		$3); }
+	| MORPH OPEN_PARENTHESIS paramListMorph CLOSE_PARENTHESIS animationCompoundStatement					{ $$ = AnimationAction(A_MORPH, 		$3); }
 
 animationCompoundStatement: OPEN_CURLY function CLOSE_CURLY		{ $$ = AnimationCompoundStatementAction(CS_A_FUNCTION,	(AnimationCompoundStatementUnion) { .functionNode = $2}); }
 	| OPEN_CURLY VARNAME CLOSE_CURLY 							{ $$ = AnimationCompoundStatementAction(CS_A_VARNAME,	(AnimationCompoundStatementUnion) { .varname = $2}); }
@@ -218,9 +202,9 @@ layout: LAYOUT OPEN_PARENTHESIS CLOSE_PARENTHESIS layoutCompoundStatement		{ $$ 
 
 layoutCompoundStatement: OPEN_CURLY functionList CLOSE_CURLY	{ $$ = LayoutCompoundStatementAction($2); }
 
-shape: RECTANGLE OPEN_PARENTHESIS paramListRectangle CLOSE_PARENTHESIS 		{ $$ = ShapeAction(S_RECTANGLE,	(ShapeUnion) { .rectangleParamList = $3 }); }
-	| ELLIPSE OPEN_PARENTHESIS paramListEllipse CLOSE_PARENTHESIS 			{ $$ = ShapeAction(S_ELLIPSE,	(ShapeUnion) { .ellipseParamList = $3 }); }
-	| TRIANGLE OPEN_PARENTHESIS paramListTriangle CLOSE_PARENTHESIS 		{ $$ = ShapeAction(S_TRIANGLE,	(ShapeUnion) { .triangleParamList = $3 }); }
+shape: RECTANGLE OPEN_PARENTHESIS paramListRectangle CLOSE_PARENTHESIS 		{ $$ = ShapeAction(S_RECTANGLE,	$3); }
+	| ELLIPSE OPEN_PARENTHESIS paramListEllipse CLOSE_PARENTHESIS 			{ $$ = ShapeAction(S_ELLIPSE,	$3); }
+	| TRIANGLE OPEN_PARENTHESIS paramListTriangle CLOSE_PARENTHESIS 		{ $$ = ShapeAction(S_TRIANGLE,	$3); }
 
 vector: IMAGE OPEN_PARENTHESIS paramListImage  CLOSE_PARENTHESIS		{ $$ = VectorAction(V_IMAGE,	(VectorUnion) { .imageParamList = $3 }); }
 	| TEXT OPEN_PARENTHESIS paramListText CLOSE_PARENTHESIS				{ $$ = VectorAction(V_TEXT,		(VectorUnion) { .textParamList = $3 }); }
@@ -232,86 +216,86 @@ paramAnimation: PARAM_ALTERNATE COLON TYPE_BOOLEAN	{ $$ = ParamAnimationAction(P
 	| PARAM_DURATION COLON TYPE_INTEGER				{ $$ = ParamAnimationAction(PA_A_DURATION,	(ParamAnimationUnion) { .integer = $3 }); }
 	| PARAM_DELAY COLON TYPE_INTEGER				{ $$ = ParamAnimationAction(PA_A_DELAY,		(ParamAnimationUnion) { .integer = $3 }); }
 
-paramListTranslate: %empty							{ $$ = ParamListTranslateAddParamAction(L_EMPTY, 		NULL,	(ParamListTranslateUnion) { .animationNode = NULL }); }
-	| paramAnimation COMMA paramListTranslate		{ $$ = ParamListTranslateAddParamAction(L_GENERIC, 	$3,		(ParamListTranslateUnion) { .animationNode = $1 }); }
-	| paramAnimation								{ $$ = ParamListTranslateAddParamAction(L_GENERIC, 	NULL,	(ParamListTranslateUnion) { .animationNode = $1 }); }
-	| paramTranslate COMMA paramListTranslate		{ $$ = ParamListTranslateAddParamAction(L_SPECIFIC, 	$3, 	(ParamListTranslateUnion) { .translateNode = $1 }); }
-	| paramTranslate								{ $$ = ParamListTranslateAddParamAction(L_SPECIFIC, 	NULL,	(ParamListTranslateUnion) { .translateNode = $1 }); }
+paramListTranslate: %empty							{ $$ = ParamListAnimationAddParamAction(TRUE, 	NULL,	NULL); }
+	| paramAnimation COMMA paramListTranslate		{ $$ = ParamListAnimationAddParamAction(FALSE, 	$3,		$1); }
+	| paramAnimation								{ $$ = ParamListAnimationAddParamAction(FALSE, 	NULL,	$1); }
+	| paramTranslate COMMA paramListTranslate		{ $$ = ParamListAnimationAddParamAction(FALSE, $3, 	$1); }
+	| paramTranslate								{ $$ = ParamListAnimationAddParamAction(FALSE, NULL,	$1); }
 
-paramTranslate: PARAM_END_VALUE COLON TYPE_INTEGER	{ $$ = ParamTranslateAction(PA_T_END_VALUE, (ParamTranslateUnion) { .integer = $3 }); }
+paramTranslate: PARAM_END_VALUE COLON TYPE_INTEGER	{ $$ = ParamAnimationAction(PA_T_END_VALUE, (ParamAnimationUnion) { .integer = $3 }); }
 
-paramListOpacity: %empty							{ $$ = ParamListOpacityAddParamAction(L_EMPTY, 		NULL,	(ParamListOpacityUnion) { .animationNode = NULL }); }
-	| paramAnimation COMMA paramListOpacity			{ $$ = ParamListOpacityAddParamAction(L_GENERIC, 	$3,		(ParamListOpacityUnion) { .animationNode = $1 }); }
-	| paramAnimation								{ $$ = ParamListOpacityAddParamAction(L_GENERIC, 	NULL,	(ParamListOpacityUnion) { .animationNode = $1 }); }
-	| paramOpacity COMMA paramListOpacity			{ $$ = ParamListOpacityAddParamAction(L_SPECIFIC, 	$3,		(ParamListOpacityUnion) { .opacityNode = $1 }); }
-	| paramOpacity									{ $$ = ParamListOpacityAddParamAction(L_SPECIFIC, 	NULL,	(ParamListOpacityUnion) { .opacityNode = $1 }); }
+paramListOpacity: %empty							{ $$ = ParamListAnimationAddParamAction(TRUE, 	NULL,	NULL); }
+	| paramAnimation COMMA paramListOpacity			{ $$ = ParamListAnimationAddParamAction(FALSE, 	$3,		$1); }
+	| paramAnimation								{ $$ = ParamListAnimationAddParamAction(FALSE, 	NULL,	$1); }
+	| paramOpacity COMMA paramListOpacity			{ $$ = ParamListAnimationAddParamAction(FALSE, $3,		$1); }
+	| paramOpacity									{ $$ = ParamListAnimationAddParamAction(FALSE, NULL,	$1); }
 
-paramOpacity: PARAM_ALPHA COLON TYPE_FLOAT			{ $$ = ParamOpacityAction(PA_O_ALPHA, (ParamOpacityUnion) { .floating = $3 }); }
+paramOpacity: PARAM_ALPHA COLON TYPE_FLOAT			{ $$ = ParamAnimationAction(PA_O_ALPHA, (ParamAnimationUnion) { .floating = $3 }); }
 
-paramListRotate: %empty								{ $$ = ParamListRotateAddParamAction(L_EMPTY,		NULL,	(ParamListRotateUnion) { .animationNode = NULL }); }
-	| paramAnimation COMMA paramListRotate			{ $$ = ParamListRotateAddParamAction(L_GENERIC,	$3,		(ParamListRotateUnion) { .animationNode = $1 }); }
-	| paramAnimation								{ $$ = ParamListRotateAddParamAction(L_GENERIC,	NULL,	(ParamListRotateUnion) { .animationNode = $1 }); }
-	| paramRotate COMMA paramListRotate				{ $$ = ParamListRotateAddParamAction(L_SPECIFIC,		$3,		(ParamListRotateUnion) { .rotateNode = $1 }); }
-	| paramRotate									{ $$ = ParamListRotateAddParamAction(L_SPECIFIC,		NULL,	(ParamListRotateUnion) { .rotateNode = $1 }); }
+paramListRotate: %empty								{ $$ = ParamListAnimationAddParamAction(TRUE,	NULL,	NULL); }
+	| paramAnimation COMMA paramListRotate			{ $$ = ParamListAnimationAddParamAction(FALSE,	$3,		$1); }
+	| paramAnimation								{ $$ = ParamListAnimationAddParamAction(FALSE,	NULL,	$1); }
+	| paramRotate COMMA paramListRotate				{ $$ = ParamListAnimationAddParamAction(FALSE,	$3,		$1); }
+	| paramRotate									{ $$ = ParamListAnimationAddParamAction(FALSE,	NULL,	$1); }
 
-paramRotate: PARAM_ANGLE COLON TYPE_INTEGER			{ $$ = ParamRotateAction(PA_R_ANGLE, (ParamRotateUnion) { .integer = $3 }); }
+paramRotate: PARAM_ANGLE COLON TYPE_INTEGER			{ $$ = ParamAnimationAction(PA_R_ANGLE, (ParamAnimationUnion) { .integer = $3 }); }
 
-paramListResize: %empty								{ $$ = ParamListResizeAddParamAction(L_EMPTY, 		NULL,	(ParamListResizeUnion) { .animationNode = NULL }); }
-	| paramAnimation COMMA paramListResize			{ $$ = ParamListResizeAddParamAction(L_GENERIC, 	$3,		(ParamListResizeUnion) { .animationNode = $1 }); }
-	| paramAnimation								{ $$ = ParamListResizeAddParamAction(L_GENERIC, 	NULL,	(ParamListResizeUnion) { .animationNode = $1 }); }
-	| paramResize COMMA paramListResize				{ $$ = ParamListResizeAddParamAction(L_SPECIFIC, 	$3,		(ParamListResizeUnion) { .resizeNode = $1 }); }
-	| paramResize									{ $$ = ParamListResizeAddParamAction(L_SPECIFIC, 	NULL,	(ParamListResizeUnion) { .resizeNode = $1 }); }
+paramListResize: %empty								{ $$ = ParamListAnimationAddParamAction(TRUE, 	NULL,	NULL); }
+	| paramAnimation COMMA paramListResize			{ $$ = ParamListAnimationAddParamAction(FALSE, 	$3,		$1); }
+	| paramAnimation								{ $$ = ParamListAnimationAddParamAction(FALSE, 	NULL,	$1); }
+	| paramResize COMMA paramListResize				{ $$ = ParamListAnimationAddParamAction(FALSE, $3,		$1); }
+	| paramResize									{ $$ = ParamListAnimationAddParamAction(FALSE, NULL,	$1); }
 
-paramResize: PARAM_SCALE COLON TYPE_FLOAT			{ $$ = ParamResizeAction(PA_RE_SCALE, (ParamResizeUnion) { .floating = $3 }); }
+paramResize: PARAM_SCALE COLON TYPE_FLOAT			{ $$ = ParamAnimationAction(PA_RE_SCALE, (ParamAnimationUnion) { .floating = $3 }); }
 
-paramListMorph: %empty								{ $$ = ParamListMorphAddParamAction(L_EMPTY, 		NULL,	(ParamListMorphUnion) { .animationNode = NULL}); }
-	| paramAnimation COMMA paramListMorph			{ $$ = ParamListMorphAddParamAction(L_GENERIC, 	$3,		(ParamListMorphUnion) { .animationNode = $1 }); }
-	| paramAnimation								{ $$ = ParamListMorphAddParamAction(L_GENERIC, 	NULL,	(ParamListMorphUnion) { .animationNode = $1 }); }
-	| paramMorph COMMA paramListMorph				{ $$ = ParamListMorphAddParamAction(L_SPECIFIC, 		$3,		(ParamListMorphUnion) { .morphNode = $1 }); }
-	| paramMorph									{ $$ = ParamListMorphAddParamAction(L_SPECIFIC, 		NULL,	(ParamListMorphUnion) { .morphNode = $1 }); }
+paramListMorph: %empty								{ $$ = ParamListAnimationAddParamAction(TRUE, 	NULL,	NULL); }
+	| paramAnimation COMMA paramListMorph			{ $$ = ParamListAnimationAddParamAction(FALSE, 	$3,		$1); }
+	| paramAnimation								{ $$ = ParamListAnimationAddParamAction(FALSE, 	NULL,	$1); }
+	| paramMorph COMMA paramListMorph				{ $$ = ParamListAnimationAddParamAction(FALSE, $3,		$1); }
+	| paramMorph									{ $$ = ParamListAnimationAddParamAction(FALSE, NULL,	$1); }
 
-paramMorph: PARAM_POINTS COLON typePoints			{ $$ = ParamMorphAction(PA_M_POINT, (ParamMorphUnion) { .points = $3 }); }
+paramMorph: PARAM_POINTS COLON typePoints			{ $$ = ParamAnimationAction(PA_M_POINT, (ParamAnimationUnion) { .points = $3 }); }
 
-paramListRecolor: %empty							{ $$ = ParamListRecolorAddParamAction(L_EMPTY, 		NULL,	(ParamListRecolorUnion) { .animationNode = NULL }); }
-	| paramAnimation COMMA paramListRecolor			{ $$ = ParamListRecolorAddParamAction(L_GENERIC, 	$3,		(ParamListRecolorUnion) { .animationNode = $1 }); }
-	| paramAnimation								{ $$ = ParamListRecolorAddParamAction(L_GENERIC, 	NULL,	(ParamListRecolorUnion) { .animationNode = $1 }); }
-	| paramRecolor COMMA paramListRecolor			{ $$ = ParamListRecolorAddParamAction(L_SPECIFIC,		$3,		(ParamListRecolorUnion) { .morphNode = $1 }); }
-	| paramRecolor									{ $$ = ParamListRecolorAddParamAction(L_SPECIFIC,		NULL,	(ParamListRecolorUnion) { .morphNode = $1 }); }
+paramListRecolor: %empty							{ $$ = ParamListAnimationAddParamAction(TRUE, 	NULL,	NULL); }
+	| paramAnimation COMMA paramListRecolor			{ $$ = ParamListAnimationAddParamAction(FALSE, 	$3,		$1); }
+	| paramAnimation								{ $$ = ParamListAnimationAddParamAction(FALSE, 	NULL,	$1); }
+	| paramRecolor COMMA paramListRecolor			{ $$ = ParamListAnimationAddParamAction(FALSE,	$3,		$1); }
+	| paramRecolor									{ $$ = ParamListAnimationAddParamAction(FALSE,	NULL,	$1); }
 
-paramRecolor: PARAM_END_COLOR COLON typeColor		{ $$ = ParamRecolorAction(PA_REC_END_COLOR, (ParamRecolorUnion) { .color = $3 }); }
+paramRecolor: PARAM_END_COLOR COLON typeColor		{ $$ = ParamAnimationAction(PA_REC_END_COLOR, (ParamAnimationUnion) { .color = $3 }); }
 
 // For shapes
 paramShape: PARAM_FILL_COLOR COLON typeColor		{ $$ = ParamShapeAction(PS_S_FILL_COLOR,	(ParamShapeUnion) { .color = $3 }); }
-	| PARAM_BORDER_COLOR COLON typeColor			{ $$ = ParamShapeAction(PS_S_BORDER_COLOR, (ParamShapeUnion) { .color = $3 }); }
-	| PARAM_BORDER_WIDTH COLON TYPE_INTEGER			{ $$ = ParamShapeAction(PS_S_BORDER_WIDTH, (ParamShapeUnion) { .integer = $3 }); }
-	| PARAM_ROTATION COLON TYPE_INTEGER				{ $$ = ParamShapeAction(PS_S_ROTATION, (ParamShapeUnion) { .integer = $3 }); }
+	| PARAM_BORDER_COLOR COLON typeColor			{ $$ = ParamShapeAction(PS_S_BORDER_COLOR,	(ParamShapeUnion) { .color = $3 }); }
+	| PARAM_BORDER_WIDTH COLON TYPE_INTEGER			{ $$ = ParamShapeAction(PS_S_BORDER_WIDTH,	(ParamShapeUnion) { .integer = $3 }); }
+	| PARAM_ROTATION COLON TYPE_INTEGER				{ $$ = ParamShapeAction(PS_S_ROTATION,		(ParamShapeUnion) { .integer = $3 }); }
 
-paramListRectangle: %empty							{ $$ = ParamListRectangleAddParamAction(L_EMPTY, 		NULL, 	(ParamListRectangleUnion) { .shapeNode = NULL }); }
-	| paramShape COMMA paramListRectangle			{ $$ = ParamListRectangleAddParamAction(L_GENERIC, 		$3, 	(ParamListRectangleUnion) { .shapeNode = $1 }); }
-	| paramShape									{ $$ = ParamListRectangleAddParamAction(L_GENERIC, 		NULL,	(ParamListRectangleUnion) { .shapeNode = $1 }); }
-	| paramRectangle COMMA paramListRectangle		{ $$ = ParamListRectangleAddParamAction(L_SPECIFIC, 	$3,		(ParamListRectangleUnion) { .rectangleNode = $1 }); }
-	| paramRectangle								{ $$ = ParamListRectangleAddParamAction(L_SPECIFIC, 	NULL,	(ParamListRectangleUnion) { .rectangleNode = $1 }); }
+paramListRectangle: %empty							{ $$ = ParamListShapeAddParamAction(TRUE, 	NULL,	NULL); }
+	| paramShape COMMA paramListRectangle			{ $$ = ParamListShapeAddParamAction(FALSE, 	$3, 	$1); }
+	| paramShape									{ $$ = ParamListShapeAddParamAction(FALSE, 	NULL,	$1); }
+	| paramRectangle COMMA paramListRectangle		{ $$ = ParamListShapeAddParamAction(FALSE, $3,		$1); }
+	| paramRectangle								{ $$ = ParamListShapeAddParamAction(FALSE,	NULL,	$1); }
 
-paramRectangle: PARAM_HEIGHT COLON TYPE_INTEGER		{ $$ = ParamRectangleAction(PS_R_HEIGHT, 	(ParamRectangleUnion) { .integer = $3 }); }
-	| PARAM_WIDTH COLON TYPE_INTEGER				{ $$ = ParamRectangleAction(PS_R_WIDTH, 	(ParamRectangleUnion) { .integer = $3 }); }
+paramRectangle: PARAM_HEIGHT COLON TYPE_INTEGER		{ $$ = ParamShapeAction(PS_R_HEIGHT, 	(ParamShapeUnion) { .integer = $3 }); }
+	| PARAM_WIDTH COLON TYPE_INTEGER				{ $$ = ParamShapeAction(PS_R_WIDTH, 	(ParamShapeUnion) { .integer = $3 }); }
 
-paramListEllipse: %empty							{ $$ = ParamListEllipseAddParamAction(L_EMPTY,		NULL, 	(ParamListEllipseUnion) { .shapeNode = NULL }); }
-	| paramShape COMMA paramListEllipse				{ $$ = ParamListEllipseAddParamAction(L_GENERIC,		$3, 	(ParamListEllipseUnion)	{ .shapeNode = $1 }); }
-	| paramShape									{ $$ = ParamListEllipseAddParamAction(L_GENERIC,		NULL,	(ParamListEllipseUnion)	{ .shapeNode = $1 }); }
-	| paramEllipse COMMA paramListEllipse			{ $$ = ParamListEllipseAddParamAction(L_SPECIFIC, 	$3,		(ParamListEllipseUnion) { .ellipseNode = $1 }); }
-	| paramEllipse									{ $$ = ParamListEllipseAddParamAction(L_SPECIFIC, 	NULL,	(ParamListEllipseUnion) { .ellipseNode = $1 }); }
+paramListEllipse: %empty							{ $$ = ParamListShapeAddParamAction(TRUE,		NULL, 	NULL); }
+	| paramShape COMMA paramListEllipse				{ $$ = ParamListShapeAddParamAction(FALSE,		$3, 	$1); }
+	| paramShape									{ $$ = ParamListShapeAddParamAction(FALSE,		NULL,	$1); }
+	| paramEllipse COMMA paramListEllipse			{ $$ = ParamListShapeAddParamAction(FALSE, 	$3,		$1); }
+	| paramEllipse									{ $$ = ParamListShapeAddParamAction(FALSE, 	NULL,	$1); }
 
-paramEllipse: PARAM_X_AXIS COLON TYPE_INTEGER		{ $$ = ParamEllipseAction(PS_E_X_AXIS, (ParamEllipseUnion) { .integer = $3 }); }
-	| PARAM_Y_AXIS COLON TYPE_INTEGER				{ $$ = ParamEllipseAction(PS_E_Y_AXIS, (ParamEllipseUnion) { .integer = $3 }); }
+paramEllipse: PARAM_X_AXIS COLON TYPE_INTEGER		{ $$ = ParamShapeAction(PS_E_X_AXIS,	(ParamShapeUnion) { .integer = $3 }); }
+	| PARAM_Y_AXIS COLON TYPE_INTEGER				{ $$ = ParamShapeAction(PS_E_Y_AXIS,	(ParamShapeUnion) { .integer = $3 }); }
 
-paramListTriangle: %empty							{ $$ = ParamListTriangleAddParamAction(L_EMPTY, 	NULL, 	(ParamListTriangleUnion) { .shapeNode = NULL }); }
-	| paramShape COMMA paramListTriangle			{ $$ = ParamListTriangleAddParamAction(L_GENERIC, 	$3, 	(ParamListTriangleUnion) { .shapeNode = $1 }); }
-	| paramShape									{ $$ = ParamListTriangleAddParamAction(L_GENERIC,		NULL,	(ParamListTriangleUnion) { .shapeNode = $1 }); }
-	| paramTriangle COMMA paramListTriangle			{ $$ = ParamListTriangleAddParamAction(L_SPECIFIC,	$3,		(ParamListTriangleUnion) { .triangleNode = $1 }); }
-	| paramTriangle									{ $$ = ParamListTriangleAddParamAction(L_SPECIFIC,	NULL,	(ParamListTriangleUnion) { .triangleNode = $1 }); }
+paramListTriangle: %empty							{ $$ = ParamListShapeAddParamAction(TRUE, 	NULL, 	NULL); }
+	| paramShape COMMA paramListTriangle			{ $$ = ParamListShapeAddParamAction(FALSE, 	$3, 	$1); }
+	| paramShape									{ $$ = ParamListShapeAddParamAction(FALSE,	NULL,	$1); }
+	| paramTriangle COMMA paramListTriangle			{ $$ = ParamListShapeAddParamAction(FALSE,	$3,		$1); }
+	| paramTriangle									{ $$ = ParamListShapeAddParamAction(FALSE,	NULL,	$1); }
 
-paramTriangle: PARAM_HEIGHT COLON TYPE_INTEGER		{ $$ = ParamTriangleAction(PS_T_HEIGHT, (ParamTriangleUnion) { .integer = $3 }); }
-	| PARAM_BASE COLON TYPE_INTEGER					{ $$ = ParamTriangleAction(PS_T_BASE,	(ParamTriangleUnion) { .integer = $3 }); }
+paramTriangle: PARAM_HEIGHT COLON TYPE_INTEGER		{ $$ = ParamShapeAction(PS_T_HEIGHT,	(ParamShapeUnion) { .integer = $3 }); }
+	| PARAM_BASE COLON TYPE_INTEGER					{ $$ = ParamShapeAction(PS_T_BASE,		(ParamShapeUnion) { .integer = $3 }); }
 
 // For vectors
 paramListImage: %empty						{ $$ = ParamListImageAddParamAction(NULL, 	NULL); }

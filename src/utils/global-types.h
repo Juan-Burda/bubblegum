@@ -32,10 +32,4 @@ typedef enum {
     PV_T_BACKGROUND_COLOR,
 } ParameterType;
 
-typedef enum {
-    L_EMPTY,
-    L_GENERIC,
-    L_SPECIFIC  // if its not EMPTY or GENERIC => its SPECIFIC
-} ListNodeType;
-
 #endif  // _GLOBAL_TYPES_H_

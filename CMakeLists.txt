@@ -61,6 +61,7 @@ endif ()
 add_executable(Compiler
 	src/main.c
 	src/utils/wrapper-functions.c
+	src/utils/stringify.c
 	src/backend/code-generation/generator.c
 	src/backend/domain-specific/calculator.c
 	src/backend/support/logger.c

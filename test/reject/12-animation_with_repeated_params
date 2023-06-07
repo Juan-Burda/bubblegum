@@ -1,0 +1,4 @@
+/* delay is repeated */
+myanimation = Rotate(delay: 10, loop: true, delay: 20) {
+    Ellipse(fill-color: #292929)
+}
