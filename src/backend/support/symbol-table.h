@@ -1,7 +1,7 @@
 #ifndef _SYMBOL_TABLE_H_
 #define _SYMBOL_TABLE_H_
 
-#include "../../utils/parameters.h"
+#include "../../utils/global-types.h"
 #include "../semantic-analysis/abstract-syntax-tree.h"
 #include "uthash.h"
 

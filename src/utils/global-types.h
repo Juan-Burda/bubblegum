@@ -1,5 +1,5 @@
-#ifndef _PARAMETERS_H_
-#define _PARAMETERS_H_
+#ifndef _GLOBAL_TYPES_H_
+#define _GLOBAL_TYPES_H_
 
 typedef enum {
     PA_A_ALTERNATE,
@@ -32,4 +32,10 @@ typedef enum {
     PV_T_BACKGROUND_COLOR,
 } ParameterType;
 
-#endif  // _PARAMETERS_H_
+typedef enum {
+    L_EMPTY,
+    L_GENERIC,
+    L_SPECIFIC  // if its not EMPTY or GENERIC => its SPECIFIC
+} ListNodeType;
+
+#endif  // _GLOBAL_TYPES_H_

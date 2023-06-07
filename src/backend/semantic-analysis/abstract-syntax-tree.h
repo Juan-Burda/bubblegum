@@ -2,7 +2,7 @@
 #define ABSTRACT_SYNTAX_TREE_HEADER
 
 #include "../../utils/data-types.h"
-#include "../../utils/parameters.h"
+#include "../../utils/global-types.h"
 
 /**
  * In order to standarize enum names we follow the following pattern
@@ -60,7 +60,7 @@ typedef struct {
 /** Parameters */
 /* Data type nodes */
 typedef struct {
-    char* typeColor;
+    char* string;
 } ParamTypeColorNode;
 
 struct ParamTypePointsNode {
@@ -71,10 +71,8 @@ struct ParamTypePointsNode {
 /* Animation nodes */
 // Animation
 typedef union {
-    boolean_t alternate;
-    boolean_t loop;
-    int duration;
-    int delay;
+    boolean_t boolean;
+    int integer;
 } ParamAnimationUnion;
 typedef struct {
     ParameterType type;
@@ -83,96 +81,76 @@ typedef struct {
 
 // Translate
 typedef union {
-    int endValue;
+    int integer;
 } ParamTranslateUnion;
 typedef struct {
     ParameterType type;
     ParamTranslateUnion value;
 } ParamTranslateNode;
 
-typedef enum {
-    PLA_T_EMPTY,
-    PLA_T_ANIMATION,
-    PLA_T_TRANSLATE
-} ParamListTranslateType;
 typedef union {
     ParamAnimationNode* animationNode;
     ParamTranslateNode* translateNode;
 } ParamListTranslateUnion;
 struct ParamListTranslateNode {
-    ParamListTranslateType type;
+    ListNodeType type;
     ParamListTranslateUnion value;
     ParamListTranslateNode* tail;
 };
 
 // Opacity
 typedef union {
-    float alpha;
+    float floating;
 } ParamOpacityUnion;
 typedef struct {
     ParameterType type;
     ParamOpacityUnion value;
 } ParamOpacityNode;
 
-typedef enum {
-    PLA_O_EMPTY,
-    PLA_O_ANIMATION,
-    PLA_O_OPACITY
-} ParamListOpacityType;
 typedef union {
     ParamAnimationNode* animationNode;
     ParamOpacityNode* opacityNode;
 } ParamListOpacityUnion;
 struct ParamListOpacityNode {
-    ParamListOpacityType type;
+    ListNodeType type;
     ParamListOpacityUnion value;
     ParamListOpacityNode* tail;
 };
 
 // Rotate
 typedef union {
-    int angle;
+    int integer;
 } ParamRotateUnion;
 typedef struct {
     ParameterType type;
     ParamRotateUnion value;
 } ParamRotateNode;
 
-typedef enum {
-    PLA_R_EMPTY,
-    PLA_R_ANIMATION,
-    PLA_R_ROTATE
-} ParamListRotateType;
 typedef union {
     ParamAnimationNode* animationNode;
     ParamRotateNode* rotateNode;
 } ParamListRotateUnion;
 struct ParamListRotateNode {
-    ParamListRotateType type;
+    ListNodeType type;
     ParamListRotateUnion value;
     ParamListRotateNode* tail;
 };
 
 // Resize
 typedef union {
-    float scale;
+    float floating;
 } ParamResizeUnion;
 typedef struct {
     ParameterType type;
     ParamResizeUnion value;
 } ParamResizeNode;
 
-typedef enum {
-    PLA_RE_EMPTY,
-    PLA_RE_ANIMATION,
-    PLA_RE_RESIZE
-} ParamListResizeType;
 typedef union {
     ParamAnimationNode* animationNode;
     ParamResizeNode* resizeNode;
 } ParamListResizeUnion;
 struct ParamListResizeNode {
-    ParamListResizeType type;
+    ListNodeType type;
     ParamListResizeUnion value;
     ParamListResizeNode* tail;
 };
@@ -186,24 +164,19 @@ typedef struct {
     ParamMorphUnion value;
 } ParamMorphNode;
 
-typedef enum {
-    PLA_M_EMPTY,
-    PLA_M_ANIMATION,
-    PLA_M_MORPH
-} ParamListMorphType;
 typedef union {
     ParamAnimationNode* animationNode;
     ParamMorphNode* morphNode;
 } ParamListMorphUnion;
 struct ParamListMorphNode {
-    ParamListMorphType type;
+    ListNodeType type;
     ParamListMorphUnion value;
     ParamListMorphNode* tail;
 };
 
 // Recolor
 typedef union {
-    ParamTypeColorNode* endColor;
+    ParamTypeColorNode* color;
 } ParamRecolorUnion;
 typedef struct {
     ParameterType type;
@@ -228,10 +201,8 @@ struct ParamListRecolorNode {
 /* Shape nodes */
 // Shape
 typedef union {
-    ParamTypeColorNode* fillColor;
-    ParamTypeColorNode* borderColor;
-    int borderWidth;
-    int rotation;
+    ParamTypeColorNode* color;
+    int integer;
 } ParamShapeUnion;
 typedef struct {
     ParameterType type;
@@ -240,75 +211,57 @@ typedef struct {
 
 // Rectangle
 typedef union {
-    int height;
-    int width;
+    int integer;
 } ParamRectangleUnion;
 typedef struct {
     ParameterType type;
     ParamRectangleUnion value;
 } ParamRectangleNode;
 
-typedef enum {
-    PLS_R_EMPTY,
-    PLS_R_SHAPE,
-    PLS_R_RECTANGLE
-} ParamListRectangleType;
 typedef union {
     ParamShapeNode* shapeNode;
     ParamRectangleNode* rectangleNode;
 } ParamListRectangleUnion;
 struct ParamListRectangleNode {
-    ParamListRectangleType type;
+    ListNodeType type;
     ParamListRectangleUnion value;
     ParamListRectangleNode* tail;
 };
 
 // Ellipse
 typedef union {
-    int xAxis;
-    int yAxis;
+    int integer;
 } ParamEllipseUnion;
 typedef struct {
     ParameterType type;
     ParamEllipseUnion value;
 } ParamEllipseNode;
 
-typedef enum {
-    PLS_E_EMPTY,
-    PLS_E_SHAPE,
-    PLS_E_ELLIPSE
-} ParamListEllipseType;
 typedef union {
     ParamShapeNode* shapeNode;
     ParamEllipseNode* ellipseNode;
 } ParamListEllipseUnion;
 struct ParamListEllipseNode {
-    ParamListEllipseType type;
+    ListNodeType type;
     ParamListEllipseUnion value;
     ParamListEllipseNode* tail;
 };
 
 // Triangle
 typedef union {
-    int height;
-    int base;
+    int integer;
 } ParamTriangleUnion;
 typedef struct {
     ParameterType type;
     ParamTriangleUnion value;
 } ParamTriangleNode;
 
-typedef enum {
-    PLS_T_EMPTY,
-    PLS_T_SHAPE,
-    PLS_T_TRIANGLE
-} ParamListTriangleType;
 typedef union {
     ParamShapeNode* shapeNode;
     ParamTriangleNode* triangleNode;
 } ParamListTriangleUnion;
 struct ParamListTriangleNode {
-    ParamListTriangleType type;
+    ListNodeType type;
     ParamListTriangleUnion value;
     ParamListTriangleNode* tail;
 };
@@ -316,7 +269,7 @@ struct ParamListTriangleNode {
 /* Vector nodes */
 // Images
 typedef struct {
-    char* typeUrl;
+    char* string;
 } ParamImageNode;
 
 struct ParamListImageNode {
@@ -326,12 +279,11 @@ struct ParamListImageNode {
 
 // Text
 typedef union {
-    int fontWidth;
+    int integer;
     fontfamily_t fontFamily;
-    int fontWeight;
     fontstyle_t fontStyle;
     textdeco_t textDecoration;
-    ParamTypeColorNode* paramTypeColorNode;
+    ParamTypeColorNode* color;
 } ParamTextUnion;
 typedef struct {
     ParameterType type;

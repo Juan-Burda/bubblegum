@@ -87,7 +87,7 @@ int stAddParametersToAnimation(ParameterMap** map, AnimationNode* node) {
 
 // add parameters to specific animations
 int stAddParametersToAnimationTranslate(ParameterMap** map, ParamListTranslateNode* head) {
-    if (head == NULL || head->type == PLA_T_EMPTY) {
+    if (head == NULL || head->type == L_EMPTY) {
         LogDebug("\t\tSymbol Table: Found no Animation parameters");
         return 0;
     }
@@ -98,7 +98,7 @@ int stAddParametersToAnimationTranslate(ParameterMap** map, ParamListTranslateNo
 
     ParameterType paramType;
     while (currNode != NULL) {
-        paramType = currNode->type == PLA_T_ANIMATION ? currNode->value.animationNode->type : currNode->value.translateNode->type;
+        paramType = currNode->type == L_GENERIC ? currNode->value.animationNode->type : currNode->value.translateNode->type;
 
         HASH_FIND_INT(*map, &paramType, currParam);
         if (currParam != NULL) {
@@ -112,14 +112,14 @@ int stAddParametersToAnimationTranslate(ParameterMap** map, ParamListTranslateNo
         switch (currParam->type) {
             case PA_A_ALTERNATE:
             case PA_A_LOOP:
-                currParam->value.boolean = currNode->value.animationNode->value.loop;
+                currParam->value.boolean = currNode->value.animationNode->value.boolean;
                 LogDebug("\t\tAdded {%d, %d}", currParam->type, currParam->value.boolean);
                 break;
 
             case PA_A_DELAY:
             case PA_A_DURATION:
             case PA_T_END_VALUE:
-                currParam->value.integer = (currNode->type == PLA_T_ANIMATION ? currNode->value.animationNode->value.delay : currNode->value.translateNode->value.endValue);
+                currParam->value.integer = (currNode->type == L_GENERIC ? currNode->value.animationNode->value.integer : currNode->value.translateNode->value.integer);
                 LogDebug("\t\tAdded {%d, %d}", currParam->type, currParam->value.integer);
                 break;
 
@@ -140,7 +140,7 @@ int stAddParametersToAnimationTranslate(ParameterMap** map, ParamListTranslateNo
 }
 
 int stAddParametersToAnimationOpacity(ParameterMap** map, ParamListOpacityNode* head) {
-    if (head == NULL || head->type == PLA_O_EMPTY) {
+    if (head == NULL || head->type == L_EMPTY) {
         LogDebug("\t\tSymbol Table: Found no Animation parameters");
         return 0;
     }
@@ -151,7 +151,7 @@ int stAddParametersToAnimationOpacity(ParameterMap** map, ParamListOpacityNode* 
 
     ParameterType paramType;
     while (currNode != NULL) {
-        paramType = currNode->type == PLA_O_ANIMATION ? currNode->value.animationNode->type : currNode->value.opacityNode->type;
+        paramType = currNode->type == L_GENERIC ? currNode->value.animationNode->type : currNode->value.opacityNode->type;
 
         HASH_FIND_INT(*map, &paramType, currParam);
         if (currParam != NULL) {
@@ -165,14 +165,14 @@ int stAddParametersToAnimationOpacity(ParameterMap** map, ParamListOpacityNode* 
         switch (currParam->type) {
             case PA_A_ALTERNATE:
             case PA_A_LOOP:
-                currParam->value.boolean = currNode->value.animationNode->value.loop;
+                currParam->value.boolean = currNode->value.animationNode->value.boolean;
                 LogDebug("\t\tAdded {%d, %d}", currParam->type, currParam->value.boolean);
                 break;
 
             case PA_A_DELAY:
             case PA_A_DURATION:
             case PA_O_ALPHA:
-                currParam->value.integer = (currNode->type == PLA_T_ANIMATION ? currNode->value.animationNode->value.delay : currNode->value.opacityNode->value.alpha);
+                currParam->value.integer = (currNode->type == L_GENERIC ? currNode->value.animationNode->value.integer : currNode->value.opacityNode->value.floating);
                 LogDebug("\t\tAdded {%d, %d}", currParam->type, currParam->value.integer);
                 break;
 
@@ -193,7 +193,7 @@ int stAddParametersToAnimationOpacity(ParameterMap** map, ParamListOpacityNode* 
 }
 
 int stAddParametersToAnimationRotate(ParameterMap** map, ParamListRotateNode* head) {
-    if (head == NULL || head->type == PLA_R_EMPTY) {
+    if (head == NULL || head->type == L_EMPTY) {
         LogDebug("\t\tSymbol Table: Found no Animation parameters");
         return 0;
     }
@@ -204,7 +204,7 @@ int stAddParametersToAnimationRotate(ParameterMap** map, ParamListRotateNode* he
 
     ParameterType paramType;
     while (currNode != NULL) {
-        paramType = currNode->type == PLA_R_ANIMATION ? currNode->value.animationNode->type : currNode->value.rotateNode->type;
+        paramType = currNode->type == L_GENERIC ? currNode->value.animationNode->type : currNode->value.rotateNode->type;
 
         HASH_FIND_INT(*map, &paramType, currParam);
         if (currParam != NULL) {
@@ -218,14 +218,14 @@ int stAddParametersToAnimationRotate(ParameterMap** map, ParamListRotateNode* he
         switch (currParam->type) {
             case PA_A_ALTERNATE:
             case PA_A_LOOP:
-                currParam->value.boolean = currNode->value.animationNode->value.loop;
+                currParam->value.boolean = currNode->value.animationNode->value.boolean;
                 LogDebug("\t\tAdded {%d, %d}", currParam->type, currParam->value.boolean);
                 break;
 
             case PA_A_DELAY:
             case PA_A_DURATION:
             case PA_R_ANGLE:
-                currParam->value.integer = (currNode->type == PLA_T_ANIMATION ? currNode->value.animationNode->value.delay : currNode->value.rotateNode->value.angle);
+                currParam->value.integer = (currNode->type == L_GENERIC ? currNode->value.animationNode->value.integer : currNode->value.rotateNode->value.integer);
                 LogDebug("\t\tAdded {%d, %d}", currParam->type, currParam->value.integer);
                 break;
 
@@ -247,7 +247,7 @@ int stAddParametersToAnimationRotate(ParameterMap** map, ParamListRotateNode* he
 
 // add parameters to specific shapes
 int stAddParametersToShapeRectangle(ParameterMap** map, ParamListRectangleNode* head) {
-    if (head == NULL || head->type == PLS_R_EMPTY) {
+    if (head == NULL || head->type == L_EMPTY) {
         LogDebug("\t\tSymbol Table: Found no Rectangle parameters");
         return 0;
     }
@@ -258,7 +258,7 @@ int stAddParametersToShapeRectangle(ParameterMap** map, ParamListRectangleNode* 
 
     ParameterType paramType;
     while (currNode != NULL) {
-        paramType = currNode->type == PLS_R_SHAPE ? currNode->value.shapeNode->type : currNode->value.rectangleNode->type;
+        paramType = currNode->type == L_GENERIC ? currNode->value.shapeNode->type : currNode->value.rectangleNode->type;
 
         HASH_FIND_INT(*map, &paramType, currParam);
         if (currParam != NULL) {
@@ -272,7 +272,7 @@ int stAddParametersToShapeRectangle(ParameterMap** map, ParamListRectangleNode* 
         switch (currParam->type) {
             case PS_S_FILL_COLOR:
             case PS_S_BORDER_COLOR:
-                char* hexColor = currNode->value.shapeNode->value.borderColor->typeColor;
+                char* hexColor = currNode->value.shapeNode->value.color->string;
                 char* aux = (char*)_malloc(strlen(hexColor) + 1);
                 strncpy(aux, hexColor, strlen(hexColor));
                 currParam->value.color = aux;
@@ -283,7 +283,7 @@ int stAddParametersToShapeRectangle(ParameterMap** map, ParamListRectangleNode* 
             case PS_S_ROTATION:
             case PS_R_HEIGHT:
             case PS_R_WIDTH:
-                currParam->value.integer = (currNode->type == PLS_R_SHAPE ? currNode->value.shapeNode->value.rotation : currNode->value.rectangleNode->value.height);
+                currParam->value.integer = (currNode->type == L_GENERIC ? currNode->value.shapeNode->value.integer : currNode->value.rectangleNode->value.integer);
                 LogDebug("\t\tAdded {%d, %d}", currParam->type, currParam->value.integer);
                 break;
 
@@ -304,7 +304,7 @@ int stAddParametersToShapeRectangle(ParameterMap** map, ParamListRectangleNode* 
 }
 
 int stAddParametersToShapeEllipse(ParameterMap** map, ParamListEllipseNode* head) {
-    if (head == NULL || head->type == PLS_E_EMPTY) {
+    if (head == NULL || head->type == L_EMPTY) {
         LogDebug("\t\tSymbol Table: Found no Ellipse parameters");
         return 0;
     }
@@ -315,7 +315,7 @@ int stAddParametersToShapeEllipse(ParameterMap** map, ParamListEllipseNode* head
 
     ParameterType paramType;
     while (currNode != NULL) {
-        paramType = currNode->type == PLS_E_SHAPE ? currNode->value.shapeNode->type : currNode->value.ellipseNode->type;
+        paramType = currNode->type == L_GENERIC ? currNode->value.shapeNode->type : currNode->value.ellipseNode->type;
         HASH_FIND_INT(*map, &paramType, currParam);
         if (currParam != NULL) {
             LogError("\t\tDuplicate key found, aborting...");
@@ -328,7 +328,7 @@ int stAddParametersToShapeEllipse(ParameterMap** map, ParamListEllipseNode* head
         switch (currParam->type) {
             case PS_S_FILL_COLOR:
             case PS_S_BORDER_COLOR:
-                char* hexColor = currNode->value.shapeNode->value.borderColor->typeColor;
+                char* hexColor = currNode->value.shapeNode->value.color->string;
                 char* aux = (char*)_malloc(strlen(hexColor) + 1);
                 strncpy(aux, hexColor, strlen(hexColor));
                 currParam->value.color = aux;
@@ -339,7 +339,7 @@ int stAddParametersToShapeEllipse(ParameterMap** map, ParamListEllipseNode* head
             case PS_S_ROTATION:
             case PS_E_X_AXIS:
             case PS_E_Y_AXIS:
-                currParam->value.integer = (currNode->type == PLS_E_SHAPE ? currNode->value.shapeNode->value.rotation : currNode->value.ellipseNode->value.xAxis);
+                currParam->value.integer = (currNode->type == L_GENERIC ? currNode->value.shapeNode->value.integer : currNode->value.ellipseNode->value.integer);
                 LogDebug("\t\tAdded {%d, %d}", currParam->type, currParam->value.integer);
                 break;
 
@@ -360,7 +360,7 @@ int stAddParametersToShapeEllipse(ParameterMap** map, ParamListEllipseNode* head
 }
 
 int stAddParametersToShapeTriangle(ParameterMap** map, ParamListTriangleNode* head) {
-    if (head == NULL || head->type == PLS_T_EMPTY) {
+    if (head == NULL || head->type == L_EMPTY) {
         LogDebug("\t\tSymbol Table: Found no Triangle parameters");
         return 0;
     }
@@ -371,7 +371,7 @@ int stAddParametersToShapeTriangle(ParameterMap** map, ParamListTriangleNode* he
 
     ParameterType paramType;
     while (currNode != NULL) {
-        paramType = currNode->type == PLS_T_SHAPE ? currNode->value.shapeNode->type : currNode->value.triangleNode->type;
+        paramType = currNode->type == L_GENERIC ? currNode->value.shapeNode->type : currNode->value.triangleNode->type;
         HASH_FIND_INT(*map, &paramType, currParam);
         if (currParam != NULL) {
             LogError("\t\tDuplicate key found, aborting...");
@@ -384,7 +384,7 @@ int stAddParametersToShapeTriangle(ParameterMap** map, ParamListTriangleNode* he
         switch (currParam->type) {
             case PS_S_FILL_COLOR:
             case PS_S_BORDER_COLOR:
-                char* hexColor = currNode->value.shapeNode->value.borderColor->typeColor;
+                char* hexColor = currNode->value.shapeNode->value.color->string;
                 char* aux = (char*)_malloc(strlen(hexColor) + 1);
                 strncpy(aux, hexColor, strlen(hexColor));
                 currParam->value.color = aux;
@@ -395,7 +395,7 @@ int stAddParametersToShapeTriangle(ParameterMap** map, ParamListTriangleNode* he
             case PS_S_ROTATION:
             case PS_T_BASE:
             case PS_T_HEIGHT:
-                currParam->value.integer = (currNode->type == PLS_T_SHAPE ? currNode->value.shapeNode->value.rotation : currNode->value.triangleNode->value.base);
+                currParam->value.integer = (currNode->type == L_GENERIC ? currNode->value.shapeNode->value.integer : currNode->value.triangleNode->value.integer);
                 LogDebug("\t\tAdded {%d, %d}", currParam->type, currParam->value.integer);
                 break;
 

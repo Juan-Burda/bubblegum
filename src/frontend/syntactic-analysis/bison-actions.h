@@ -40,19 +40,19 @@ VectorNode* VectorAction(VectorType type, VectorUnion value);
 // For animations
 ParamAnimationNode* ParamAnimationAction(ParameterType type, ParamAnimationUnion value);
 
-ParamListTranslateNode* ParamListTranslateAddParamAction(ParamListTranslateType type, ParamListTranslateNode* listNode, ParamListTranslateUnion value);
+ParamListTranslateNode* ParamListTranslateAddParamAction(ListNodeType type, ParamListTranslateNode* listNode, ParamListTranslateUnion value);
 ParamTranslateNode* ParamTranslateAction(ParameterType type, ParamTranslateUnion value);
 
-ParamListOpacityNode* ParamListOpacityAddParamAction(ParamListOpacityType type, ParamListOpacityNode* listNode, ParamListOpacityUnion value);
+ParamListOpacityNode* ParamListOpacityAddParamAction(ListNodeType type, ParamListOpacityNode* listNode, ParamListOpacityUnion value);
 ParamOpacityNode* ParamOpacityAction(ParameterType type, ParamOpacityUnion value);
 
-ParamListRotateNode* ParamListRotateAddParamAction(ParamListRotateType type, ParamListRotateNode* listNode, ParamListRotateUnion value);
+ParamListRotateNode* ParamListRotateAddParamAction(ListNodeType type, ParamListRotateNode* listNode, ParamListRotateUnion value);
 ParamRotateNode* ParamRotateAction(ParameterType type, ParamRotateUnion value);
 
-ParamListResizeNode* ParamListResizeAddParamAction(ParamListResizeType type, ParamListResizeNode* listNode, ParamListResizeUnion value);
+ParamListResizeNode* ParamListResizeAddParamAction(ListNodeType type, ParamListResizeNode* listNode, ParamListResizeUnion value);
 ParamResizeNode* ParamResizeAction(ParameterType type, ParamResizeUnion value);
 
-ParamListMorphNode* ParamListMorphAddParamAction(ParamListMorphType type, ParamListMorphNode* listNode, ParamListMorphUnion value);
+ParamListMorphNode* ParamListMorphAddParamAction(ListNodeType type, ParamListMorphNode* listNode, ParamListMorphUnion value);
 ParamMorphNode* ParamMorphAction(ParameterType type, ParamMorphUnion value);
 
 ParamListRecolorNode* ParamListRecolorAddParamAction(ParamListRecolorType type, ParamListRecolorNode* listNode, ParamListRecolorUnion value);
@@ -61,13 +61,13 @@ ParamRecolorNode* ParamRecolorAction(ParameterType type, ParamRecolorUnion value
 // For shapes
 ParamShapeNode* ParamShapeAction(ParameterType type, ParamShapeUnion value);
 
-ParamListRectangleNode* ParamListRectangleAddParamAction(ParamListRectangleType type, ParamListRectangleNode* listNode, ParamListRectangleUnion value);
+ParamListRectangleNode* ParamListRectangleAddParamAction(ListNodeType type, ParamListRectangleNode* listNode, ParamListRectangleUnion value);
 ParamRectangleNode* ParamRectangleAction(ParameterType type, ParamRectangleUnion value);
 
-ParamListEllipseNode* ParamListEllipseAddParamAction(ParamListEllipseType type, ParamListEllipseNode* listNode, ParamListEllipseUnion value);
+ParamListEllipseNode* ParamListEllipseAddParamAction(ListNodeType type, ParamListEllipseNode* listNode, ParamListEllipseUnion value);
 ParamEllipseNode* ParamEllipseAction(ParameterType type, ParamEllipseUnion value);
 
-ParamListTriangleNode* ParamListTriangleAddParamAction(ParamListTriangleType type, ParamListTriangleNode* listNode, ParamListTriangleUnion value);
+ParamListTriangleNode* ParamListTriangleAddParamAction(ListNodeType type, ParamListTriangleNode* listNode, ParamListTriangleUnion value);
 ParamTriangleNode* ParamTriangleAction(ParameterType type, ParamTriangleUnion value);
 
 // For vectors
