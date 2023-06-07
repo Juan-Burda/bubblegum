@@ -2,8 +2,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "../../backend/domain-specific/calculator.h"
 #include "../../backend/support/logger.h"
+#include "../../backend/support/symbol-table.h"
+#include "../../utils/wrapper-functions.h"
 
 /**
  * Implementación de "bison-grammar.h".
@@ -34,7 +35,7 @@ void yyerror(const char* string) {
 Program* ProgramAction(ExpressionNode* expression) {
     LogDebug("\tProgramAction");
 
-    Program* result = (Program*)calloc(1, sizeof(Program));
+    Program* result = (Program*)_calloc(1, sizeof(Program));
     result->expression = expression;
 
     /*
@@ -60,7 +61,7 @@ Program* ProgramAction(ExpressionNode* expression) {
 ExpressionNode* ExpressionAction(ExpressionType type, ExpressionUnion value, ExpressionNode* expression) {
     LogDebug("\tExpressionNodeAction");
 
-    ExpressionNode* result = (ExpressionNode*)calloc(1, sizeof(ExpressionNode));
+    ExpressionNode* result = (ExpressionNode*)_calloc(1, sizeof(ExpressionNode));
     result->type = type;
     result->value = value;
     result->nextExpression = expression;
@@ -72,7 +73,7 @@ ExpressionNode* ExpressionAction(ExpressionType type, ExpressionUnion value, Exp
 AssignNode* AssignAction(char* varname, FunctionNode* function) {
     LogDebug("\tAssignNodeAction");
 
-    AssignNode* result = (AssignNode*)calloc(1, sizeof(AssignNode));
+    AssignNode* result = (AssignNode*)_calloc(1, sizeof(AssignNode));
     result->varname = varname;
     result->function = function;
 
@@ -83,7 +84,7 @@ AssignNode* AssignAction(char* varname, FunctionNode* function) {
 FunctionNode* FunctionAction(FunctionType type, FunctionUnion value) {
     LogDebug("\tFunctionNodeAction");
 
-    FunctionNode* result = (FunctionNode*)calloc(1, sizeof(FunctionNode));
+    FunctionNode* result = (FunctionNode*)_calloc(1, sizeof(FunctionNode));
     result->type = type;
     result->value = value;
 
@@ -93,9 +94,9 @@ FunctionNode* FunctionAction(FunctionType type, FunctionUnion value) {
 FunctionListNode* FunctionListAction(FunctionListType type, FunctionListNode* listNode, FunctionListUnion value) {
     LogDebug("\tFunctionListNodeAction");
 
-    FunctionListNode* result = (FunctionListNode*)calloc(1, sizeof(FunctionListNode));
+    FunctionListNode* result = (FunctionListNode*)_calloc(1, sizeof(FunctionListNode));
     result->type = type;
-    result->listNode = listNode;
+    result->tail = listNode;
     result->value = value;
 
     return result;
@@ -105,7 +106,7 @@ FunctionListNode* FunctionListAction(FunctionListType type, FunctionListNode* li
 AnimationCompoundStatementNode* AnimationCompoundStatementAction(AnimationCompoundStatementType type, AnimationCompoundStatementUnion value) {
     LogDebug("\tAnimationCompoundStatementNodeAction");
 
-    AnimationCompoundStatementNode* result = (AnimationCompoundStatementNode*)calloc(1, sizeof(AnimationCompoundStatementNode));
+    AnimationCompoundStatementNode* result = (AnimationCompoundStatementNode*)_calloc(1, sizeof(AnimationCompoundStatementNode));
     result->type = type;
     result->value = value;
 
@@ -115,7 +116,7 @@ AnimationCompoundStatementNode* AnimationCompoundStatementAction(AnimationCompou
 AnimationNode* AnimationAction(AnimationType type, AnimationUnion value) {
     LogDebug("\tAnimationNodeAction");
 
-    AnimationNode* result = (AnimationNode*)calloc(1, sizeof(AnimationNode));
+    AnimationNode* result = (AnimationNode*)_calloc(1, sizeof(AnimationNode));
     result->type = type;
     result->value = value;
 
@@ -123,11 +124,11 @@ AnimationNode* AnimationAction(AnimationType type, AnimationUnion value) {
 }
 
 /** Layouts */
-LayoutCompoundStatementNode* LayoutCompoundStatementAction(FunctionListNode* listNode) {
+LayoutCompoundStatementNode* LayoutCompoundStatementAction(FunctionListNode* tail) {
     LogDebug("\tLayoutCompoundStatementNodeAction");
 
-    LayoutCompoundStatementNode* result = (LayoutCompoundStatementNode*)calloc(1, sizeof(LayoutCompoundStatementNode));
-    result->functionList = listNode;
+    LayoutCompoundStatementNode* result = (LayoutCompoundStatementNode*)_calloc(1, sizeof(LayoutCompoundStatementNode));
+    result->functionList = tail;
 
     return result;
 }
@@ -135,7 +136,7 @@ LayoutCompoundStatementNode* LayoutCompoundStatementAction(FunctionListNode* lis
 LayoutNode* LayoutAction(layout_t layout, LayoutCompoundStatementNode* compoundStatement) {
     LogDebug("\tLayoutAction");
 
-    LayoutNode* result = (LayoutNode*)calloc(1, sizeof(LayoutNode));
+    LayoutNode* result = (LayoutNode*)_calloc(1, sizeof(LayoutNode));
     result->layout = layout;
     result->compoundStatement = compoundStatement;
 
@@ -146,9 +147,29 @@ LayoutNode* LayoutAction(layout_t layout, LayoutCompoundStatementNode* compoundS
 ShapeNode* ShapeAction(ShapeType type, ShapeUnion value) {
     LogDebug("\tShapeNodeAction");
 
-    ShapeNode* result = (ShapeNode*)calloc(1, sizeof(ShapeNode));
+    ShapeNode* result = (ShapeNode*)_calloc(1, sizeof(ShapeNode));
     result->type = type;
     result->value = value;
+
+    ParameterMap* map = NULL;
+    stAddParametersToShape(&map, result);
+
+    /* TODO: BORRAR!!!!
+    ParameterMap *currParam, *tmp;
+    HASH_ITER(hh, map, currParam, tmp) {
+        switch (currParam->type) {
+            case PS_S_FILL_COLOR:
+            case PS_S_BORDER_COLOR:
+                LogDebug("\t[ param: %d, { value: %s }}]\n", currParam->type, currParam->value.color);
+                break;
+
+            case PS_R_HEIGHT:
+            default:
+                LogDebug("\t[ param: %d, { value: %d }}]\n", currParam->type, currParam->value.integer);
+                break;
+        }
+    }
+    */
 
     return result;
 }
@@ -157,7 +178,7 @@ ShapeNode* ShapeAction(ShapeType type, ShapeUnion value) {
 VectorNode* VectorAction(VectorType type, VectorUnion value) {
     LogDebug("\tVectorNodeAction");
 
-    VectorNode* result = (VectorNode*)calloc(1, sizeof(VectorNode));
+    VectorNode* result = (VectorNode*)_calloc(1, sizeof(VectorNode));
     result->type = type;
     result->value = value;
 
@@ -174,7 +195,7 @@ VectorNode* VectorAction(VectorType type, VectorUnion value) {
 ParamAnimationNode* ParamAnimationAction(ParameterType type, ParamAnimationUnion value) {
     LogDebug("\tParamAnimationAction");
 
-    ParamAnimationNode* result = (ParamAnimationNode*)calloc(1, sizeof(ParamAnimationNode));
+    ParamAnimationNode* result = (ParamAnimationNode*)_calloc(1, sizeof(ParamAnimationNode));
     result->type = type;
     result->value = value;
 
@@ -185,9 +206,9 @@ ParamAnimationNode* ParamAnimationAction(ParameterType type, ParamAnimationUnion
 ParamListTranslateNode* ParamListTranslateAddParamAction(ParamListTranslateType type, ParamListTranslateNode* listNode, ParamListTranslateUnion value) {
     LogDebug("\tParamListTranslateAddParamAction");
 
-    ParamListTranslateNode* result = (ParamListTranslateNode*)calloc(1, sizeof(ParamListTranslateNode));
+    ParamListTranslateNode* result = (ParamListTranslateNode*)_calloc(1, sizeof(ParamListTranslateNode));
     result->type = type;
-    result->listNode = listNode;
+    result->tail = listNode;
     result->value = value;
 
     return result;
@@ -196,7 +217,7 @@ ParamListTranslateNode* ParamListTranslateAddParamAction(ParamListTranslateType 
 ParamTranslateNode* ParamTranslateAction(ParameterType type, ParamTranslateUnion value) {
     LogDebug("\tParamTranslateAction");
 
-    ParamTranslateNode* result = (ParamTranslateNode*)calloc(1, sizeof(ParamTranslateNode));
+    ParamTranslateNode* result = (ParamTranslateNode*)_calloc(1, sizeof(ParamTranslateNode));
     result->type = type;
     result->value = value;
 
@@ -207,9 +228,9 @@ ParamTranslateNode* ParamTranslateAction(ParameterType type, ParamTranslateUnion
 ParamListOpacityNode* ParamListOpacityAddParamAction(ParamListOpacityType type, ParamListOpacityNode* listNode, ParamListOpacityUnion value) {
     LogDebug("\tParamListOpacityAddParamAction");
 
-    ParamListOpacityNode* result = (ParamListOpacityNode*)calloc(1, sizeof(ParamListOpacityNode));
+    ParamListOpacityNode* result = (ParamListOpacityNode*)_calloc(1, sizeof(ParamListOpacityNode));
     result->type = type;
-    result->listNode = listNode;
+    result->tail = listNode;
     result->value = value;
 
     return result;
@@ -218,7 +239,7 @@ ParamListOpacityNode* ParamListOpacityAddParamAction(ParamListOpacityType type, 
 ParamOpacityNode* ParamOpacityAction(ParameterType type, ParamOpacityUnion value) {
     LogDebug("\tParamOpacityAction");
 
-    ParamOpacityNode* result = (ParamOpacityNode*)calloc(1, sizeof(ParamOpacityNode));
+    ParamOpacityNode* result = (ParamOpacityNode*)_calloc(1, sizeof(ParamOpacityNode));
     result->type = type;
     result->value = value;
 
@@ -229,9 +250,9 @@ ParamOpacityNode* ParamOpacityAction(ParameterType type, ParamOpacityUnion value
 ParamListRotateNode* ParamListRotateAddParamAction(ParamListRotateType type, ParamListRotateNode* listNode, ParamListRotateUnion value) {
     LogDebug("\tParamListRotateAddParamAction");
 
-    ParamListRotateNode* result = (ParamListRotateNode*)calloc(1, sizeof(ParamListRotateNode));
+    ParamListRotateNode* result = (ParamListRotateNode*)_calloc(1, sizeof(ParamListRotateNode));
     result->type = type;
-    result->listNode = listNode;
+    result->tail = listNode;
     result->value = value;
 
     return result;
@@ -240,7 +261,7 @@ ParamListRotateNode* ParamListRotateAddParamAction(ParamListRotateType type, Par
 ParamRotateNode* ParamRotateAction(ParameterType type, ParamRotateUnion value) {
     LogDebug("\tParamRotateAction");
 
-    ParamRotateNode* result = (ParamRotateNode*)calloc(1, sizeof(ParamRotateNode));
+    ParamRotateNode* result = (ParamRotateNode*)_calloc(1, sizeof(ParamRotateNode));
     result->type = type;
     result->value = value;
 
@@ -251,9 +272,9 @@ ParamRotateNode* ParamRotateAction(ParameterType type, ParamRotateUnion value) {
 ParamListResizeNode* ParamListResizeAddParamAction(ParamListResizeType type, ParamListResizeNode* listNode, ParamListResizeUnion value) {
     LogDebug("\tParamListResizeAddParamAction");
 
-    ParamListResizeNode* result = (ParamListResizeNode*)calloc(1, sizeof(ParamListResizeNode));
+    ParamListResizeNode* result = (ParamListResizeNode*)_calloc(1, sizeof(ParamListResizeNode));
     result->type = type;
-    result->listNode = listNode;
+    result->tail = listNode;
     result->value = value;
 
     return result;
@@ -262,7 +283,7 @@ ParamListResizeNode* ParamListResizeAddParamAction(ParamListResizeType type, Par
 ParamResizeNode* ParamResizeAction(ParameterType type, ParamResizeUnion value) {
     LogDebug("\tParamResizeAction");
 
-    ParamResizeNode* result = (ParamResizeNode*)calloc(1, sizeof(ParamResizeNode));
+    ParamResizeNode* result = (ParamResizeNode*)_calloc(1, sizeof(ParamResizeNode));
     result->type = type;
     result->value = value;
 
@@ -273,9 +294,9 @@ ParamResizeNode* ParamResizeAction(ParameterType type, ParamResizeUnion value) {
 ParamListMorphNode* ParamListMorphAddParamAction(ParamListMorphType type, ParamListMorphNode* listNode, ParamListMorphUnion value) {
     LogDebug("\tParamListMorphAddParamAction");
 
-    ParamListMorphNode* result = (ParamListMorphNode*)calloc(1, sizeof(ParamListMorphNode));
+    ParamListMorphNode* result = (ParamListMorphNode*)_calloc(1, sizeof(ParamListMorphNode));
     result->type = type;
-    result->listNode = listNode;
+    result->tail = listNode;
     result->value = value;
 
     return result;
@@ -284,7 +305,7 @@ ParamListMorphNode* ParamListMorphAddParamAction(ParamListMorphType type, ParamL
 ParamMorphNode* ParamMorphAction(ParameterType type, ParamMorphUnion value) {
     LogDebug("\tParamMorphAction");
 
-    ParamMorphNode* result = (ParamMorphNode*)calloc(1, sizeof(ParamMorphNode));
+    ParamMorphNode* result = (ParamMorphNode*)_calloc(1, sizeof(ParamMorphNode));
     result->type = type;
     result->value = value;
 
@@ -295,9 +316,9 @@ ParamMorphNode* ParamMorphAction(ParameterType type, ParamMorphUnion value) {
 ParamListRecolorNode* ParamListRecolorAddParamAction(ParamListRecolorType type, ParamListRecolorNode* listNode, ParamListRecolorUnion value) {
     LogDebug("\tParamListRecolorAddParamAction");
 
-    ParamListRecolorNode* result = (ParamListRecolorNode*)calloc(1, sizeof(ParamListRecolorNode));
+    ParamListRecolorNode* result = (ParamListRecolorNode*)_calloc(1, sizeof(ParamListRecolorNode));
     result->type = type;
-    result->listNode = listNode;
+    result->tail = listNode;
     result->value = value;
 
     return result;
@@ -306,7 +327,7 @@ ParamListRecolorNode* ParamListRecolorAddParamAction(ParamListRecolorType type, 
 ParamRecolorNode* ParamRecolorAction(ParameterType type, ParamRecolorUnion value) {
     LogDebug("\tParamRecolorAction");
 
-    ParamRecolorNode* result = (ParamRecolorNode*)calloc(1, sizeof(ParamRecolorNode));
+    ParamRecolorNode* result = (ParamRecolorNode*)_calloc(1, sizeof(ParamRecolorNode));
     result->type = type;
     result->value = value;
 
@@ -317,7 +338,7 @@ ParamRecolorNode* ParamRecolorAction(ParameterType type, ParamRecolorUnion value
 ParamShapeNode* ParamShapeAction(ParameterType type, ParamShapeUnion value) {
     LogDebug("\tParamShapeAction");
 
-    ParamShapeNode* result = (ParamShapeNode*)calloc(1, sizeof(ParamShapeNode));
+    ParamShapeNode* result = (ParamShapeNode*)_calloc(1, sizeof(ParamShapeNode));
     result->type = type;
     result->value = value;
 
@@ -328,9 +349,9 @@ ParamShapeNode* ParamShapeAction(ParameterType type, ParamShapeUnion value) {
 ParamListRectangleNode* ParamListRectangleAddParamAction(ParamListRectangleType type, ParamListRectangleNode* listNode, ParamListRectangleUnion value) {
     LogDebug("\tParamListRectangleAddParamAction");
 
-    ParamListRectangleNode* result = (ParamListRectangleNode*)calloc(1, sizeof(ParamListRectangleNode));
+    ParamListRectangleNode* result = (ParamListRectangleNode*)_calloc(1, sizeof(ParamListRectangleNode));
     result->type = type;
-    result->listNode = listNode;
+    result->tail = listNode;
     result->value = value;
 
     return result;
@@ -339,7 +360,7 @@ ParamListRectangleNode* ParamListRectangleAddParamAction(ParamListRectangleType 
 ParamRectangleNode* ParamRectangleAction(ParameterType type, ParamRectangleUnion value) {
     LogDebug("\tParamRectangleAction");
 
-    ParamRectangleNode* result = (ParamRectangleNode*)calloc(1, sizeof(ParamRectangleNode));
+    ParamRectangleNode* result = (ParamRectangleNode*)_calloc(1, sizeof(ParamRectangleNode));
     result->type = type;
     result->value = value;
 
@@ -350,9 +371,9 @@ ParamRectangleNode* ParamRectangleAction(ParameterType type, ParamRectangleUnion
 ParamListEllipseNode* ParamListEllipseAddParamAction(ParamListEllipseType type, ParamListEllipseNode* listNode, ParamListEllipseUnion value) {
     LogDebug("\tParamListEllipseAddParamAction");
 
-    ParamListEllipseNode* result = (ParamListEllipseNode*)calloc(1, sizeof(ParamListEllipseNode));
+    ParamListEllipseNode* result = (ParamListEllipseNode*)_calloc(1, sizeof(ParamListEllipseNode));
     result->type = type;
-    result->listNode = listNode;
+    result->tail = listNode;
     result->value = value;
 
     return result;
@@ -361,7 +382,7 @@ ParamListEllipseNode* ParamListEllipseAddParamAction(ParamListEllipseType type, 
 ParamEllipseNode* ParamEllipseAction(ParameterType type, ParamEllipseUnion value) {
     LogDebug("\tParamEllipseAction");
 
-    ParamEllipseNode* result = (ParamEllipseNode*)calloc(1, sizeof(ParamEllipseNode));
+    ParamEllipseNode* result = (ParamEllipseNode*)_calloc(1, sizeof(ParamEllipseNode));
     result->type = type;
     result->value = value;
 
@@ -372,9 +393,9 @@ ParamEllipseNode* ParamEllipseAction(ParameterType type, ParamEllipseUnion value
 ParamListTriangleNode* ParamListTriangleAddParamAction(ParamListTriangleType type, ParamListTriangleNode* listNode, ParamListTriangleUnion value) {
     LogDebug("\tParamListTriangleAddParamShapeAction");
 
-    ParamListTriangleNode* result = (ParamListTriangleNode*)calloc(1, sizeof(ParamListTriangleNode));
+    ParamListTriangleNode* result = (ParamListTriangleNode*)_calloc(1, sizeof(ParamListTriangleNode));
     result->type = type;
-    result->listNode = listNode;
+    result->tail = listNode;
     result->value = value;
 
     return result;
@@ -383,7 +404,7 @@ ParamListTriangleNode* ParamListTriangleAddParamAction(ParamListTriangleType typ
 ParamTriangleNode* ParamTriangleAction(ParameterType type, ParamTriangleUnion value) {
     LogDebug("\tParamTriangleAction");
 
-    ParamTriangleNode* result = (ParamTriangleNode*)calloc(1, sizeof(ParamTriangleNode));
+    ParamTriangleNode* result = (ParamTriangleNode*)_calloc(1, sizeof(ParamTriangleNode));
     result->type = type;
     result->value = value;
 
@@ -395,17 +416,17 @@ ParamTriangleNode* ParamTriangleAction(ParameterType type, ParamTriangleUnion va
 ParamListImageNode* ParamListImageAddParamAction(ParamListImageNode* listNode, ParamImageNode* imageNode) {
     LogDebug("\tParamListImageMultipleAction");
 
-    ParamListImageNode* result = (ParamListImageNode*)calloc(1, sizeof(ParamListImageNode));
-    result->listNode = listNode;
+    ParamListImageNode* result = (ParamListImageNode*)_calloc(1, sizeof(ParamListImageNode));
+    result->tail = listNode;
     result->paramImageNode = imageNode;
 
     return result;
 }
 
 ParamImageNode* ParamImageAction(char* typeUrl) {
-    LogDebug("\t ParamImageAction");
+    LogDebug("\tParamImageAction");
 
-    ParamImageNode* result = (ParamImageNode*)calloc(1, sizeof(ParamImageNode));
+    ParamImageNode* result = (ParamImageNode*)_calloc(1, sizeof(ParamImageNode));
     result->typeUrl = typeUrl;
 
     return result;
@@ -413,19 +434,19 @@ ParamImageNode* ParamImageAction(char* typeUrl) {
 
 // For text
 ParamListTextNode* ParamListTextAddParamAction(ParamListTextNode* listNode, ParamTextNode* textNode) {
-    LogDebug("\t ParamListTextMultipleAction");
+    LogDebug("\tParamListTextMultipleAction");
 
-    ParamListTextNode* result = (ParamListTextNode*)calloc(1, sizeof(ParamListTextNode));
-    result->listNode = listNode;
+    ParamListTextNode* result = (ParamListTextNode*)_calloc(1, sizeof(ParamListTextNode));
+    result->tail = listNode;
     result->paramTextNode = textNode;
 
     return result;
 }
 
 ParamTextNode* ParamTextAction(ParameterType type, ParamTextUnion value) {
-    LogDebug("\t ParamTextAction");
+    LogDebug("\tParamTextAction");
 
-    ParamTextNode* result = (ParamTextNode*)calloc(1, sizeof(ParamTextNode));
+    ParamTextNode* result = (ParamTextNode*)_calloc(1, sizeof(ParamTextNode));
     result->type = type;
     result->value = value;
 
@@ -434,14 +455,16 @@ ParamTextNode* ParamTextAction(ParameterType type, ParamTextUnion value) {
 
 /* Data types actions*/
 ParamTypeColorNode* ParamTypeColorAction(char* typeColor) {
-    ParamTypeColorNode* result = (ParamTypeColorNode*)calloc(1, sizeof(ParamTypeColorNode));
+    LogDebug("\tParamTypeColorAction: %s", typeColor);
+
+    ParamTypeColorNode* result = (ParamTypeColorNode*)_calloc(1, sizeof(ParamTypeColorNode));
     result->typeColor = typeColor;
 
     return result;
 }
 
 ParamTypePointsNode* ParamTypePointsAddPointAction(ParamTypePointsNode* pointsNode, float floating) {
-    ParamTypePointsNode* result = (ParamTypePointsNode*)calloc(1, sizeof(ParamTypePointsNode));
+    ParamTypePointsNode* result = (ParamTypePointsNode*)_calloc(1, sizeof(ParamTypePointsNode));
     result->nextPoint = pointsNode;
     result->floating = floating;
 

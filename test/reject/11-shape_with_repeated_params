@@ -1,0 +1,1 @@
+ellipse = Ellipse(x-axis: 10, fill-color: #a993fe, border-color: #101010, y-axis: 10, x-axis: 20)

@@ -60,10 +60,11 @@ endif ()
 # Los *.h se incluyen automáticamente desde estos fuentes.
 add_executable(Compiler
 	src/main.c
-	src/utils
+	src/utils/wrapper-functions.c
 	src/backend/code-generation/generator.c
 	src/backend/domain-specific/calculator.c
 	src/backend/support/logger.c
+	src/backend/support/symbol-table.c
 	src/frontend/lexical-analysis/flex-actions.c
 	src/frontend/lexical-analysis/flex-scanner.c
 	src/frontend/syntactic-analysis/bison-actions.c

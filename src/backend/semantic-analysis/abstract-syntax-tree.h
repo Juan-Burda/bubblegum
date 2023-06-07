@@ -101,8 +101,8 @@ typedef union {
 } ParamListTranslateUnion;
 struct ParamListTranslateNode {
     ParamListTranslateType type;
-    ParamListTranslateNode* listNode;
     ParamListTranslateUnion value;
+    ParamListTranslateNode* tail;
 };
 
 // Opacity
@@ -125,8 +125,8 @@ typedef union {
 } ParamListOpacityUnion;
 struct ParamListOpacityNode {
     ParamListOpacityType type;
-    ParamListOpacityNode* listNode;
     ParamListOpacityUnion value;
+    ParamListOpacityNode* tail;
 };
 
 // Rotate
@@ -149,8 +149,8 @@ typedef union {
 } ParamListRotateUnion;
 struct ParamListRotateNode {
     ParamListRotateType type;
-    ParamListRotateNode* listNode;
     ParamListRotateUnion value;
+    ParamListRotateNode* tail;
 };
 
 // Resize
@@ -173,8 +173,8 @@ typedef union {
 } ParamListResizeUnion;
 struct ParamListResizeNode {
     ParamListResizeType type;
-    ParamListResizeNode* listNode;
     ParamListResizeUnion value;
+    ParamListResizeNode* tail;
 };
 
 // Morph
@@ -197,8 +197,8 @@ typedef union {
 } ParamListMorphUnion;
 struct ParamListMorphNode {
     ParamListMorphType type;
-    ParamListMorphNode* listNode;
     ParamListMorphUnion value;
+    ParamListMorphNode* tail;
 };
 
 // Recolor
@@ -221,8 +221,8 @@ typedef union {
 } ParamListRecolorUnion;
 struct ParamListRecolorNode {
     ParamListRecolorType type;
-    ParamListRecolorNode* listNode;
     ParamListRecolorUnion value;
+    ParamListRecolorNode* tail;
 };
 
 /* Shape nodes */
@@ -259,8 +259,8 @@ typedef union {
 } ParamListRectangleUnion;
 struct ParamListRectangleNode {
     ParamListRectangleType type;
-    ParamListRectangleNode* listNode;
     ParamListRectangleUnion value;
+    ParamListRectangleNode* tail;
 };
 
 // Ellipse
@@ -284,8 +284,8 @@ typedef union {
 } ParamListEllipseUnion;
 struct ParamListEllipseNode {
     ParamListEllipseType type;
-    ParamListEllipseNode* listNode;
     ParamListEllipseUnion value;
+    ParamListEllipseNode* tail;
 };
 
 // Triangle
@@ -309,8 +309,8 @@ typedef union {
 } ParamListTriangleUnion;
 struct ParamListTriangleNode {
     ParamListTriangleType type;
-    ParamListTriangleNode* listNode;
     ParamListTriangleUnion value;
+    ParamListTriangleNode* tail;
 };
 
 /* Vector nodes */
@@ -321,7 +321,7 @@ typedef struct {
 
 struct ParamListImageNode {
     ParamImageNode* paramImageNode;
-    ParamListImageNode* listNode;
+    ParamListImageNode* tail;
 };
 
 // Text
@@ -340,7 +340,7 @@ typedef struct {
 
 struct ParamListTextNode {
     ParamTextNode* paramTextNode;
-    ParamListTextNode* listNode;
+    ParamListTextNode* tail;
 };
 
 /** Animations */
@@ -449,7 +449,7 @@ typedef enum {
 struct FunctionListNode {
     FunctionListType type;
     FunctionListUnion value;
-    FunctionListNode* listNode;
+    FunctionListNode* tail;
 };
 
 // Assign
