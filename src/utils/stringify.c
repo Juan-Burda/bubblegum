@@ -61,3 +61,48 @@ const char* stringifyParameterType(ParameterType type) {
             return "Unknown";
     }
 }
+
+const char* stringifyMediaType(MediaType type) {
+    switch (type) {
+        STRINGIFY_ENUM_CASE(PM_I_URL)
+
+        default:
+            return "Unknown";
+    }
+}
+
+const char* stringifyFontStyle(fontstyle_t style) {
+    switch (style) {
+        STRINGIFY_ENUM_CASE(NORMAL)
+        STRINGIFY_ENUM_CASE(ITALIC)
+        STRINGIFY_ENUM_CASE(OBLIQUE)
+
+        default:
+            return "Unknown";
+    }
+}
+
+const char* stringifyFontFamily(fontfamily_t family) {
+    switch (family) {
+        STRINGIFY_ENUM_CASE(ARIAL)
+        STRINGIFY_ENUM_CASE(HELVETICA)
+        STRINGIFY_ENUM_CASE(VERDANA)
+        STRINGIFY_ENUM_CASE(FANTASY)
+        STRINGIFY_ENUM_CASE(MONOSPACE)
+
+        default:
+            return "Unknown";
+    }
+}
+
+const char* stringifyTextDecoration(textdeco_t deco) {
+    switch (deco) {
+        STRINGIFY_ENUM_CASE(UNDERLINE)
+        STRINGIFY_ENUM_CASE(OVERLINE)
+        case LINE_THROUGH:
+            return "LINE-THROUGH";
+
+        default:
+            return "Unknown";
+    }
+}

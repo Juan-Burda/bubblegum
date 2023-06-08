@@ -91,11 +91,11 @@ int stAddParametersToAnimation(ParameterMap** map, AnimationNode* node) {
                 break;
 
             case PA_REC_END_COLOR:
-                char* hexColor = currNode->parameter->value.color->string;
-                char* aux = (char*)_malloc(strlen(hexColor) + 1);
-                strncpy(aux, hexColor, strlen(hexColor));
-                currParam->value.color = aux;
-                LogDebug("\t\tAdded {%d, %s}", currParam->type, currParam->value.color);
+                int len = strlen(currNode->parameter->value.color->string);
+                char* color = (char*)_malloc(len + 1);
+                strncpy(color, currNode->parameter->value.color->string, len);
+                currParam->value.color = color;
+                LogDebug("\t\tAdded {%s, %s}", stringifyParameterType(currParam->type), currParam->value.color);
                 break;
 
             default:
@@ -143,10 +143,10 @@ int stAddParametersToShape(ParameterMap** map, ShapeNode* node) {
         switch (currParam->type) {
             case PS_S_FILL_COLOR:
             case PS_S_BORDER_COLOR:
-                char* hexColor = currNode->parameter->value.color->string;
-                char* aux = (char*)_malloc(strlen(hexColor) + 1);
-                strncpy(aux, hexColor, strlen(hexColor));
-                currParam->value.color = aux;
+                int len = strlen(currNode->parameter->value.color->string);
+                char* color = (char*)_malloc(len + 1);
+                strncpy(color, currNode->parameter->value.color->string, len);
+                currParam->value.color = color;
                 LogDebug("\t\tAdded {%s, %s}", stringifyParameterType(currParam->type), currParam->value.color);
                 break;
 
@@ -160,6 +160,139 @@ int stAddParametersToShape(ParameterMap** map, ShapeNode* node) {
             case PS_T_HEIGHT:
                 currParam->value.integer = currNode->parameter->value.integer;
                 LogDebug("\t\tAdded {%s, %d}", stringifyParameterType(currParam->type), currParam->value.integer);
+                break;
+
+            default:
+                LogError("\t\tError unknown type D:");
+                free(currParam);
+                exit(EXIT_FAILURE);
+        }
+
+        HASH_ADD_INT(*map, type, currParam);
+
+        currNode = currNode->tail;
+    }
+
+    LogDebug("\t\tSymbol Table: Added %d parameters", HASH_COUNT(*map));
+
+    return 0;
+}
+
+int stAddParametersToMedia(ParameterMap** map, MediaNode* node) {
+    LogDebug("\t\tSymbol Table: Add Media [%s] parameters", stringifyMediaType(node->type));
+
+    ParamListMediaNode* head = node->paramList;
+    if (head == NULL || head->isEmpty) {
+        LogDebug("\t\tSymbol Table: Found no Media parameters");
+        return 0;
+    }
+
+    ParameterMap* currParam;
+    ParamListMediaNode* currNode = head;
+
+    ParameterType paramType;
+    while (currNode != NULL) {
+        paramType = currNode->parameter->type;
+
+        HASH_FIND_INT(*map, &paramType, currParam);
+        if (currParam != NULL) {
+            LogError("\t\tDuplicate key found, aborting...");
+            exit(EXIT_FAILURE);
+        }
+
+        currParam = (ParameterMap*)_malloc(sizeof(ParameterMap));
+
+        currParam->type = paramType;
+        switch (currParam->type) {
+            case PM_I_URL:
+                int len = strlen(currNode->parameter->value.string);
+                char* url = (char*)_malloc(len + 1);
+                strncpy(url, currNode->parameter->value.string, len);
+                currParam->value.string = url;
+                LogDebug("\t\tAdded {%s, %s}", stringifyParameterType(currParam->type), currParam->value.string);
+                break;
+
+            default:
+                LogError("\t\tError unknown type D:");
+                free(currParam);
+                exit(EXIT_FAILURE);
+        }
+
+        HASH_ADD_INT(*map, type, currParam);
+
+        currNode = currNode->tail;
+    }
+
+    LogDebug("\t\tSymbol Table: Added %d parameters", HASH_COUNT(*map));
+
+    return 0;
+}
+
+int stAddParametersToText(ParameterMap** map, TextNode* node) {
+    LogDebug("\t\tSymbol Table: Add Text parameters");
+
+    ParamListTextNode* head = node->paramList;
+    if (head == NULL || head->isEmpty) {
+        LogDebug("\t\tSymbol Table: Found no Text parameters");
+        return 0;
+    }
+
+    ParameterMap* currParam;
+    ParamListTextNode* currNode = head;
+
+    ParameterType paramType;
+    while (currNode != NULL) {
+        paramType = currNode->parameter->type;
+
+        HASH_FIND_INT(*map, &paramType, currParam);
+        if (currParam != NULL) {
+            LogError("\t\tDuplicate key found, aborting...");
+            exit(EXIT_FAILURE);
+        }
+
+        currParam = (ParameterMap*)_malloc(sizeof(ParameterMap));
+
+        currParam->type = paramType;
+        int len = 0;
+        char* aux;
+        switch (currParam->type) {
+            case PT_T_FONT_WEIGHT:
+            case PT_T_FONT_WIDTH:
+                currParam->value.integer = currNode->parameter->value.integer;
+
+            case PT_T_BACKGROUND_COLOR:
+                len = strlen(currNode->parameter->value.color->string);
+                char* color = (char*)_malloc(len + 1);
+                strncpy(color, currNode->parameter->value.color->string, len);
+                currParam->value.color = color;
+                LogDebug("\t\tAdded {%s, %s}", stringifyParameterType(currParam->type), currParam->value.color);
+                break;
+
+            case PT_T_FONT_FAMILY:
+                aux = (char*)stringifyFontFamily(currNode->parameter->value.fontFamily);
+                len = strlen(aux);
+                char* family = (char*)_malloc(len + 1);
+                strncpy(family, aux, len);
+                currParam->value.string = family;
+                LogDebug("\t\tAdded {%s, %s}", stringifyParameterType(currParam->type), currParam->value.string);
+                break;
+
+            case PT_T_FONT_STYLE:
+                aux = (char*)stringifyFontStyle(currNode->parameter->value.fontStyle);
+                len = strlen(aux);
+                char* style = (char*)_malloc(len + 1);
+                strncpy(style, aux, len);
+                currParam->value.string = style;
+                LogDebug("\t\tAdded {%s, %s}", stringifyParameterType(currParam->type), currParam->value.string);
+                break;
+
+            case PT_T_TEXT_DECORATION:
+                aux = (char*)stringifyTextDecoration(currNode->parameter->value.textDecoration);
+                len = strlen(aux);
+                char* deco = (char*)_malloc(len + 1);
+                strncpy(deco, aux, len);
+                currParam->value.string = deco;
+                LogDebug("\t\tAdded {%s, %s}", stringifyParameterType(currParam->type), currParam->value.string);
                 break;
 
             default:

@@ -6,5 +6,9 @@
 const char* stringifyAnimationType(AnimationType type);
 const char* stringifyParameterType(ParameterType type);
 const char* stringifyShapeType(ShapeType type);
+const char* stringifyMediaType(MediaType type);
+const char* stringifyFontStyle(fontstyle_t style);
+const char* stringifyFontFamily(fontfamily_t family);
+const char* stringifyTextDecoration(textdeco_t deco);
 
 #endif

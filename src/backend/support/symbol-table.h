@@ -13,6 +13,7 @@ typedef union {
     int integer;
     float floating;
     char* color;
+    char* string;
     char* points;
 } ParameterValue;
 typedef struct {
@@ -44,5 +45,7 @@ void stDestroy();
 int stAddVariable(char varname[VARNAME_MAX_LENGTH], VariableType type, ParameterMap** parameters);
 int stAddParametersToShape(ParameterMap** map, ShapeNode* shapeNode);
 int stAddParametersToAnimation(ParameterMap** map, AnimationNode* node);
+int stAddParametersToMedia(ParameterMap** map, MediaNode* node);
+int stAddParametersToText(ParameterMap** map, TextNode* node);
 
 #endif  // _SYMBOL_TABLE_H_

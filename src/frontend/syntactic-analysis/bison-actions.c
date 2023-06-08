@@ -168,6 +168,9 @@ MediaNode* MediaAction(MediaType type, ParamListMediaNode* paramList) {
     result->type = type;
     result->paramList = paramList;
 
+    ParameterMap* map = NULL;
+    stAddParametersToMedia(&map, result);
+
     return result;
 }
 
@@ -177,6 +180,9 @@ TextNode* TextAction(ParamListTextNode* paramList) {
 
     TextNode* result = (TextNode*)_calloc(1, sizeof(TextNode));
     result->paramList = paramList;
+
+    ParameterMap* map = NULL;
+    stAddParametersToText(&map, result);
 
     return result;
 }

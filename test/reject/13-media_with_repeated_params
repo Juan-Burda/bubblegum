@@ -1,0 +1,2 @@
+/* src is repeated */
+oops = Image(src: "https://images.com/nyanCat.png", src: "https://gif.com")
