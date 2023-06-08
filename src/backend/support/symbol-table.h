@@ -24,7 +24,8 @@ typedef struct {
 
 typedef union {
     AnimationType animationType;
-    VectorType vectorType;
+    MediaType mediaType;
+    char textType;
     ShapeType shapeType;
     layout_t layoutType;
 } VariableType;

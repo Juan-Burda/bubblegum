@@ -22,7 +22,8 @@
 	LayoutNode * layout;
 	ShapeNode * shape;
 	LayoutCompoundStatementNode * layoutCompoundStatement;
-	VectorNode * vector;
+	MediaNode * media;
+	TextNode * text;
 
 	ParamAnimationNode * paramAnimation;
 	ParamListAnimationNode * paramListAnimation;
@@ -30,10 +31,11 @@
 	ParamShapeNode * paramShape;
 	ParamListShapeNode* paramListShape;
 
-	ParamListTextNode * paramListText;
 	ParamTextNode * paramText;
-	ParamListImageNode * paramListImage;
-	ParamImageNode * paramImage;
+	ParamListTextNode * paramListText;
+
+	ParamMediaNode * paramMedia;
+	ParamListMediaNode * paramListMedia;
 
 	ParamTypeColorNode * typeColor;
 	ParamTypePointsNode * typePoints;
@@ -132,7 +134,8 @@
 %type <animation> animation;
 %type <layout> layout;
 %type <shape> shape;
-%type <vector> vector;
+%type <media> media;
+%type <text> text;
 
 %type <paramAnimation> paramAnimation;
 %type <paramListAnimation> paramListTranslate;
@@ -156,10 +159,10 @@
 %type <paramListShape> paramListTriangle;
 %type <paramShape> paramTriangle;
 
-%type <paramListText> paramListText;
 %type <paramText> paramText;
-%type <paramListImage> paramListImage;
-%type <paramImage> paramImage;
+%type <paramListText> paramListText;
+%type <paramMedia> paramImage;
+%type <paramListMedia> paramListImage;
 
 %type <typeColor> typeColor;
 %type <typePoints> typePoints;
@@ -176,9 +179,10 @@ expression: %empty			{ $$ = ExpressionAction(E_EMPTY,	(ExpressionUnion) { .funct
 	| assign expression		{ $$ = ExpressionAction(E_ASSIGN,	(ExpressionUnion) { .assignNode = $1 }, $2); }
 
 function: animation		{ $$ = FunctionAction(F_ANIMATION,	(FunctionUnion) { .animationNode = $1 }); }
-	| layout			{ $$ = FunctionAction(F_LAYOUT,		(FunctionUnion) { .layoutNode = $1 }); }
-	| shape				{ $$ = FunctionAction(F_SHAPE,		(FunctionUnion) { .shapeNode = $1 }); }
-	| vector			{ $$ = FunctionAction(F_VECTOR,		(FunctionUnion) { .vectorNode = $1 }); }
+	| layout			{ $$ = FunctionAction(F_LAYOUT,		(FunctionUnion) { .layoutNode = $1	}); }
+	| shape				{ $$ = FunctionAction(F_SHAPE,		(FunctionUnion) { .shapeNode = $1	}); }
+	| media				{ $$ = FunctionAction(F_MEDIA,		(FunctionUnion) { .mediaNode = $1	}); }
+	| text				{ $$ = FunctionAction(F_TEXT,		(FunctionUnion)	{ .textNode = $1	});	}
 
 functionList: function COMMA functionList		{ $$ = FunctionListAction(FL_FUNCTION,	$3,		(FunctionListUnion) { .functionNode = $1 }); }
 	| function									{ $$ = FunctionListAction(FL_FUNCTION,	NULL,	(FunctionListUnion) { .functionNode = $1 }); }
@@ -206,8 +210,9 @@ shape: RECTANGLE OPEN_PARENTHESIS paramListRectangle CLOSE_PARENTHESIS 		{ $$ = 
 	| ELLIPSE OPEN_PARENTHESIS paramListEllipse CLOSE_PARENTHESIS 			{ $$ = ShapeAction(S_ELLIPSE,	$3); }
 	| TRIANGLE OPEN_PARENTHESIS paramListTriangle CLOSE_PARENTHESIS 		{ $$ = ShapeAction(S_TRIANGLE,	$3); }
 
-vector: IMAGE OPEN_PARENTHESIS paramListImage  CLOSE_PARENTHESIS		{ $$ = VectorAction(V_IMAGE,	(VectorUnion) { .imageParamList = $3 }); }
-	| TEXT OPEN_PARENTHESIS paramListText CLOSE_PARENTHESIS				{ $$ = VectorAction(V_TEXT,		(VectorUnion) { .textParamList = $3 }); }
+media: IMAGE OPEN_PARENTHESIS paramListImage  CLOSE_PARENTHESIS		{ $$ = MediaAction(M_IMAGE, $3); }
+
+text: TEXT OPEN_PARENTHESIS paramListText CLOSE_PARENTHESIS			{ $$ = TextAction($3); }
 
 /* Parameters */
 // For animations
@@ -298,22 +303,22 @@ paramTriangle: PARAM_HEIGHT COLON TYPE_INTEGER		{ $$ = ParamShapeAction(PS_T_HEI
 	| PARAM_BASE COLON TYPE_INTEGER					{ $$ = ParamShapeAction(PS_T_BASE,		(ParamShapeUnion) { .integer = $3 }); }
 
 // For vectors
-paramListImage: %empty						{ $$ = ParamListImageAddParamAction(NULL, 	NULL); }
-	| paramImage COMMA paramListImage		{ $$ = ParamListImageAddParamAction($3, 	$1); }
-	| paramImage							{ $$ = ParamListImageAddParamAction(NULL, 	$1); }
+paramListImage: %empty						{ $$ = ParamListMediaAddParamAction(TRUE,	NULL, 	NULL); }
+	| paramImage COMMA paramListImage		{ $$ = ParamListMediaAddParamAction(FALSE,	$3, 	$1); }
+	| paramImage							{ $$ = ParamListMediaAddParamAction(FALSE,	NULL, 	$1); }
 
-paramImage: PARAM_SRC COLON DOUBLE_QUOTE TYPE_URL DOUBLE_QUOTE 	{ $$ = ParamImageAction($4); }
+paramImage: PARAM_SRC COLON DOUBLE_QUOTE TYPE_URL DOUBLE_QUOTE 	{ $$ = ParamMediaAction(PM_I_URL, (ParamMediaUnion) { .string = $4 }); }
 
-paramListText: %empty						{ $$ = ParamListTextAddParamAction(NULL, 	NULL); }
-	| paramText COMMA paramListText			{ $$ = ParamListTextAddParamAction($3, 		$1); }
-	| paramText								{ $$ = ParamListTextAddParamAction(NULL, 	$1); }
+paramListText: %empty						{ $$ = ParamListTextAddParamAction(TRUE,	NULL,	NULL); }
+	| paramText COMMA paramListText			{ $$ = ParamListTextAddParamAction(FALSE,	$3,		$1); }
+	| paramText								{ $$ = ParamListTextAddParamAction(FALSE,	NULL,	$1); }
 
-paramText: PARAM_FONT_WIDTH COLON TYPE_INTEGER 				{ $$ = ParamTextAction(PV_T_FONT_WIDTH, 		(ParamTextUnion) { .integer = $3 }); }
-	| PARAM_FONT_FAMILY COLON TYPE_FONT_FAMILY 				{ $$ = ParamTextAction(PV_T_FONT_FAMILY,		(ParamTextUnion) { .fontFamily = $3 }); }
-	| PARAM_FONT_WEIGHT COLON TYPE_INTEGER 					{ $$ = ParamTextAction(PV_T_FONT_WEIGHT,		(ParamTextUnion) { .integer = $3 }); }
-	| PARAM_FONT_STYLE COLON TYPE_FONT_STYLE 				{ $$ = ParamTextAction(PV_T_FONT_STYLE, 		(ParamTextUnion) { .fontStyle = $3 }); }
-	| PARAM_TEXT_DECORATION COLON TYPE_TEXT_DECORATION 		{ $$ = ParamTextAction(PV_T_TEXT_DECORATION, 	(ParamTextUnion) { .textDecoration = $3 }); }
-	| PARAM_BACKGROUND_COLOR COLON typeColor 				{ $$ = ParamTextAction(PV_T_BACKGROUND_COLOR, 	(ParamTextUnion) { .color = $3 }); }
+paramText: PARAM_FONT_WIDTH COLON TYPE_INTEGER 				{ $$ = ParamTextAction(PT_T_FONT_WIDTH, 		(ParamTextUnion) { .integer = $3 }); }
+	| PARAM_FONT_FAMILY COLON TYPE_FONT_FAMILY 				{ $$ = ParamTextAction(PT_T_FONT_FAMILY,		(ParamTextUnion) { .fontFamily = $3 }); }
+	| PARAM_FONT_WEIGHT COLON TYPE_INTEGER 					{ $$ = ParamTextAction(PT_T_FONT_WEIGHT,		(ParamTextUnion) { .integer = $3 }); }
+	| PARAM_FONT_STYLE COLON TYPE_FONT_STYLE 				{ $$ = ParamTextAction(PT_T_FONT_STYLE, 		(ParamTextUnion) { .fontStyle = $3 }); }
+	| PARAM_TEXT_DECORATION COLON TYPE_TEXT_DECORATION 		{ $$ = ParamTextAction(PT_T_TEXT_DECORATION, 	(ParamTextUnion) { .textDecoration = $3 }); }
+	| PARAM_BACKGROUND_COLOR COLON typeColor 				{ $$ = ParamTextAction(PT_T_BACKGROUND_COLOR, 	(ParamTextUnion) { .color = $3 }); }
 
 /* Data types */
 typeColor: COLOR_HEX			{ $$ = ParamTypeColorAction($1); }

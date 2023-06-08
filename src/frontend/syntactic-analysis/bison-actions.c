@@ -160,13 +160,23 @@ ShapeNode* ShapeAction(ShapeType type, ParamListShapeNode* paramList) {
     return result;
 }
 
-/** Vectors */
-VectorNode* VectorAction(VectorType type, VectorUnion value) {
-    LogDebug("\tVectorNodeAction");
+/** Media */
+MediaNode* MediaAction(MediaType type, ParamListMediaNode* paramList) {
+    LogDebug("\tMediaNodeAction");
 
-    VectorNode* result = (VectorNode*)_calloc(1, sizeof(VectorNode));
+    MediaNode* result = (MediaNode*)_calloc(1, sizeof(MediaNode));
     result->type = type;
-    result->value = value;
+    result->paramList = paramList;
+
+    return result;
+}
+
+/** Text */
+TextNode* TextAction(ParamListTextNode* paramList) {
+    LogDebug("\tTextNodeAction");
+
+    TextNode* result = (TextNode*)_calloc(1, sizeof(TextNode));
+    result->paramList = paramList;
 
     return result;
 }
@@ -223,32 +233,35 @@ ParamListShapeNode* ParamListShapeAddParamAction(boolean_t isEmpty, ParamListSha
 
 /* Vectors */
 // For images
-ParamListImageNode* ParamListImageAddParamAction(ParamListImageNode* listNode, ParamImageNode* imageNode) {
-    LogDebug("\tParamListImageMultipleAction");
+ParamListMediaNode* ParamListMediaAddParamAction(boolean_t isEmpty, ParamListMediaNode* listNode, ParamMediaNode* value) {
+    LogDebug("\tParamListImageAddParamAction");
 
-    ParamListImageNode* result = (ParamListImageNode*)_calloc(1, sizeof(ParamListImageNode));
+    ParamListMediaNode* result = (ParamListMediaNode*)_calloc(1, sizeof(ParamListMediaNode));
+    result->isEmpty = isEmpty;
+    result->parameter = value;
     result->tail = listNode;
-    result->paramImageNode = imageNode;
 
     return result;
 }
 
-ParamImageNode* ParamImageAction(char* typeUrl) {
+ParamMediaNode* ParamMediaAction(ParameterType type, ParamMediaUnion value) {
     LogDebug("\tParamImageAction");
 
-    ParamImageNode* result = (ParamImageNode*)_calloc(1, sizeof(ParamImageNode));
-    result->string = typeUrl;
+    ParamMediaNode* result = (ParamMediaNode*)_calloc(1, sizeof(ParamMediaNode));
+    result->type = type;
+    result->value = value;
 
     return result;
 }
 
 // For text
-ParamListTextNode* ParamListTextAddParamAction(ParamListTextNode* listNode, ParamTextNode* textNode) {
+ParamListTextNode* ParamListTextAddParamAction(boolean_t isEmpty, ParamListTextNode* listNode, ParamTextNode* value) {
     LogDebug("\tParamListTextMultipleAction");
 
     ParamListTextNode* result = (ParamListTextNode*)_calloc(1, sizeof(ParamListTextNode));
+    result->isEmpty = isEmpty;
     result->tail = listNode;
-    result->paramTextNode = textNode;
+    result->parameter = value;
 
     return result;
 }

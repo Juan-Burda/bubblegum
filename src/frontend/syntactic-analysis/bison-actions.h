@@ -33,8 +33,11 @@ LayoutNode* LayoutAction(layout_t layout, LayoutCompoundStatementNode* compoundS
 /* Shapes */
 ShapeNode* ShapeAction(ShapeType type, ParamListShapeNode* paramList);
 
-/* Vectors */
-VectorNode* VectorAction(VectorType type, VectorUnion value);
+/* Media */
+MediaNode* MediaAction(MediaType type, ParamListMediaNode* paramList);
+
+/* Text */
+TextNode* TextAction(ParamListTextNode* paramList);
 
 /* Parameters */
 // For animations
@@ -46,11 +49,11 @@ ParamShapeNode* ParamShapeAction(ParameterType type, ParamShapeUnion value);
 ParamListShapeNode* ParamListShapeAddParamAction(boolean_t isEmpty, ParamListShapeNode* listNode, ParamShapeNode* value);
 
 // For vectors
-ParamListImageNode* ParamListImageAddParamAction(ParamListImageNode* listNode, ParamImageNode* imageNode);
-ParamImageNode* ParamImageAction(char* typeUrl);
+ParamMediaNode* ParamMediaAction(ParameterType type, ParamMediaUnion value);
+ParamListMediaNode* ParamListMediaAddParamAction(boolean_t isEmpty, ParamListMediaNode* listNode, ParamMediaNode* value);
 
-ParamListTextNode* ParamListTextAddParamAction(ParamListTextNode* listNode, ParamTextNode* textNode);
 ParamTextNode* ParamTextAction(ParameterType type, ParamTextUnion value);
+ParamListTextNode* ParamListTextAddParamAction(boolean_t isEmpty, ParamListTextNode* listNode, ParamTextNode* textNode);
 
 // For data types
 ParamTypeColorNode* ParamTypeColorAction(char* typeColor);

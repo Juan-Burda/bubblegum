@@ -34,11 +34,10 @@ typedef struct FunctionListNode FunctionListNode;
 typedef struct FunctionNode FunctionNode;
 
 typedef struct ParamListAnimationNode ParamListAnimationNode;
-
 typedef struct ParamListShapeNode ParamListShapeNode;
-
-typedef struct ParamListImageNode ParamListImageNode;
+typedef struct ParamListMediaNode ParamListMediaNode;
 typedef struct ParamListTextNode ParamListTextNode;
+
 typedef struct ParamTypePointsNode ParamTypePointsNode;
 
 /**
@@ -97,18 +96,23 @@ struct ParamListShapeNode {
     ParamListShapeNode* tail;
 };
 
-/* Vector nodes */
+/* Media nodes */
 // Images
-typedef struct {
+typedef union {
     char* string;
-} ParamImageNode;
+} ParamMediaUnion;
+typedef struct {
+    ParameterType type;
+    ParamMediaUnion value;
+} ParamMediaNode;
 
-struct ParamListImageNode {
-    ParamImageNode* paramImageNode;
-    ParamListImageNode* tail;
+struct ParamListMediaNode {
+    boolean_t isEmpty;
+    ParamMediaNode* parameter;
+    ParamListMediaNode* tail;
 };
 
-// Text
+/* Text Node */
 typedef union {
     int integer;
     fontfamily_t fontFamily;
@@ -122,7 +126,8 @@ typedef struct {
 } ParamTextNode;
 
 struct ParamListTextNode {
-    ParamTextNode* paramTextNode;
+    boolean_t isEmpty;
+    ParamTextNode* parameter;
     ParamListTextNode* tail;
 };
 
@@ -175,19 +180,19 @@ typedef struct {
     ParamListShapeNode* paramList;
 } ShapeNode;
 
-/** Vectors */
-typedef union {
-    ParamListTextNode* textParamList;
-    ParamListImageNode* imageParamList;
-} VectorUnion;
+/** Media */
 typedef enum {
-    V_TEXT,
-    V_IMAGE
-} VectorType;
+    M_IMAGE
+} MediaType;
 typedef struct {
-    VectorType type;
-    VectorUnion value;
-} VectorNode;
+    MediaType type;
+    ParamListMediaNode* paramList;
+} MediaNode;
+
+/** Text */
+typedef struct {
+    ParamListTextNode* paramList;
+} TextNode;
 
 /** Others */
 // Function
@@ -195,13 +200,15 @@ typedef union {
     AnimationNode* animationNode;
     LayoutNode* layoutNode;
     ShapeNode* shapeNode;
-    VectorNode* vectorNode;
+    MediaNode* mediaNode;
+    TextNode* textNode;
 } FunctionUnion;
 typedef enum {
     F_ANIMATION,
     F_LAYOUT,
     F_SHAPE,
-    F_VECTOR
+    F_MEDIA,
+    F_TEXT
 } FunctionType;
 struct FunctionNode {
     FunctionType type;
