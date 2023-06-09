@@ -24,7 +24,7 @@ AssignNode* AssignAction(char* varname, FunctionNode* function);
 
 /* Animations */
 AnimationCompoundStatementNode* AnimationCompoundStatementAction(AnimationCompoundStatementType type, AnimationCompoundStatementUnion value);
-AnimationNode* AnimationAction(AnimationType type, ParamListAnimationNode* paramList);
+AnimationNode* AnimationAction(AnimationType type, ParamListAnimationNode* paramList, AnimationCompoundStatementNode* compoundStatement);
 
 /* Layouts */
 LayoutCompoundStatementNode* LayoutCompoundStatementAction(FunctionListNode* listNode);

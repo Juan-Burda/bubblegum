@@ -113,12 +113,13 @@ AnimationCompoundStatementNode* AnimationCompoundStatementAction(AnimationCompou
     return result;
 }
 
-AnimationNode* AnimationAction(AnimationType type, ParamListAnimationNode* paramList) {
+AnimationNode* AnimationAction(AnimationType type, ParamListAnimationNode* paramList, AnimationCompoundStatementNode* compoundStatement) {
     LogDebug("\tAnimationNodeAction");
 
     AnimationNode* result = (AnimationNode*)_calloc(1, sizeof(AnimationNode));
     result->type = type;
     result->paramList = paramList;
+    result->compoundStatement = compoundStatement;
 
     ParameterMap* map = NULL;
     stAddParametersToAnimation(&map, result);

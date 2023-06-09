@@ -157,6 +157,7 @@ typedef enum {
 typedef struct {
     AnimationType type;
     ParamListAnimationNode* paramList;
+    AnimationCompoundStatementNode* compoundStatement;
 } AnimationNode;
 
 /** Layouts */

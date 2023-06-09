@@ -191,13 +191,13 @@ functionList: function COMMA functionList		{ $$ = FunctionListAction(FL_FUNCTION
 
 assign: VARNAME ASSIGN function 		{ $$ = AssignAction($1, $3); }
 
-animation: TRANSLATE_X OPEN_PARENTHESIS paramListTranslate CLOSE_PARENTHESIS animationCompoundStatement		{ $$ = AnimationAction(A_TRANSLATE_X,	$3); }
-	| TRANSLATE_Y OPEN_PARENTHESIS paramListTranslate CLOSE_PARENTHESIS animationCompoundStatement			{ $$ = AnimationAction(A_TRANSLATE_Y,	$3); }
-	| OPACITY OPEN_PARENTHESIS paramListOpacity CLOSE_PARENTHESIS animationCompoundStatement				{ $$ = AnimationAction(A_OPACITY, 		$3); }
-	| RECOLOR OPEN_PARENTHESIS paramListRecolor CLOSE_PARENTHESIS animationCompoundStatement				{ $$ = AnimationAction(A_RECOLOR, 		$3); }
-	| ROTATE OPEN_PARENTHESIS paramListRotate CLOSE_PARENTHESIS animationCompoundStatement					{ $$ = AnimationAction(A_ROTATE, 		$3); }
-	| RESIZE OPEN_PARENTHESIS paramListResize CLOSE_PARENTHESIS animationCompoundStatement					{ $$ = AnimationAction(A_RESIZE, 		$3); }
-	| MORPH OPEN_PARENTHESIS paramListMorph CLOSE_PARENTHESIS animationCompoundStatement					{ $$ = AnimationAction(A_MORPH, 		$3); }
+animation: TRANSLATE_X OPEN_PARENTHESIS paramListTranslate CLOSE_PARENTHESIS animationCompoundStatement		{ $$ = AnimationAction(A_TRANSLATE_X,	$3,	$5); }
+	| TRANSLATE_Y OPEN_PARENTHESIS paramListTranslate CLOSE_PARENTHESIS animationCompoundStatement			{ $$ = AnimationAction(A_TRANSLATE_Y,	$3,	$5); }
+	| OPACITY OPEN_PARENTHESIS paramListOpacity CLOSE_PARENTHESIS animationCompoundStatement				{ $$ = AnimationAction(A_OPACITY, 		$3,	$5); }
+	| RECOLOR OPEN_PARENTHESIS paramListRecolor CLOSE_PARENTHESIS animationCompoundStatement				{ $$ = AnimationAction(A_RECOLOR, 		$3,	$5); }
+	| ROTATE OPEN_PARENTHESIS paramListRotate CLOSE_PARENTHESIS animationCompoundStatement					{ $$ = AnimationAction(A_ROTATE, 		$3,	$5); }
+	| RESIZE OPEN_PARENTHESIS paramListResize CLOSE_PARENTHESIS animationCompoundStatement					{ $$ = AnimationAction(A_RESIZE, 		$3,	$5); }
+	| MORPH OPEN_PARENTHESIS paramListMorph CLOSE_PARENTHESIS animationCompoundStatement					{ $$ = AnimationAction(A_MORPH, 		$3,	$5); }
 
 animationCompoundStatement: OPEN_CURLY function CLOSE_CURLY		{ $$ = AnimationCompoundStatementAction(CS_A_FUNCTION,	(AnimationCompoundStatementUnion) { .functionNode = $2}); }
 	| OPEN_CURLY VARNAME CLOSE_CURLY 							{ $$ = AnimationCompoundStatementAction(CS_A_VARNAME,	(AnimationCompoundStatementUnion) { .varname = $2}); }
