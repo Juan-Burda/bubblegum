@@ -28,7 +28,7 @@ const char* stringifyShapeType(ShapeType type) {
     }
 }
 
-const char* stringifyParameterType(ParameterType type) {
+const char* stringifyParameterType(parameter_t type) {
     switch (type) {
         STRINGIFY_ENUM_CASE(PA_A_ALTERNATE)
         STRINGIFY_ENUM_CASE(PA_A_LOOP)

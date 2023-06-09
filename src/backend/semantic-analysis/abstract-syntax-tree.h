@@ -2,7 +2,6 @@
 #define ABSTRACT_SYNTAX_TREE_HEADER
 
 #include "../../utils/data-types.h"
-#include "../../utils/global-types.h"
 
 /**
  * In order to standarize enum names we follow the following pattern
@@ -69,7 +68,7 @@ typedef union {
     ParamTypePointsNode* points;
 } ParamAnimationUnion;
 typedef struct {
-    ParameterType type;
+    parameter_t type;
     ParamAnimationUnion value;
 } ParamAnimationNode;
 
@@ -86,7 +85,7 @@ typedef union {
     int integer;
 } ParamShapeUnion;
 typedef struct {
-    ParameterType type;
+    parameter_t type;
     ParamShapeUnion value;
 } ParamShapeNode;
 
@@ -102,7 +101,7 @@ typedef union {
     char* string;
 } ParamMediaUnion;
 typedef struct {
-    ParameterType type;
+    parameter_t type;
     ParamMediaUnion value;
 } ParamMediaNode;
 
@@ -121,7 +120,7 @@ typedef union {
     ParamTypeColorNode* color;
 } ParamTextUnion;
 typedef struct {
-    ParameterType type;
+    parameter_t type;
     ParamTextUnion value;
 } ParamTextNode;
 

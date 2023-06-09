@@ -180,7 +180,6 @@ TextNode* TextAction(ParamListTextNode* paramList) {
     LogDebug("\tTextNodeAction");
 
     TextNode* result = (TextNode*)_calloc(1, sizeof(TextNode));
-    result->paramList = paramList;
 
     ParameterMap* map = NULL;
     stAddParametersToText(&map, result);
@@ -195,7 +194,7 @@ TextNode* TextAction(ParamListTextNode* paramList) {
  * 	- We need to add a new paramter -> this is done in ParamList<sth>Node
  */
 /* Animation */
-ParamAnimationNode* ParamAnimationAction(ParameterType type, ParamAnimationUnion value) {
+ParamAnimationNode* ParamAnimationAction(parameter_t type, ParamAnimationUnion value) {
     LogDebug("\tParamAnimationAction");
 
     ParamAnimationNode* result = (ParamAnimationNode*)_calloc(1, sizeof(ParamAnimationNode));
@@ -217,7 +216,7 @@ ParamListAnimationNode* ParamListAnimationAddParamAction(boolean_t isEmpty, Para
 }
 
 /* Shapes */
-ParamShapeNode* ParamShapeAction(ParameterType type, ParamShapeUnion value) {
+ParamShapeNode* ParamShapeAction(parameter_t type, ParamShapeUnion value) {
     LogDebug("\tParamShapeAction");
 
     ParamShapeNode* result = (ParamShapeNode*)_calloc(1, sizeof(ParamShapeNode));
@@ -251,7 +250,7 @@ ParamListMediaNode* ParamListMediaAddParamAction(boolean_t isEmpty, ParamListMed
     return result;
 }
 
-ParamMediaNode* ParamMediaAction(ParameterType type, ParamMediaUnion value) {
+ParamMediaNode* ParamMediaAction(parameter_t type, ParamMediaUnion value) {
     LogDebug("\tParamImageAction");
 
     ParamMediaNode* result = (ParamMediaNode*)_calloc(1, sizeof(ParamMediaNode));
@@ -273,7 +272,7 @@ ParamListTextNode* ParamListTextAddParamAction(boolean_t isEmpty, ParamListTextN
     return result;
 }
 
-ParamTextNode* ParamTextAction(ParameterType type, ParamTextUnion value) {
+ParamTextNode* ParamTextAction(parameter_t type, ParamTextUnion value) {
     LogDebug("\tParamTextAction");
 
     ParamTextNode* result = (ParamTextNode*)_calloc(1, sizeof(ParamTextNode));

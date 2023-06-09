@@ -41,18 +41,18 @@ TextNode* TextAction(ParamListTextNode* paramList);
 
 /* Parameters */
 // For animations
-ParamAnimationNode* ParamAnimationAction(ParameterType type, ParamAnimationUnion value);
+ParamAnimationNode* ParamAnimationAction(parameter_t type, ParamAnimationUnion value);
 ParamListAnimationNode* ParamListAnimationAddParamAction(boolean_t isEmpty, ParamListAnimationNode* listNode, ParamAnimationNode* value);
 
 // For shapes
-ParamShapeNode* ParamShapeAction(ParameterType type, ParamShapeUnion value);
+ParamShapeNode* ParamShapeAction(parameter_t type, ParamShapeUnion value);
 ParamListShapeNode* ParamListShapeAddParamAction(boolean_t isEmpty, ParamListShapeNode* listNode, ParamShapeNode* value);
 
 // For vectors
-ParamMediaNode* ParamMediaAction(ParameterType type, ParamMediaUnion value);
+ParamMediaNode* ParamMediaAction(parameter_t type, ParamMediaUnion value);
 ParamListMediaNode* ParamListMediaAddParamAction(boolean_t isEmpty, ParamListMediaNode* listNode, ParamMediaNode* value);
 
-ParamTextNode* ParamTextAction(ParameterType type, ParamTextUnion value);
+ParamTextNode* ParamTextAction(parameter_t type, ParamTextUnion value);
 ParamListTextNode* ParamListTextAddParamAction(boolean_t isEmpty, ParamListTextNode* listNode, ParamTextNode* textNode);
 
 // For data types

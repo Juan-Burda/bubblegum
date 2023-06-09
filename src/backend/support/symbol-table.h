@@ -1,7 +1,7 @@
 #ifndef _SYMBOL_TABLE_H_
 #define _SYMBOL_TABLE_H_
 
-#include "../../utils/global-types.h"
+#include "../../utils/data-types.h"
 #include "../semantic-analysis/abstract-syntax-tree.h"
 #include "uthash.h"
 
@@ -17,7 +17,7 @@ typedef union {
     char* points;
 } ParameterValue;
 typedef struct {
-    ParameterType type;  // key
+    parameter_t type;  // key
     ParameterValue value;
 
     UT_hash_handle hh;  // make the struct hashable

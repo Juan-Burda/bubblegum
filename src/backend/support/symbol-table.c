@@ -8,7 +8,6 @@
 #include "logger.h"
 #include "shared.h"
 
-// TODO: variables anonimas? tipo si no le asignas ningun valor a la variable que pasa
 // TODO: no abortar por key duplicada
 
 char* convertPointsToString(ParamTypePointsNode* head);
@@ -51,7 +50,7 @@ int stAddParametersToAnimation(ParameterMap** map, AnimationNode* node) {
     ParameterMap* currParam;
     ParamListAnimationNode* currNode = head;
 
-    ParameterType paramType;
+    parameter_t paramType;
     while (currNode != NULL) {
         paramType = currNode->parameter->type;
 
@@ -127,7 +126,7 @@ int stAddParametersToShape(ParameterMap** map, ShapeNode* node) {
     ParameterMap* currParam;
     ParamListShapeNode* currNode = head;
 
-    ParameterType paramType;
+    parameter_t paramType;
     while (currNode != NULL) {
         paramType = currNode->parameter->type;
 
@@ -190,7 +189,7 @@ int stAddParametersToMedia(ParameterMap** map, MediaNode* node) {
     ParameterMap* currParam;
     ParamListMediaNode* currNode = head;
 
-    ParameterType paramType;
+    parameter_t paramType;
     while (currNode != NULL) {
         paramType = currNode->parameter->type;
 
@@ -240,7 +239,7 @@ int stAddParametersToText(ParameterMap** map, TextNode* node) {
     ParameterMap* currParam;
     ParamListTextNode* currNode = head;
 
-    ParameterType paramType;
+    parameter_t paramType;
     while (currNode != NULL) {
         paramType = currNode->parameter->type;
 

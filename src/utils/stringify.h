@@ -4,7 +4,7 @@
 #include "../backend/semantic-analysis/abstract-syntax-tree.h"
 
 const char* stringifyAnimationType(AnimationType type);
-const char* stringifyParameterType(ParameterType type);
+const char* stringifyParameterType(parameter_t type);
 const char* stringifyShapeType(ShapeType type);
 const char* stringifyMediaType(MediaType type);
 const char* stringifyFontStyle(fontstyle_t style);
