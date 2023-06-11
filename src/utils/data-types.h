@@ -38,6 +38,11 @@ typedef enum {
     LINE_THROUGH
 } textdeco_t;
 
+#define PARAM_IS_STRING(type)   (   (type) == PA_A_ALTERNATE    || (type) == PA_A_LOOP || (type) == PA_M_POINT  \
+                                ||  (type) == PS_S_BORDER_COLOR || (type) == PS_S_FILL_COLOR                    \
+                                ||  (type) == PM_I_URL                                                          \
+                                ||  (type) == PT_T_BACKGROUND_COLOR)
+
 typedef enum {
     PA_A_ALTERNATE,
     PA_A_LOOP,

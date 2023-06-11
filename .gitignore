@@ -6,6 +6,7 @@ cache/
 log/
 obj/
 node_modules/
+.vscode/
 
 # Files:
 *.csproj.user

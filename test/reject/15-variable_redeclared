@@ -1,0 +1,3 @@
+myvar = Rectangle()
+
+myvar = Ellipse()

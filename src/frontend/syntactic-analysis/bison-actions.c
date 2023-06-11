@@ -77,6 +77,8 @@ AssignNode* AssignAction(char* varname, FunctionNode* function) {
     result->varname = varname;
     result->function = function;
 
+    stAddVariable(varname, function);  // add variable to symbol table
+
     return result;
 }
 

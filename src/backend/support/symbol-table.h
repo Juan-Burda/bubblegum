@@ -18,9 +18,8 @@ typedef union {
 } VariableType;
 
 typedef struct {
-    char id[VARNAME_MAX_LENGTH];  // key
-    VariableType type;
-    ParameterMap* parameters;
+    char* id;  // key
+    FunctionNode* function;
 
     UT_hash_handle hh;  // make the struct hashable
 } SymbolTable;
@@ -28,7 +27,7 @@ typedef struct {
 void stInit();
 void stDestroy();
 
-int stAddVariable(char varname[VARNAME_MAX_LENGTH], VariableType type, ParameterMap** parameters);
+int stAddVariable(char* varname, FunctionNode* function);
 int stAddParametersToAnimation(ParameterMap** map, ParamListAnimationNode* paramList);
 int stAddParametersToShape(ParameterMap** map, ParamListShapeNode* paramList);
 int stAddParametersToMedia(ParameterMap** map, ParamListMediaNode* paramList);

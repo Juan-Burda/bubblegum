@@ -28,13 +28,41 @@ void stDestroyParameters(ParameterMap* parameters) {
 
 void stDestroy() {
     SymbolTable *currSymbol, *tmp;
+    LogDebug("Destroying symbol table...");
 
     HASH_ITER(hh, state.symbolTable, currSymbol, tmp) {
         HASH_DEL(state.symbolTable, currSymbol);
-        stDestroyParameters(currSymbol->parameters);
-
         free(currSymbol);
     }
+    LogDebug("Memory freed...");
+}
+
+int stAddVariable(char* varname, FunctionNode* function) {
+    LogDebug("\t\tSymbol Table: Add variable [%s]", varname);
+
+    int len;
+    if ((len = strlen(varname)) > VARNAME_MAX_LENGTH) {
+        LogError("\t\tVariable name too long. Max length is: %d", VARNAME_MAX_LENGTH);
+        LogError("\t\tAborting...");
+        exit(EXIT_FAILURE);
+    }
+
+    SymbolTable* entry;
+    HASH_FIND_STR(state.symbolTable, varname, entry);
+    if (entry != NULL) {
+        LogError("\t\tVariable [%s] redeclared, aborting...", varname);
+        exit(EXIT_FAILURE);
+    }
+
+    entry = (SymbolTable*)_malloc(sizeof(SymbolTable));
+    entry->id = (char*)_malloc((len + 1) * sizeof(char));  // Allocate memory for id
+    strcpy(entry->id, varname);
+    entry->function = function;
+
+    HASH_ADD_STR(state.symbolTable, id, entry);
+
+    LogDebug("\t\tSymbol Table: Successfully added variable [%s]", varname);
+    return 0;
 }
 
 // add params to symbol table for animations
