@@ -38,10 +38,10 @@ void stDestroy() {
 }
 
 // add params to symbol table for animations
-int stAddParametersToAnimation(ParameterMap** map, AnimationNode* node) {
-    LogDebug("\t\tSymbol Table: Add Animation [%s] parameters", stringifyAnimationType(node->type));
+int stAddParametersToAnimation(ParameterMap** map, ParamListAnimationNode* paramList) {
+    LogDebug("\t\tSymbol Table: Add Animation parameters");
 
-    ParamListAnimationNode* head = node->paramList;
+    ParamListAnimationNode* head = paramList;
     if (head == NULL || head->isEmpty) {
         LogDebug("\t\tSymbol Table: Found no parameters");
         return 0;
@@ -114,10 +114,10 @@ int stAddParametersToAnimation(ParameterMap** map, AnimationNode* node) {
 }
 
 // add params to symbol table for shapes
-int stAddParametersToShape(ParameterMap** map, ShapeNode* node) {
-    LogDebug("\t\tSymbol Table: Add Shape [%s] parameters", stringifyShapeType(node->type));
+int stAddParametersToShape(ParameterMap** map, ParamListShapeNode* paramList) {
+    LogDebug("\t\tSymbol Table: Add Shape parameters");
 
-    ParamListShapeNode* head = node->paramList;
+    ParamListShapeNode* head = paramList;
     if (head == NULL || head->isEmpty) {
         LogDebug("\t\tSymbol Table: Found no Shape parameters");
         return 0;
@@ -177,10 +177,10 @@ int stAddParametersToShape(ParameterMap** map, ShapeNode* node) {
     return 0;
 }
 
-int stAddParametersToMedia(ParameterMap** map, MediaNode* node) {
-    LogDebug("\t\tSymbol Table: Add Media [%s] parameters", stringifyMediaType(node->type));
+int stAddParametersToMedia(ParameterMap** map, ParamListMediaNode* paramList) {
+    LogDebug("\t\tSymbol Table: Add Media parameters");
 
-    ParamListMediaNode* head = node->paramList;
+    ParamListMediaNode* head = paramList;
     if (head == NULL || head->isEmpty) {
         LogDebug("\t\tSymbol Table: Found no Media parameters");
         return 0;
@@ -227,10 +227,10 @@ int stAddParametersToMedia(ParameterMap** map, MediaNode* node) {
     return 0;
 }
 
-int stAddParametersToText(ParameterMap** map, TextNode* node) {
+int stAddParametersToText(ParameterMap** map, ParamListTextNode* paramList) {
     LogDebug("\t\tSymbol Table: Add Text parameters");
 
-    ParamListTextNode* head = node->paramList;
+    ParamListTextNode* head = paramList;
     if (head == NULL || head->isEmpty) {
         LogDebug("\t\tSymbol Table: Found no Text parameters");
         return 0;

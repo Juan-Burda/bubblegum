@@ -118,11 +118,12 @@ AnimationNode* AnimationAction(AnimationType type, ParamListAnimationNode* param
 
     AnimationNode* result = (AnimationNode*)_calloc(1, sizeof(AnimationNode));
     result->type = type;
-    result->paramList = paramList;
     result->compoundStatement = compoundStatement;
 
     ParameterMap* map = NULL;
-    stAddParametersToAnimation(&map, result);
+    stAddParametersToAnimation(&map, paramList);
+
+    result->paramMap = map;
 
     return result;
 }
@@ -153,10 +154,11 @@ ShapeNode* ShapeAction(ShapeType type, ParamListShapeNode* paramList) {
 
     ShapeNode* result = (ShapeNode*)_calloc(1, sizeof(ShapeNode));
     result->type = type;
-    result->paramList = paramList;
 
     ParameterMap* map = NULL;
-    stAddParametersToShape(&map, result);
+    stAddParametersToShape(&map, paramList);
+
+    result->paramMap = map;
 
     return result;
 }
@@ -167,10 +169,11 @@ MediaNode* MediaAction(MediaType type, ParamListMediaNode* paramList) {
 
     MediaNode* result = (MediaNode*)_calloc(1, sizeof(MediaNode));
     result->type = type;
-    result->paramList = paramList;
 
     ParameterMap* map = NULL;
-    stAddParametersToMedia(&map, result);
+    stAddParametersToMedia(&map, paramList);
+
+    result->paramMap = map;
 
     return result;
 }
@@ -182,7 +185,9 @@ TextNode* TextAction(ParamListTextNode* paramList) {
     TextNode* result = (TextNode*)_calloc(1, sizeof(TextNode));
 
     ParameterMap* map = NULL;
-    stAddParametersToText(&map, result);
+    stAddParametersToText(&map, paramList);
+
+    result->paramMap = map;
 
     return result;
 }
@@ -237,7 +242,7 @@ ParamListShapeNode* ParamListShapeAddParamAction(boolean_t isEmpty, ParamListSha
     return result;
 }
 
-/* Vectors */
+/* Media */
 // For images
 ParamListMediaNode* ParamListMediaAddParamAction(boolean_t isEmpty, ParamListMediaNode* listNode, ParamMediaNode* value) {
     LogDebug("\tParamListImageAddParamAction");
@@ -260,7 +265,7 @@ ParamMediaNode* ParamMediaAction(parameter_t type, ParamMediaUnion value) {
     return result;
 }
 
-// For text
+/* Text */
 ParamListTextNode* ParamListTextAddParamAction(boolean_t isEmpty, ParamListTextNode* listNode, ParamTextNode* value) {
     LogDebug("\tParamListTextMultipleAction");
 

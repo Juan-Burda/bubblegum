@@ -2,6 +2,7 @@
 #define ABSTRACT_SYNTAX_TREE_HEADER
 
 #include "../../utils/data-types.h"
+#include "../../utils/parameter-map.h"
 
 /**
  * In order to standarize enum names we follow the following pattern
@@ -155,7 +156,7 @@ typedef enum {
 } AnimationType;
 typedef struct {
     AnimationType type;
-    ParamListAnimationNode* paramList;
+    ParameterMap* paramMap;
     AnimationCompoundStatementNode* compoundStatement;
 } AnimationNode;
 
@@ -177,7 +178,7 @@ typedef enum {
 } ShapeType;
 typedef struct {
     ShapeType type;
-    ParamListShapeNode* paramList;
+    ParameterMap* paramMap;
 } ShapeNode;
 
 /** Media */
@@ -186,12 +187,12 @@ typedef enum {
 } MediaType;
 typedef struct {
     MediaType type;
-    ParamListMediaNode* paramList;
+    ParameterMap* paramMap;
 } MediaNode;
 
 /** Text */
 typedef struct {
-    ParamListTextNode* paramList;
+    ParameterMap* paramMap;
 } TextNode;
 
 /** Others */
