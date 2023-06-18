@@ -6,7 +6,7 @@
 #include "../../utils/parameter-map.h"
 #include "../semantic-analysis/abstract-syntax-tree.h"
 
-#define VARNAME_MAX_LENGTH 64
+#define VARNAME_MAX_LENGTH 32
 
 // we know the type bc of the enum, so now we want to know how to read it
 typedef union {

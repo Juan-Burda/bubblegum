@@ -8,16 +8,6 @@
 // Estado de la aplicación.
 CompilerState state;
 
-void printList(listADT list) {
-    LogInfo("imprimiendo lista");
-
-    toBegin(list);
-    while (hasNext(list)) {
-        char* curr = next(list);
-        LogDebug("%s", curr);
-    }
-}
-
 // Punto de entrada principal del compilador.
 const int main(const int argumentCount, const char** arguments) {
     // Inicializar estado de la aplicación.
@@ -47,8 +37,8 @@ const int main(const int argumentCount, const char** arguments) {
             // La variable "succeed" es la que setea Bison al identificar el símbolo
             // inicial de la gramática satisfactoriamente.
             if (state.succeed) {
-                LogInfo("La compilacion fue exitosa.");
                 Generator(state.result);
+                LogInfo("La compilacion fue exitosa.");
             } else {
                 LogError("Se produjo un error en la aplicacion.");
                 return -1;
@@ -63,9 +53,6 @@ const int main(const int argumentCount, const char** arguments) {
         default:
             LogError("Error desconocido mientras se ejecutaba el analizador Bison (codigo %d).", result);
     }
-    // TODO: sacar, solo para debugging!!
-    printList(state.errorList);
-    printList(state.warningList);
 
     stDestroy();
     freeList(state.errorList);

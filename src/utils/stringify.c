@@ -111,3 +111,13 @@ const char* stringifyTextDecoration(textdeco_t deco) {
             return UNKNOWN;
     }
 }
+
+const char* stringifyProblemType(ProblemType problem) {
+    switch (problem) {
+        STRINGIFY_ENUM_CASE(WARNING);
+        STRINGIFY_ENUM_CASE(ERROR);
+
+        default:
+            return UNKNOWN;
+    }
+}

@@ -5,8 +5,8 @@
 #include "../utils/wrapper-functions.h"
 
 typedef struct TNode {
-    char* elem;
-    struct TNode* next;  // Apunta al siguiente elemento agregado (o a NULL si es le utlimo)
+    elemType elem;
+    struct TNode* next;  // if NULL then last element
 } TNode;
 
 typedef TNode* TList;
@@ -21,16 +21,12 @@ listADT newList(void) {
     return _calloc(1, sizeof(listCDT));
 }
 
-static TList addRec(TList curr, char* elem, listADT list) {
+static TList addRec(TList curr, elemType elem, listADT list) {
     if (curr == NULL) {
         // If its the end of the list, we add the new element
-        TList new = _malloc(sizeof(TNode));
+        TList new = _calloc(1, sizeof(TNode));
+        new->elem = elem;
         new->next = NULL;
-
-        int len = strlen(elem);
-        new->elem = _calloc(len, sizeof(char));
-        strcpy(new->elem, elem);
-
         list->size += 1;
 
         return new;
@@ -40,15 +36,12 @@ static TList addRec(TList curr, char* elem, listADT list) {
     return curr;
 }
 
-void add(listADT list, char* elem) {
+void add(listADT list, elemType elem) {
     if (list->first == NULL) {
         // If its the first node, create node and initialize fields
-        list->first = _calloc(1, sizeof(char*));
-
-        int len = strlen(elem);
-        list->first->elem = _calloc(len, sizeof(char));
-        strcpy(list->first->elem, elem);
-
+        list->first = _calloc(1, sizeof(TNode));
+        list->first->elem = elem;
+        list->first->next = NULL;
         list->size += 1;
 
         return;
@@ -67,13 +60,13 @@ int hasNext(listADT list) {
     return list->current != NULL;
 }
 
-char* next(listADT list) {
+elemType next(listADT list) {
     if (!hasNext(list)) {
         LogError("No such element exists, aborting...");
         exit(EXIT_FAILURE);
     }
 
-    char* elem = list->current->elem;
+    elemType elem = list->current->elem;
     list->current = list->current->next;
     return elem;
 }
@@ -83,11 +76,25 @@ static void freeListRec(TList list) {
         return;
 
     freeListRec(list->next);
-    free(list->elem);
+    free(list->elem->message);  // depending on elemType may be not necessary
+    free(list->elem);           // depending on elemType may be not necessary
     free(list);
 }
 
 void freeList(listADT list) {
     freeListRec(list->first);
     free(list);
+}
+
+int getSize(listADT list) {
+    return list->size;
+}
+
+// TODO: borrar!
+void printList(listADT list, char* (*getFormat)(ProblemContext*)) {
+    toBegin(list);
+    while (hasNext(list)) {
+        elemType curr = next(list);
+        printf("%s", getFormat(curr));
+    }
 }

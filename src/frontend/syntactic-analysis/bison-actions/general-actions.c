@@ -3,6 +3,7 @@
 #include <string.h>
 #include "../../../backend/support/logger.h"
 #include "../../../backend/support/symbol-table.h"
+#include "../../../libs/list-adt.h"
 #include "../../../utils/wrapper-functions.h"
 #include "bison-actions.h"
 
@@ -46,6 +47,13 @@ Program* ProgramAction(ExpressionNode* expression) {
      * variable es un simple entero, en lugar de un nodo.
      */
     state.result = 0;
+    if (getSize(state.errorList) > 0) {
+        state.succeed = false;
+        printList(state.errorList, problemToString);
+    } else {
+        state.succeed = true;
+        printList(state.warningList, problemToString);
+    }
 
     return result;
 }

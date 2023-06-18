@@ -32,7 +32,7 @@ void stDestroy() {
         HASH_DEL(state.symbolTable, currSymbol);
         free(currSymbol);
     }
-    LogDebug("Memory freed...");
+    LogDebug("Memory freed");
 }
 
 int stAddVariable(char* varname, FunctionNode* function) {
@@ -41,9 +41,9 @@ int stAddVariable(char* varname, FunctionNode* function) {
     int len;
     if ((len = strlen(varname)) > VARNAME_MAX_LENGTH) {
         LogError("\t\tVariable name too long. Max length is: %d", VARNAME_MAX_LENGTH);
-        LogError("\t\tAborting...");
 
-        add(state.errorList, ERROR_VNAMETOOLONG);
+        ProblemContext* context = createProblem(ERROR, ERROR_VTOOLONG, yylineno);
+        add(state.errorList, context);
 
         return 1;
     }
@@ -52,7 +52,11 @@ int stAddVariable(char* varname, FunctionNode* function) {
     HASH_FIND_STR(state.symbolTable, varname, entry);
     if (entry != NULL) {
         LogError("\t\tVariable [%s] redeclared, aborting...", varname);
-        exit(EXIT_FAILURE);
+
+        ProblemContext* context = createProblem(ERROR, ERROR_VREDECLARED, yylineno);
+        add(state.errorList, context);
+
+        return 1;
     }
 
     entry = (SymbolTable*)_malloc(sizeof(SymbolTable));
@@ -73,6 +77,10 @@ int stAddParametersToAnimation(ParameterMap** map, ParamListAnimationNode* param
     ParamListAnimationNode* head = paramList;
     if (head == NULL || head->isEmpty) {
         LogDebug("\t\tFound no parameters");
+
+        ProblemContext* context = createProblem(WARNING, WARN_NOPARAM, yylineno);
+        add(state.warningList, context);
+
         return 0;
     }
 
@@ -86,7 +94,11 @@ int stAddParametersToAnimation(ParameterMap** map, ParamListAnimationNode* param
         HASH_FIND_INT(*map, &paramType, currParam);
         if (currParam != NULL) {
             LogError("\t\tCannot reassign parameters, aborting...");
-            exit(EXIT_FAILURE);
+
+            ProblemContext* context = createProblem(ERROR, ERROR_PREASSIGNED, yylineno);
+            add(state.errorList, context);
+
+            return 1;
         }
 
         currParam = (ParameterMap*)_malloc(sizeof(ParameterMap));
@@ -149,6 +161,10 @@ int stAddParametersToShape(ParameterMap** map, ParamListShapeNode* paramList) {
     ParamListShapeNode* head = paramList;
     if (head == NULL || head->isEmpty) {
         LogDebug("\t\tFound no Shape parameters");
+
+        ProblemContext* context = createProblem(WARNING, WARN_NOPARAM, yylineno);
+        add(state.warningList, context);
+
         return 0;
     }
 
@@ -162,7 +178,11 @@ int stAddParametersToShape(ParameterMap** map, ParamListShapeNode* paramList) {
         HASH_FIND_INT(*map, &paramType, currParam);
         if (currParam != NULL) {
             LogError("\t\tCannot reassign parameters, aborting...");
-            exit(EXIT_FAILURE);
+
+            ProblemContext* context = createProblem(ERROR, ERROR_PREASSIGNED, yylineno);
+            add(state.errorList, context);
+
+            return 1;
         }
 
         currParam = (ParameterMap*)_malloc(sizeof(ParameterMap));
@@ -212,6 +232,10 @@ int stAddParametersToMedia(ParameterMap** map, ParamListMediaNode* paramList) {
     ParamListMediaNode* head = paramList;
     if (head == NULL || head->isEmpty) {
         LogDebug("\t\tFound no Media parameters");
+
+        ProblemContext* context = createProblem(WARNING, WARN_NOPARAM, yylineno);
+        add(state.warningList, context);
+
         return 0;
     }
 
@@ -225,7 +249,11 @@ int stAddParametersToMedia(ParameterMap** map, ParamListMediaNode* paramList) {
         HASH_FIND_INT(*map, &paramType, currParam);
         if (currParam != NULL) {
             LogError("\t\tCannot reassign parameters, aborting...");
-            exit(EXIT_FAILURE);
+
+            ProblemContext* context = createProblem(ERROR, ERROR_PREASSIGNED, yylineno);
+            add(state.errorList, context);
+
+            return 1;
         }
 
         currParam = (ParameterMap*)_malloc(sizeof(ParameterMap));
@@ -262,6 +290,10 @@ int stAddParametersToText(ParameterMap** map, ParamListTextNode* paramList) {
     ParamListTextNode* head = paramList;
     if (head == NULL || head->isEmpty) {
         LogDebug("\t\tFound no Text parameters");
+
+        ProblemContext* context = createProblem(WARNING, WARN_NOPARAM, yylineno);
+        add(state.warningList, context);
+
         return 0;
     }
 
@@ -274,8 +306,12 @@ int stAddParametersToText(ParameterMap** map, ParamListTextNode* paramList) {
 
         HASH_FIND_INT(*map, &paramType, currParam);
         if (currParam != NULL) {
-            LogError("\t\tCannot reassign parameters, aborting...");
-            exit(EXIT_FAILURE);
+            LogError("\t\tCannot reassign parameters...");
+
+            ProblemContext* context = createProblem(ERROR, ERROR_PREASSIGNED, yylineno);
+            add(state.errorList, context);
+
+            return 1;
         }
 
         currParam = (ParameterMap*)_malloc(sizeof(ParameterMap));

@@ -63,6 +63,7 @@ add_executable(Compiler
 
 	src/utils/wrapper-functions.c
 	src/utils/stringify.c
+	src/utils/errors/problem-context.c
 
 	src/libs/list-adt.c
 

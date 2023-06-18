@@ -1,7 +1,10 @@
 #ifndef _LIST_ADT_
 #define _LIST_ADT_
 
-typedef char* elemType;
+#include "../utils/errors/problem-context.h"
+
+// change accordingly
+typedef ProblemContext* elemType;
 
 typedef struct listCDT* listADT;
 
@@ -19,8 +22,13 @@ void toBegin(listADT list);
 ** recorre la lista en el orden de inserción. Sino retorna 0 */
 int hasNext(listADT list);
 
-char* next(listADT list);
+elemType next(listADT list);
 
 void freeList(listADT list);
+
+int getSize(listADT list);
+
+// FIXME: borrar!!
+void printList(listADT list, char* (*getFormat)(ProblemContext*));
 
 #endif
