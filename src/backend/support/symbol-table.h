@@ -1,10 +1,10 @@
 #ifndef _SYMBOL_TABLE_H_
 #define _SYMBOL_TABLE_H_
 
+#include "../../libs/uthash.h"
 #include "../../utils/data-types.h"
 #include "../../utils/parameter-map.h"
 #include "../semantic-analysis/abstract-syntax-tree.h"
-#include "uthash.h"
 
 #define VARNAME_MAX_LENGTH 64
 

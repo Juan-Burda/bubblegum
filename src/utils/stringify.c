@@ -4,6 +4,8 @@
     case x:                    \
         return #x;
 
+#define UNKNOWN "Unknown"
+
 const char* stringifyAnimationType(AnimationType type) {
     switch (type) {
         STRINGIFY_ENUM_CASE(A_TRANSLATE_X)
@@ -13,8 +15,9 @@ const char* stringifyAnimationType(AnimationType type) {
         STRINGIFY_ENUM_CASE(A_ROTATE)
         STRINGIFY_ENUM_CASE(A_RESIZE)
         STRINGIFY_ENUM_CASE(A_MORPH)
+
         default:
-            return "Unknown";
+            return UNKNOWN;
     }
 }
 
@@ -23,8 +26,9 @@ const char* stringifyShapeType(ShapeType type) {
         STRINGIFY_ENUM_CASE(S_RECTANGLE)
         STRINGIFY_ENUM_CASE(S_ELLIPSE)
         STRINGIFY_ENUM_CASE(S_TRIANGLE)
+
         default:
-            return "Unknown";
+            return UNKNOWN;
     }
 }
 
@@ -57,8 +61,9 @@ const char* stringifyParameterType(parameter_t type) {
         STRINGIFY_ENUM_CASE(PT_T_FONT_STYLE)
         STRINGIFY_ENUM_CASE(PT_T_TEXT_DECORATION)
         STRINGIFY_ENUM_CASE(PT_T_BACKGROUND_COLOR)
+
         default:
-            return "Unknown";
+            return UNKNOWN;
     }
 }
 
@@ -67,7 +72,7 @@ const char* stringifyMediaType(MediaType type) {
         STRINGIFY_ENUM_CASE(PM_I_URL)
 
         default:
-            return "Unknown";
+            return UNKNOWN;
     }
 }
 
@@ -78,7 +83,7 @@ const char* stringifyFontStyle(fontstyle_t style) {
         STRINGIFY_ENUM_CASE(OBLIQUE)
 
         default:
-            return "Unknown";
+            return UNKNOWN;
     }
 }
 
@@ -91,7 +96,7 @@ const char* stringifyFontFamily(fontfamily_t family) {
         STRINGIFY_ENUM_CASE(MONOSPACE)
 
         default:
-            return "Unknown";
+            return UNKNOWN;
     }
 }
 
@@ -103,6 +108,6 @@ const char* stringifyTextDecoration(textdeco_t deco) {
             return "LINE-THROUGH";
 
         default:
-            return "Unknown";
+            return UNKNOWN;
     }
 }

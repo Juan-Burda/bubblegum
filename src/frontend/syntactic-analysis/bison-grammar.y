@@ -1,6 +1,6 @@
 %{
 
-#include "bison-actions.h"
+#include "bison-actions/bison-actions.h"
 
 %}
 
