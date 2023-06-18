@@ -8,8 +8,6 @@
 #include "logger.h"
 #include "shared.h"
 
-// TODO: no abortar por key duplicada
-
 char* convertPointsToString(ParamTypePointsNode* head);
 void stDestroyParameters(ParameterMap* parameters);
 
@@ -61,17 +59,17 @@ int stAddVariable(char* varname, FunctionNode* function) {
 
     HASH_ADD_STR(state.symbolTable, id, entry);
 
-    LogDebug("\t\tSymbol Table: Successfully added variable [%s]", varname);
+    LogDebug("\t\tSuccessfully added variable [%s]", varname);
     return 0;
 }
 
 // add params to symbol table for animations
 int stAddParametersToAnimation(ParameterMap** map, ParamListAnimationNode* paramList) {
-    LogDebug("\t\tSymbol Table: Add Animation parameters");
+    LogDebug("\t\tAdding Animation parameters...");
 
     ParamListAnimationNode* head = paramList;
     if (head == NULL || head->isEmpty) {
-        LogDebug("\t\tSymbol Table: Found no parameters");
+        LogDebug("\t\tFound no parameters");
         return 0;
     }
 
@@ -84,7 +82,7 @@ int stAddParametersToAnimation(ParameterMap** map, ParamListAnimationNode* param
 
         HASH_FIND_INT(*map, &paramType, currParam);
         if (currParam != NULL) {
-            LogError("\t\tDuplicate key found, aborting...");
+            LogError("\t\tCannot reassign parameters, aborting...");
             exit(EXIT_FAILURE);
         }
 
@@ -136,18 +134,18 @@ int stAddParametersToAnimation(ParameterMap** map, ParamListAnimationNode* param
         currNode = currNode->tail;
     }
 
-    LogDebug("\t\tSymbol Table: Added %d parameters", HASH_COUNT(*map));
+    LogDebug("\t\tAdded %d parameters", HASH_COUNT(*map));
 
     return 0;
 }
 
 // add params to symbol table for shapes
 int stAddParametersToShape(ParameterMap** map, ParamListShapeNode* paramList) {
-    LogDebug("\t\tSymbol Table: Add Shape parameters");
+    LogDebug("\t\tAdding Shape parameters...");
 
     ParamListShapeNode* head = paramList;
     if (head == NULL || head->isEmpty) {
-        LogDebug("\t\tSymbol Table: Found no Shape parameters");
+        LogDebug("\t\tFound no Shape parameters");
         return 0;
     }
 
@@ -160,7 +158,7 @@ int stAddParametersToShape(ParameterMap** map, ParamListShapeNode* paramList) {
 
         HASH_FIND_INT(*map, &paramType, currParam);
         if (currParam != NULL) {
-            LogError("\t\tDuplicate key found, aborting...");
+            LogError("\t\tCannot reassign parameters, aborting...");
             exit(EXIT_FAILURE);
         }
 
@@ -190,7 +188,7 @@ int stAddParametersToShape(ParameterMap** map, ParamListShapeNode* paramList) {
                 break;
 
             default:
-                LogError("\t\tError unknown type D:");
+                LogError("\t\tUnknown Shape parameter");
                 free(currParam);
                 exit(EXIT_FAILURE);
         }
@@ -200,17 +198,17 @@ int stAddParametersToShape(ParameterMap** map, ParamListShapeNode* paramList) {
         currNode = currNode->tail;
     }
 
-    LogDebug("\t\tSymbol Table: Added %d parameters", HASH_COUNT(*map));
+    LogDebug("\t\tAdded %d parameters", HASH_COUNT(*map));
 
     return 0;
 }
 
 int stAddParametersToMedia(ParameterMap** map, ParamListMediaNode* paramList) {
-    LogDebug("\t\tSymbol Table: Add Media parameters");
+    LogDebug("\t\tAdd Media parameters");
 
     ParamListMediaNode* head = paramList;
     if (head == NULL || head->isEmpty) {
-        LogDebug("\t\tSymbol Table: Found no Media parameters");
+        LogDebug("\t\tFound no Media parameters");
         return 0;
     }
 
@@ -223,7 +221,7 @@ int stAddParametersToMedia(ParameterMap** map, ParamListMediaNode* paramList) {
 
         HASH_FIND_INT(*map, &paramType, currParam);
         if (currParam != NULL) {
-            LogError("\t\tDuplicate key found, aborting...");
+            LogError("\t\tCannot reassign parameters, aborting...");
             exit(EXIT_FAILURE);
         }
 
@@ -240,7 +238,7 @@ int stAddParametersToMedia(ParameterMap** map, ParamListMediaNode* paramList) {
                 break;
 
             default:
-                LogError("\t\tError unknown type D:");
+                LogError("\t\tUnkown Media parameter");
                 free(currParam);
                 exit(EXIT_FAILURE);
         }
@@ -250,17 +248,17 @@ int stAddParametersToMedia(ParameterMap** map, ParamListMediaNode* paramList) {
         currNode = currNode->tail;
     }
 
-    LogDebug("\t\tSymbol Table: Added %d parameters", HASH_COUNT(*map));
+    LogDebug("\t\tAdded %d parameters", HASH_COUNT(*map));
 
     return 0;
 }
 
 int stAddParametersToText(ParameterMap** map, ParamListTextNode* paramList) {
-    LogDebug("\t\tSymbol Table: Add Text parameters");
+    LogDebug("\t\tAdd Text parameters");
 
     ParamListTextNode* head = paramList;
     if (head == NULL || head->isEmpty) {
-        LogDebug("\t\tSymbol Table: Found no Text parameters");
+        LogDebug("\t\tFound no Text parameters");
         return 0;
     }
 
@@ -273,7 +271,7 @@ int stAddParametersToText(ParameterMap** map, ParamListTextNode* paramList) {
 
         HASH_FIND_INT(*map, &paramType, currParam);
         if (currParam != NULL) {
-            LogError("\t\tDuplicate key found, aborting...");
+            LogError("\t\tCannot reassign parameters, aborting...");
             exit(EXIT_FAILURE);
         }
 
@@ -323,7 +321,7 @@ int stAddParametersToText(ParameterMap** map, ParamListTextNode* paramList) {
                 break;
 
             default:
-                LogError("\t\tError unknown type D:");
+                LogError("\t\tUnknown Text parameter");
                 free(currParam);
                 exit(EXIT_FAILURE);
         }
@@ -333,7 +331,7 @@ int stAddParametersToText(ParameterMap** map, ParamListTextNode* paramList) {
         currNode = currNode->tail;
     }
 
-    LogDebug("\t\tSymbol Table: Added %d parameters", HASH_COUNT(*map));
+    LogDebug("\t\tAdded %d parameters", HASH_COUNT(*map));
 
     return 0;
 }

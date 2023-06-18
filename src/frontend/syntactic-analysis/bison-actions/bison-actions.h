@@ -12,23 +12,23 @@
  * abstracta (i.e., el AST).
  */
 
-/* Others */
+/* General */
 Program* ProgramAction(ExpressionNode* expression);
 
 ExpressionNode* ExpressionAction(ExpressionType type, ExpressionUnion value, ExpressionNode* expression);
 
-FunctionListNode* FunctionListAction(FunctionListType type, FunctionListNode* listNode, FunctionListUnion value);
 FunctionNode* FunctionAction(FunctionType type, FunctionUnion value);
+FunctionListNode* FunctionListAction(FunctionListType type, FunctionListNode* listNode, FunctionListUnion value);
 
 AssignNode* AssignAction(char* varname, FunctionNode* function);
 
 /* Animations */
-AnimationCompoundStatementNode* AnimationCompoundStatementAction(AnimationCompoundStatementType type, AnimationCompoundStatementUnion value);
 AnimationNode* AnimationAction(AnimationType type, ParamListAnimationNode* paramList, AnimationCompoundStatementNode* compoundStatement);
+AnimationCompoundStatementNode* AnimationCompoundStatementAction(AnimationCompoundStatementType type, AnimationCompoundStatementUnion value);
 
 /* Layouts */
-LayoutCompoundStatementNode* LayoutCompoundStatementAction(FunctionListNode* listNode);
 LayoutNode* LayoutAction(layout_t layout, LayoutCompoundStatementNode* compoundStatement);
+LayoutCompoundStatementNode* LayoutCompoundStatementAction(FunctionListNode* listNode);
 
 /* Shapes */
 ShapeNode* ShapeAction(ShapeType type, ParamListShapeNode* paramList);
