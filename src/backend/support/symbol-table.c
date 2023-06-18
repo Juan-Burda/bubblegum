@@ -42,7 +42,10 @@ int stAddVariable(char* varname, FunctionNode* function) {
     if ((len = strlen(varname)) > VARNAME_MAX_LENGTH) {
         LogError("\t\tVariable name too long. Max length is: %d", VARNAME_MAX_LENGTH);
         LogError("\t\tAborting...");
-        exit(EXIT_FAILURE);
+
+        add(state.errorList, ERROR_VNAMETOOLONG);
+
+        return 1;
     }
 
     SymbolTable* entry;

@@ -64,6 +64,8 @@ add_executable(Compiler
 	src/utils/wrapper-functions.c
 	src/utils/stringify.c
 
+	src/libs/list-adt.c
+
 	src/backend/code-generation/generator.c
 
 	src/backend/support/logger.c

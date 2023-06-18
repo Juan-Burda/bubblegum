@@ -3,9 +3,20 @@
 #include "backend/support/logger.h"
 #include "backend/support/shared.h"
 #include "frontend/syntactic-analysis/bison-parser.h"
+#include "libs/list-adt.h"
 
 // Estado de la aplicación.
 CompilerState state;
+
+void printList(listADT list) {
+    LogInfo("imprimiendo lista");
+
+    toBegin(list);
+    while (hasNext(list)) {
+        char* curr = next(list);
+        LogDebug("%s", curr);
+    }
+}
 
 // Punto de entrada principal del compilador.
 const int main(const int argumentCount, const char** arguments) {
@@ -13,7 +24,15 @@ const int main(const int argumentCount, const char** arguments) {
     state.program = NULL;
     state.result = 0;
     state.succeed = false;
+
+    LogInfo("Creating symbol table...\n");
     stInit();  // init symbol table
+    LogInfo("Symbol table created successfully\n");
+
+    LogInfo("Creating warning and error lists...\n");
+    state.errorList = newList();
+    state.warningList = newList();
+    LogInfo("Lists created successfully\n");
 
     // Mostrar parámetros recibidos por consola.
     for (int i = 0; i < argumentCount; ++i) {
@@ -44,7 +63,13 @@ const int main(const int argumentCount, const char** arguments) {
         default:
             LogError("Error desconocido mientras se ejecutaba el analizador Bison (codigo %d).", result);
     }
+    // TODO: sacar, solo para debugging!!
+    printList(state.errorList);
+    printList(state.warningList);
+
     stDestroy();
+    freeList(state.errorList);
+    freeList(state.warningList);
 
     LogInfo("Fin.");
     return result;
