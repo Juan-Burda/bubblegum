@@ -1,6 +1,7 @@
 #include "../../../backend/support/logger.h"
 #include "../../../backend/support/symbol-table.h"
 #include "../../../utils/wrapper-functions.h"
+#include "bison-actions.h"
 
 LayoutNode* LayoutAction(layout_t layout, LayoutCompoundStatementNode* compoundStatement) {
     LogDebug("\tLayoutAction");

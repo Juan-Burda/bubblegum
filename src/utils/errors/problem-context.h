@@ -12,7 +12,7 @@ typedef struct {
     ProblemType type;
 } ProblemContext;
 
-ProblemContext* createProblem(ProblemType type, char* message, int lineno);
+ProblemContext* createProblemContext(ProblemType type, char* message, int lineno);
 
 char* problemToString(ProblemContext* context);
 

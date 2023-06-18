@@ -1,6 +1,7 @@
 #include "../../../backend/support/logger.h"
 #include "../../../backend/support/symbol-table.h"
 #include "../../../utils/wrapper-functions.h"
+#include "bison-actions.h"
 
 ParamTypeColorNode* ParamTypeColorAction(char* typeColor) {
     LogDebug("\tParamTypeColorAction: %s", typeColor);

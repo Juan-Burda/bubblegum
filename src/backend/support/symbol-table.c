@@ -17,9 +17,11 @@ void stDestroyParameters(ParameterMap* parameters) {
     ParameterMap *currParameter, *tmp2;
 
     HASH_ITER(hh, parameters, currParameter, tmp2) {
+        LogDebug("%s", stringifyParameterType(currParameter->type));
         HASH_DEL(parameters, currParameter);
-        // TODO: check for char* or list params tipo Points
 
+        if (PARAM_IS_STRING(currParameter->type))
+            free(currParameter->value.string);
         free(currParameter);
     }
 }
@@ -30,6 +32,24 @@ void stDestroy() {
 
     HASH_ITER(hh, state.symbolTable, currSymbol, tmp) {
         HASH_DEL(state.symbolTable, currSymbol);
+        switch (currSymbol->function->type) {
+            case F_ANIMATION:
+                stDestroyParameters(currSymbol->function->value.animationNode->paramMap);
+                break;
+            case F_MEDIA:
+                stDestroyParameters(currSymbol->function->value.mediaNode->paramMap);
+                break;
+            case F_SHAPE:
+                stDestroyParameters(currSymbol->function->value.shapeNode->paramMap);
+                break;
+            case F_TEXT:
+                stDestroyParameters(currSymbol->function->value.textNode->paramMap);
+                break;
+            default:
+                break;
+        }
+
+        free(currSymbol->id);
         free(currSymbol);
     }
     LogDebug("Memory freed");
@@ -42,7 +62,7 @@ int stAddVariable(char* varname, FunctionNode* function) {
     if ((len = strlen(varname)) > VARNAME_MAX_LENGTH) {
         LogError("\t\tVariable name too long. Max length is: %d", VARNAME_MAX_LENGTH);
 
-        ProblemContext* context = createProblem(ERROR, ERROR_VTOOLONG, yylineno);
+        ProblemContext* context = createProblemContext(ERROR, ERROR_VTOOLONG, yylineno);
         add(state.errorList, context);
 
         return 1;
@@ -53,7 +73,7 @@ int stAddVariable(char* varname, FunctionNode* function) {
     if (entry != NULL) {
         LogError("\t\tVariable [%s] redeclared, aborting...", varname);
 
-        ProblemContext* context = createProblem(ERROR, ERROR_VREDECLARED, yylineno);
+        ProblemContext* context = createProblemContext(ERROR, ERROR_VREDECLARED, yylineno);
         add(state.errorList, context);
 
         return 1;
@@ -78,7 +98,7 @@ int stAddParametersToAnimation(ParameterMap** map, ParamListAnimationNode* param
     if (head == NULL || head->isEmpty) {
         LogDebug("\t\tFound no parameters");
 
-        ProblemContext* context = createProblem(WARNING, WARN_NOPARAM, yylineno);
+        ProblemContext* context = createProblemContext(WARNING, WARN_NOPARAM, yylineno);
         add(state.warningList, context);
 
         return 0;
@@ -95,7 +115,7 @@ int stAddParametersToAnimation(ParameterMap** map, ParamListAnimationNode* param
         if (currParam != NULL) {
             LogError("\t\tCannot reassign parameters, aborting...");
 
-            ProblemContext* context = createProblem(ERROR, ERROR_PREASSIGNED, yylineno);
+            ProblemContext* context = createProblemContext(ERROR, ERROR_PREASSIGNED, yylineno);
             add(state.errorList, context);
 
             return 1;
@@ -162,7 +182,7 @@ int stAddParametersToShape(ParameterMap** map, ParamListShapeNode* paramList) {
     if (head == NULL || head->isEmpty) {
         LogDebug("\t\tFound no Shape parameters");
 
-        ProblemContext* context = createProblem(WARNING, WARN_NOPARAM, yylineno);
+        ProblemContext* context = createProblemContext(WARNING, WARN_NOPARAM, yylineno);
         add(state.warningList, context);
 
         return 0;
@@ -179,7 +199,7 @@ int stAddParametersToShape(ParameterMap** map, ParamListShapeNode* paramList) {
         if (currParam != NULL) {
             LogError("\t\tCannot reassign parameters, aborting...");
 
-            ProblemContext* context = createProblem(ERROR, ERROR_PREASSIGNED, yylineno);
+            ProblemContext* context = createProblemContext(ERROR, ERROR_PREASSIGNED, yylineno);
             add(state.errorList, context);
 
             return 1;
@@ -233,7 +253,7 @@ int stAddParametersToMedia(ParameterMap** map, ParamListMediaNode* paramList) {
     if (head == NULL || head->isEmpty) {
         LogDebug("\t\tFound no Media parameters");
 
-        ProblemContext* context = createProblem(WARNING, WARN_NOPARAM, yylineno);
+        ProblemContext* context = createProblemContext(WARNING, WARN_NOPARAM, yylineno);
         add(state.warningList, context);
 
         return 0;
@@ -250,7 +270,7 @@ int stAddParametersToMedia(ParameterMap** map, ParamListMediaNode* paramList) {
         if (currParam != NULL) {
             LogError("\t\tCannot reassign parameters, aborting...");
 
-            ProblemContext* context = createProblem(ERROR, ERROR_PREASSIGNED, yylineno);
+            ProblemContext* context = createProblemContext(ERROR, ERROR_PREASSIGNED, yylineno);
             add(state.errorList, context);
 
             return 1;
@@ -291,7 +311,7 @@ int stAddParametersToText(ParameterMap** map, ParamListTextNode* paramList) {
     if (head == NULL || head->isEmpty) {
         LogDebug("\t\tFound no Text parameters");
 
-        ProblemContext* context = createProblem(WARNING, WARN_NOPARAM, yylineno);
+        ProblemContext* context = createProblemContext(WARNING, WARN_NOPARAM, yylineno);
         add(state.warningList, context);
 
         return 0;
@@ -308,7 +328,7 @@ int stAddParametersToText(ParameterMap** map, ParamListTextNode* paramList) {
         if (currParam != NULL) {
             LogError("\t\tCannot reassign parameters...");
 
-            ProblemContext* context = createProblem(ERROR, ERROR_PREASSIGNED, yylineno);
+            ProblemContext* context = createProblemContext(ERROR, ERROR_PREASSIGNED, yylineno);
             add(state.errorList, context);
 
             return 1;

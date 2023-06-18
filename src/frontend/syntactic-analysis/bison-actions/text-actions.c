@@ -1,6 +1,7 @@
 #include "../../../backend/support/logger.h"
 #include "../../../backend/support/symbol-table.h"
 #include "../../../utils/wrapper-functions.h"
+#include "bison-actions.h"
 
 TextNode* TextAction(ParamListTextNode* paramList) {
     LogDebug("\tTextNodeAction");
@@ -9,6 +10,8 @@ TextNode* TextAction(ParamListTextNode* paramList) {
 
     ParameterMap* map = NULL;
     stAddParametersToText(&map, paramList);
+
+    FREE_LIST(ParamListTextNode, paramList);
 
     result->paramMap = map;
 

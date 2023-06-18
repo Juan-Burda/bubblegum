@@ -1,6 +1,7 @@
 #include "../../../backend/support/logger.h"
 #include "../../../backend/support/symbol-table.h"
 #include "../../../utils/wrapper-functions.h"
+#include "bison-actions.h"
 
 AnimationNode* AnimationAction(AnimationType type, ParamListAnimationNode* paramList, AnimationCompoundStatementNode* compoundStatement) {
     LogDebug("\tAnimationNodeAction");
@@ -11,6 +12,8 @@ AnimationNode* AnimationAction(AnimationType type, ParamListAnimationNode* param
 
     ParameterMap* map = NULL;
     stAddParametersToAnimation(&map, paramList);
+
+    FREE_LIST(ParamListAnimationNode, paramList);
 
     result->paramMap = map;
 

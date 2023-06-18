@@ -6,12 +6,27 @@
 #include "../../../utils/data-types.h"
 
 /**
+ * @param listType paramList<sth>Node
+ * @param listHead first element in list
+ */
+#define FREE_LIST(listType, listHead)            \
+    if (!paramList->isEmpty) {                   \
+        listType* curr = listHead;               \
+        listType* next;                          \
+        while (curr != NULL && !curr->isEmpty) { \
+            next = curr->tail;                   \
+            free(curr->parameter);               \
+            free(curr);                          \
+            curr = next;                         \
+        }                                        \
+    }
+
+/**
  * Se definen las acciones a ejecutar sobre cada regla de producción de la
  * gramática. El objetivo de cada acción debe ser el de construir el nodo
  * adecuado que almacene la información requerida en el árbol de sintaxis
  * abstracta (i.e., el AST).
  */
-
 /* General */
 Program* ProgramAction(ExpressionNode* expression);
 

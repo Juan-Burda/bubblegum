@@ -1,6 +1,7 @@
 #include "../../../backend/support/logger.h"
 #include "../../../backend/support/symbol-table.h"
 #include "../../../utils/wrapper-functions.h"
+#include "bison-actions.h"
 
 ShapeNode* ShapeAction(ShapeType type, ParamListShapeNode* paramList) {
     LogDebug("\tShapeNodeAction");
@@ -10,6 +11,8 @@ ShapeNode* ShapeAction(ShapeType type, ParamListShapeNode* paramList) {
 
     ParameterMap* map = NULL;
     stAddParametersToShape(&map, paramList);
+
+    FREE_LIST(ParamListShapeNode, paramList);
 
     result->paramMap = map;
 

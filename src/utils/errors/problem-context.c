@@ -5,7 +5,7 @@
 #include "../stringify.h"
 #include "../wrapper-functions.h"
 
-ProblemContext* createProblem(ProblemType type, char* message, int lineno) {
+ProblemContext* createProblemContext(ProblemType type, char* message, int lineno) {
     ProblemContext* result = (ProblemContext*)_calloc(1, sizeof(ProblemContext));
     result->message = (char*)_calloc(strlen(message), sizeof(char));
     strcpy(result->message, message);

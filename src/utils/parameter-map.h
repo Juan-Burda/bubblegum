@@ -1,8 +1,8 @@
 #ifndef _PARAMETER_MAP_H_
 #define _PARAMETER_MAP_H_
 
-#include "data-types.h"
 #include "../libs/uthash.h"
+#include "data-types.h"
 
 typedef union {
     boolean_t boolean;
@@ -19,5 +19,4 @@ typedef struct {
     UT_hash_handle hh;  // make the struct hashable
 } ParameterMap;
 
-
-#endif // _PARAMETER_MAP_H_
+#endif  // _PARAMETER_MAP_H_

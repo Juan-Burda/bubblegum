@@ -1,6 +1,7 @@
 #include "../../../backend/support/logger.h"
 #include "../../../backend/support/symbol-table.h"
 #include "../../../utils/wrapper-functions.h"
+#include "bison-actions.h"
 
 MediaNode* MediaAction(MediaType type, ParamListMediaNode* paramList) {
     LogDebug("\tMediaNodeAction");
@@ -10,6 +11,8 @@ MediaNode* MediaAction(MediaType type, ParamListMediaNode* paramList) {
 
     ParameterMap* map = NULL;
     stAddParametersToMedia(&map, paramList);
+
+    FREE_LIST(ParamListMediaNode, paramList);
 
     result->paramMap = map;
 
