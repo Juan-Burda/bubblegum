@@ -62,7 +62,13 @@ add_executable(Compiler
 	src/main.c
 	src/utils/wrapper-functions.c
 	src/utils/stringify.c
+	src/utils/sb.c
 	src/backend/code-generation/generator.c
+	src/backend/code-generation/animation/animation.c
+	src/backend/code-generation/layout/layout.c
+	src/backend/code-generation/shape/shape.c
+	src/backend/code-generation/media/media.c
+	src/backend/code-generation/text/text.c
 	src/backend/domain-specific/calculator.c
 	src/backend/support/logger.c
 	src/backend/support/symbol-table.c

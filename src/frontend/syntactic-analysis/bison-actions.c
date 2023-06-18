@@ -54,6 +54,8 @@ Program* ProgramAction(ExpressionNode* expression) {
      */
     state.result = 0;
 
+    state.program = result;
+
     return result;
 }
 
