@@ -4,6 +4,7 @@
 #include "backend/support/shared.h"
 #include "frontend/syntactic-analysis/bison-parser.h"
 #include "libs/list-adt.h"
+#include "utils/ast-utils.h"
 
 // Estado de la aplicación.
 CompilerState state;
@@ -54,7 +55,11 @@ const int main(const int argumentCount, const char** arguments) {
             LogError("Error desconocido mientras se ejecutaba el analizador Bison (codigo %d).", result);
     }
 
+    if (state.succeed)
+        freeProgram(state.program);
+
     stDestroy();
+
     freeList(state.errorList);
     freeList(state.warningList);
 

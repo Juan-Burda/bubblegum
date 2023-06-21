@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "../../utils/ast-utils.h"
 #include "../../utils/error-codes.h"
 #include "../../utils/stringify.h"
 #include "../../utils/wrapper-functions.h"
@@ -9,22 +10,8 @@
 #include "shared.h"
 
 char* convertPointsToString(ParamTypePointsNode* head);
-void stDestroyParameters(ParameterMap* parameters);
 
 void stInit() { state.symbolTable = NULL; }
-
-void stDestroyParameters(ParameterMap* parameters) {
-    ParameterMap *currParameter, *tmp2;
-
-    HASH_ITER(hh, parameters, currParameter, tmp2) {
-        LogDebug("%s", stringifyParameterType(currParameter->type));
-        HASH_DEL(parameters, currParameter);
-
-        if (PARAM_IS_STRING(currParameter->type))
-            free(currParameter->value.string);
-        free(currParameter);
-    }
-}
 
 void stDestroy() {
     SymbolTable *currSymbol, *tmp;
@@ -32,23 +19,8 @@ void stDestroy() {
 
     HASH_ITER(hh, state.symbolTable, currSymbol, tmp) {
         HASH_DEL(state.symbolTable, currSymbol);
-        switch (currSymbol->function->type) {
-            case F_ANIMATION:
-                stDestroyParameters(currSymbol->function->value.animationNode->paramMap);
-                break;
-            case F_MEDIA:
-                stDestroyParameters(currSymbol->function->value.mediaNode->paramMap);
-                break;
-            case F_SHAPE:
-                stDestroyParameters(currSymbol->function->value.shapeNode->paramMap);
-                break;
-            case F_TEXT:
-                stDestroyParameters(currSymbol->function->value.textNode->paramMap);
-                break;
-            default:
-                break;
-        }
-
+        // Parameters need not be freed here as they
+        // are freed when we free the program
         free(currSymbol->id);
         free(currSymbol);
     }
@@ -156,6 +128,7 @@ int stAddParametersToAnimation(ParameterMap** map, ParamListAnimationNode* param
                 strncpy(color, currNode->parameter->value.color->string, len);
                 currParam->value.color = color;
                 LogDebug("\t\tAdded {%s, %s}", stringifyParameterType(currParam->type), currParam->value.color);
+                freeColor(currNode->parameter->value.color);
                 break;
 
             default:
@@ -216,6 +189,7 @@ int stAddParametersToShape(ParameterMap** map, ParamListShapeNode* paramList) {
                 strncpy(color, currNode->parameter->value.color->string, len);
                 currParam->value.color = color;
                 LogDebug("\t\tAdded {%s, %s}", stringifyParameterType(currParam->type), currParam->value.color);
+                freeColor(currNode->parameter->value.color);
                 break;
 
             case PS_S_BORDER_WIDTH:
@@ -350,6 +324,7 @@ int stAddParametersToText(ParameterMap** map, ParamListTextNode* paramList) {
                 strncpy(color, currNode->parameter->value.color->string, len);
                 currParam->value.color = color;
                 LogDebug("\t\tAdded {%s, %s}", stringifyParameterType(currParam->type), currParam->value.color);
+                freeColor(currNode->parameter->value.color);
                 break;
 
             case PT_T_FONT_FAMILY:
@@ -421,7 +396,11 @@ char* convertPointsToString(ParamTypePointsNode* head) {
             currentPosition++;
             totalLength--;
         }
-        current = current->nextPoint;
+        // free the node because we no longer need it,
+        // from now on Points has a string value
+        ParamTypePointsNode* tmp = current;
+        current = tmp->nextPoint;
+        free(tmp);
     }
 
     *currentPosition = '\0';  // Add the null-terminator

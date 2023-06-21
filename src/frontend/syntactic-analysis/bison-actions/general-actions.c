@@ -32,6 +32,7 @@ Program* ProgramAction(ExpressionNode* expression) {
 
     Program* result = (Program*)_calloc(1, sizeof(Program));
     result->expression = expression;
+    state.program = result;
 
     /*
      * "state" es una variable global que almacena el estado del compilador,

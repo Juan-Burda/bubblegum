@@ -61,8 +61,9 @@ endif ()
 add_executable(Compiler
 	src/main.c
 
-	src/utils/wrapper-functions.c
+	src/utils/ast-utils.c
 	src/utils/stringify.c
+	src/utils/wrapper-functions.c
 	src/utils/errors/problem-context.c
 
 	src/libs/list-adt.c
