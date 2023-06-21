@@ -2,29 +2,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "../../utils/ast-utils.h"
 #include "../../utils/error-codes.h"
 #include "../../utils/stringify.h"
 #include "../../utils/wrapper-functions.h"
 #include "logger.h"
 #include "shared.h"
 
-// TODO: no abortar por key duplicada
-
 char* convertPointsToString(ParamTypePointsNode* head);
-void stDestroyParameters(ParameterMap* parameters);
 
 void stInit() { state.symbolTable = NULL; }
-
-void stDestroyParameters(ParameterMap* parameters) {
-    ParameterMap *currParameter, *tmp2;
-
-    HASH_ITER(hh, parameters, currParameter, tmp2) {
-        HASH_DEL(parameters, currParameter);
-        // TODO: check for char* or list params tipo Points
-
-        free(currParameter);
-    }
-}
 
 void stDestroy() {
     SymbolTable *currSymbol, *tmp;
@@ -32,9 +19,12 @@ void stDestroy() {
 
     HASH_ITER(hh, state.symbolTable, currSymbol, tmp) {
         HASH_DEL(state.symbolTable, currSymbol);
+        // Parameters need not be freed here as they
+        // are freed when we free the program
+        free(currSymbol->id);
         free(currSymbol);
     }
-    LogDebug("Memory freed...");
+    LogDebug("Memory freed");
 }
 
 int stAddVariable(char* varname, FunctionNode* function) {
@@ -43,15 +33,22 @@ int stAddVariable(char* varname, FunctionNode* function) {
     int len;
     if ((len = strlen(varname)) > VARNAME_MAX_LENGTH) {
         LogError("\t\tVariable name too long. Max length is: %d", VARNAME_MAX_LENGTH);
-        LogError("\t\tAborting...");
-        exit(EXIT_FAILURE);
+
+        ProblemContext* context = createProblemContext(ERROR, ERROR_VTOOLONG, yylineno);
+        add(state.errorList, context);
+
+        return 1;
     }
 
     SymbolTable* entry;
     HASH_FIND_STR(state.symbolTable, varname, entry);
     if (entry != NULL) {
         LogError("\t\tVariable [%s] redeclared, aborting...", varname);
-        exit(EXIT_FAILURE);
+
+        ProblemContext* context = createProblemContext(ERROR, ERROR_VREDECLARED, yylineno);
+        add(state.errorList, context);
+
+        return 1;
     }
 
     entry = (SymbolTable*)_malloc(sizeof(SymbolTable));
@@ -61,17 +58,21 @@ int stAddVariable(char* varname, FunctionNode* function) {
 
     HASH_ADD_STR(state.symbolTable, id, entry);
 
-    LogDebug("\t\tSymbol Table: Successfully added variable [%s]", varname);
+    LogDebug("\t\tSuccessfully added variable [%s]", varname);
     return 0;
 }
 
 // add params to symbol table for animations
 int stAddParametersToAnimation(ParameterMap** map, ParamListAnimationNode* paramList) {
-    LogDebug("\t\tSymbol Table: Add Animation parameters");
+    LogDebug("\t\tAdding Animation parameters...");
 
     ParamListAnimationNode* head = paramList;
     if (head == NULL || head->isEmpty) {
-        LogDebug("\t\tSymbol Table: Found no parameters");
+        LogDebug("\t\tFound no parameters");
+
+        ProblemContext* context = createProblemContext(WARNING, WARN_NOPARAM, yylineno);
+        add(state.warningList, context);
+
         return 0;
     }
 
@@ -84,8 +85,12 @@ int stAddParametersToAnimation(ParameterMap** map, ParamListAnimationNode* param
 
         HASH_FIND_INT(*map, &paramType, currParam);
         if (currParam != NULL) {
-            LogError("\t\tDuplicate key found, aborting...");
-            exit(EXIT_FAILURE);
+            LogError("\t\tCannot reassign parameters, aborting...");
+
+            ProblemContext* context = createProblemContext(ERROR, ERROR_PREASSIGNED, yylineno);
+            add(state.errorList, context);
+
+            return 1;
         }
 
         currParam = (ParameterMap*)_malloc(sizeof(ParameterMap));
@@ -123,6 +128,7 @@ int stAddParametersToAnimation(ParameterMap** map, ParamListAnimationNode* param
                 strncpy(color, currNode->parameter->value.color->string, len);
                 currParam->value.color = color;
                 LogDebug("\t\tAdded {%s, %s}", stringifyParameterType(currParam->type), currParam->value.color);
+                freeColor(currNode->parameter->value.color);
                 break;
 
             default:
@@ -136,18 +142,22 @@ int stAddParametersToAnimation(ParameterMap** map, ParamListAnimationNode* param
         currNode = currNode->tail;
     }
 
-    LogDebug("\t\tSymbol Table: Added %d parameters", HASH_COUNT(*map));
+    LogDebug("\t\tAdded %d parameters", HASH_COUNT(*map));
 
     return 0;
 }
 
 // add params to symbol table for shapes
 int stAddParametersToShape(ParameterMap** map, ParamListShapeNode* paramList) {
-    LogDebug("\t\tSymbol Table: Add Shape parameters");
+    LogDebug("\t\tAdding Shape parameters...");
 
     ParamListShapeNode* head = paramList;
     if (head == NULL || head->isEmpty) {
-        LogDebug("\t\tSymbol Table: Found no Shape parameters");
+        LogDebug("\t\tFound no Shape parameters");
+
+        ProblemContext* context = createProblemContext(WARNING, WARN_NOPARAM, yylineno);
+        add(state.warningList, context);
+
         return 0;
     }
 
@@ -160,8 +170,12 @@ int stAddParametersToShape(ParameterMap** map, ParamListShapeNode* paramList) {
 
         HASH_FIND_INT(*map, &paramType, currParam);
         if (currParam != NULL) {
-            LogError("\t\tDuplicate key found, aborting...");
-            exit(EXIT_FAILURE);
+            LogError("\t\tCannot reassign parameters, aborting...");
+
+            ProblemContext* context = createProblemContext(ERROR, ERROR_PREASSIGNED, yylineno);
+            add(state.errorList, context);
+
+            return 1;
         }
 
         currParam = (ParameterMap*)_malloc(sizeof(ParameterMap));
@@ -175,6 +189,7 @@ int stAddParametersToShape(ParameterMap** map, ParamListShapeNode* paramList) {
                 strncpy(color, currNode->parameter->value.color->string, len);
                 currParam->value.color = color;
                 LogDebug("\t\tAdded {%s, %s}", stringifyParameterType(currParam->type), currParam->value.color);
+                freeColor(currNode->parameter->value.color);
                 break;
 
             case PS_S_BORDER_WIDTH:
@@ -190,7 +205,7 @@ int stAddParametersToShape(ParameterMap** map, ParamListShapeNode* paramList) {
                 break;
 
             default:
-                LogError("\t\tError unknown type D:");
+                LogError("\t\tUnknown Shape parameter");
                 free(currParam);
                 exit(EXIT_FAILURE);
         }
@@ -200,17 +215,21 @@ int stAddParametersToShape(ParameterMap** map, ParamListShapeNode* paramList) {
         currNode = currNode->tail;
     }
 
-    LogDebug("\t\tSymbol Table: Added %d parameters", HASH_COUNT(*map));
+    LogDebug("\t\tAdded %d parameters", HASH_COUNT(*map));
 
     return 0;
 }
 
 int stAddParametersToMedia(ParameterMap** map, ParamListMediaNode* paramList) {
-    LogDebug("\t\tSymbol Table: Add Media parameters");
+    LogDebug("\t\tAdd Media parameters");
 
     ParamListMediaNode* head = paramList;
     if (head == NULL || head->isEmpty) {
-        LogDebug("\t\tSymbol Table: Found no Media parameters");
+        LogDebug("\t\tFound no Media parameters");
+
+        ProblemContext* context = createProblemContext(WARNING, WARN_NOPARAM, yylineno);
+        add(state.warningList, context);
+
         return 0;
     }
 
@@ -223,8 +242,12 @@ int stAddParametersToMedia(ParameterMap** map, ParamListMediaNode* paramList) {
 
         HASH_FIND_INT(*map, &paramType, currParam);
         if (currParam != NULL) {
-            LogError("\t\tDuplicate key found, aborting...");
-            exit(EXIT_FAILURE);
+            LogError("\t\tCannot reassign parameters, aborting...");
+
+            ProblemContext* context = createProblemContext(ERROR, ERROR_PREASSIGNED, yylineno);
+            add(state.errorList, context);
+
+            return 1;
         }
 
         currParam = (ParameterMap*)_malloc(sizeof(ParameterMap));
@@ -240,7 +263,7 @@ int stAddParametersToMedia(ParameterMap** map, ParamListMediaNode* paramList) {
                 break;
 
             default:
-                LogError("\t\tError unknown type D:");
+                LogError("\t\tUnkown Media parameter");
                 free(currParam);
                 exit(EXIT_FAILURE);
         }
@@ -250,17 +273,21 @@ int stAddParametersToMedia(ParameterMap** map, ParamListMediaNode* paramList) {
         currNode = currNode->tail;
     }
 
-    LogDebug("\t\tSymbol Table: Added %d parameters", HASH_COUNT(*map));
+    LogDebug("\t\tAdded %d parameters", HASH_COUNT(*map));
 
     return 0;
 }
 
 int stAddParametersToText(ParameterMap** map, ParamListTextNode* paramList) {
-    LogDebug("\t\tSymbol Table: Add Text parameters");
+    LogDebug("\t\tAdd Text parameters");
 
     ParamListTextNode* head = paramList;
     if (head == NULL || head->isEmpty) {
-        LogDebug("\t\tSymbol Table: Found no Text parameters");
+        LogDebug("\t\tFound no Text parameters");
+
+        ProblemContext* context = createProblemContext(WARNING, WARN_NOPARAM, yylineno);
+        add(state.warningList, context);
+
         return 0;
     }
 
@@ -273,8 +300,12 @@ int stAddParametersToText(ParameterMap** map, ParamListTextNode* paramList) {
 
         HASH_FIND_INT(*map, &paramType, currParam);
         if (currParam != NULL) {
-            LogError("\t\tDuplicate key found, aborting...");
-            exit(EXIT_FAILURE);
+            LogError("\t\tCannot reassign parameters...");
+
+            ProblemContext* context = createProblemContext(ERROR, ERROR_PREASSIGNED, yylineno);
+            add(state.errorList, context);
+
+            return 1;
         }
 
         currParam = (ParameterMap*)_malloc(sizeof(ParameterMap));
@@ -293,6 +324,7 @@ int stAddParametersToText(ParameterMap** map, ParamListTextNode* paramList) {
                 strncpy(color, currNode->parameter->value.color->string, len);
                 currParam->value.color = color;
                 LogDebug("\t\tAdded {%s, %s}", stringifyParameterType(currParam->type), currParam->value.color);
+                freeColor(currNode->parameter->value.color);
                 break;
 
             case PT_T_FONT_FAMILY:
@@ -323,7 +355,7 @@ int stAddParametersToText(ParameterMap** map, ParamListTextNode* paramList) {
                 break;
 
             default:
-                LogError("\t\tError unknown type D:");
+                LogError("\t\tUnknown Text parameter");
                 free(currParam);
                 exit(EXIT_FAILURE);
         }
@@ -333,7 +365,7 @@ int stAddParametersToText(ParameterMap** map, ParamListTextNode* paramList) {
         currNode = currNode->tail;
     }
 
-    LogDebug("\t\tSymbol Table: Added %d parameters", HASH_COUNT(*map));
+    LogDebug("\t\tAdded %d parameters", HASH_COUNT(*map));
 
     return 0;
 }
@@ -364,7 +396,11 @@ char* convertPointsToString(ParamTypePointsNode* head) {
             currentPosition++;
             totalLength--;
         }
-        current = current->nextPoint;
+        // free the node because we no longer need it,
+        // from now on Points has a string value
+        ParamTypePointsNode* tmp = current;
+        current = tmp->nextPoint;
+        free(tmp);
     }
 
     *currentPosition = '\0';  // Add the null-terminator

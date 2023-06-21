@@ -2,6 +2,7 @@
 #define _STRINGIFY_H_
 
 #include "../backend/semantic-analysis/abstract-syntax-tree.h"
+#include "errors/problem-context.h"
 
 const char* stringifyAnimationType(AnimationType type);
 const char* stringifyParameterType(parameter_t type);
@@ -10,5 +11,6 @@ const char* stringifyMediaType(MediaType type);
 const char* stringifyFontStyle(fontstyle_t style);
 const char* stringifyFontFamily(fontfamily_t family);
 const char* stringifyTextDecoration(textdeco_t deco);
+const char* stringifyProblemType(ProblemType problem);
 
 #endif

@@ -16,7 +16,7 @@ void* _calloc(size_t nmemb, size_t size) {
     void* result;
 
     if ((result = calloc(nmemb, size)) == NULL) {
-        perror(ERROR_MALLOC);
+        perror(ERROR_CALLOC);
         exit(EXIT_FAILURE);
     }
     return result;

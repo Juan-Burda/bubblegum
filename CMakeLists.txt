@@ -60,7 +60,14 @@ endif ()
 # Los *.h se incluyen automáticamente desde estos fuentes.
 add_executable(Compiler
 	src/main.c
+
+	src/utils/ast-utils.c
+	src/utils/stringify.c
 	src/utils/wrapper-functions.c
+	src/utils/errors/problem-context.c
+
+	src/libs/list-adt.c
+
 	src/utils/stringify.c
 	src/utils/sb.c
 	src/backend/code-generation/generator.c
@@ -69,12 +76,19 @@ add_executable(Compiler
 	src/backend/code-generation/shape/shape.c
 	src/backend/code-generation/media/media.c
 	src/backend/code-generation/text/text.c
-	src/backend/domain-specific/calculator.c
 	src/backend/support/logger.c
 	src/backend/support/symbol-table.c
+
 	src/frontend/lexical-analysis/flex-actions.c
 	src/frontend/lexical-analysis/flex-scanner.c
-	src/frontend/syntactic-analysis/bison-actions.c
+
+	src/frontend/syntactic-analysis/bison-actions/general-actions.c
+	src/frontend/syntactic-analysis/bison-actions/animation-actions.c
+	src/frontend/syntactic-analysis/bison-actions/layout-actions.c
+	src/frontend/syntactic-analysis/bison-actions/shape-actions.c
+	src/frontend/syntactic-analysis/bison-actions/media-actions.c
+	src/frontend/syntactic-analysis/bison-actions/data-type-actions.c
+	src/frontend/syntactic-analysis/bison-actions/text-actions.c
 	src/frontend/syntactic-analysis/bison-parser.c
 	# Agregar otros archivos *.c (si no se incluyen, no se compilan).
 	# ...

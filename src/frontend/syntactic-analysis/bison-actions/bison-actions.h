@@ -1,9 +1,25 @@
 #ifndef BISON_ACTIONS_HEADER
 #define BISON_ACTIONS_HEADER
 
-#include "../../backend/semantic-analysis/abstract-syntax-tree.h"
-#include "../../backend/support/shared.h"
-#include "../../utils/data-types.h"
+#include "../../../backend/semantic-analysis/abstract-syntax-tree.h"
+#include "../../../backend/support/shared.h"
+#include "../../../utils/data-types.h"
+
+/**
+ * @param listType paramList<sth>Node
+ * @param listHead first element in list
+ */
+#define FREE_LIST(listType, listHead)            \
+    if (!paramList->isEmpty) {                   \
+        listType* curr = listHead;               \
+        listType* next;                          \
+        while (curr != NULL && !curr->isEmpty) { \
+            next = curr->tail;                   \
+            free(curr->parameter);               \
+            free(curr);                          \
+            curr = next;                         \
+        }                                        \
+    }
 
 /**
  * Se definen las acciones a ejecutar sobre cada regla de producción de la
@@ -11,24 +27,23 @@
  * adecuado que almacene la información requerida en el árbol de sintaxis
  * abstracta (i.e., el AST).
  */
-
-/* Others */
+/* General */
 Program* ProgramAction(ExpressionNode* expression);
 
 ExpressionNode* ExpressionAction(ExpressionType type, ExpressionUnion value, ExpressionNode* expression);
 
-FunctionListNode* FunctionListAction(FunctionListType type, FunctionListNode* listNode, FunctionListUnion value);
 FunctionNode* FunctionAction(FunctionType type, FunctionUnion value);
+FunctionListNode* FunctionListAction(FunctionListType type, FunctionListNode* listNode, FunctionListUnion value);
 
 AssignNode* AssignAction(char* varname, FunctionNode* function);
 
 /* Animations */
-AnimationCompoundStatementNode* AnimationCompoundStatementAction(AnimationCompoundStatementType type, AnimationCompoundStatementUnion value);
 AnimationNode* AnimationAction(AnimationType type, ParamListAnimationNode* paramList, AnimationCompoundStatementNode* compoundStatement);
+AnimationCompoundStatementNode* AnimationCompoundStatementAction(AnimationCompoundStatementType type, AnimationCompoundStatementUnion value);
 
 /* Layouts */
-LayoutCompoundStatementNode* LayoutCompoundStatementAction(FunctionListNode* listNode);
 LayoutNode* LayoutAction(layout_t layout, LayoutCompoundStatementNode* compoundStatement);
+LayoutCompoundStatementNode* LayoutCompoundStatementAction(FunctionListNode* listNode);
 
 /* Shapes */
 ShapeNode* ShapeAction(ShapeType type, ParamListShapeNode* paramList);

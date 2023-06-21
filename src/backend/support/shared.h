@@ -2,6 +2,7 @@
 #define SHARED_HEADER
 
 #include <stdio.h>
+#include "../../libs/list-adt.h"
 #include "../semantic-analysis/abstract-syntax-tree.h"
 #include "symbol-table.h"
 
@@ -51,6 +52,8 @@ typedef struct {
     Program* program;
 
     SymbolTable* symbolTable;
+    listADT errorList;
+    listADT warningList;
     // Agregar lo que sea necesario para el compilador.
     // Agregar una pila para manipular scopes.
     // Agregar una tabla de símbolos.
