@@ -18,7 +18,16 @@ typedef struct Generator {
     StringBuilder *jsSb;
 } Generator;
 
+
+#ifdef WEB_ENV
+
+Generator generateProgram();
+
+#else
+
 void generateProgram();
+
+#endif
 
 void generateExpression(Generator generator, ExpressionNode *expression);
 

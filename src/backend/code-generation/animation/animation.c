@@ -11,6 +11,7 @@ void generateAnimationCompoundStatement(
             break;
 
         case CS_A_VARNAME:
+            generateVariable(generator, compoundStatement->value.varname);
             break;
 
         default:
@@ -99,6 +100,8 @@ void generateAnimationParams(Generator generator, AnimationNode *animation) {
                 sb_appendf(generator.jsSb, "\tbackground: '%s',\n",
                            currParameter->value.color);
                 targetChildShapes = 1;
+                break;
+            default:
                 break;
         }
     }

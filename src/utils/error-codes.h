@@ -7,6 +7,7 @@
 #define ERROR_VREDECLARED "Variable redeclared"
 #define ERROR_PREASSIGNED "Parameter reassigned"
 #define ERROR_UNKNOWNPARAM "Parameter unknown"
+#define ERROR_VUNKNOWN "Variable unknown"
 
 #define WARN_NOPARAM "Found no parameters"
 

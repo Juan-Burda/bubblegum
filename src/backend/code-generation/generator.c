@@ -6,9 +6,112 @@
 #include "text/text.h"
 #include <errno.h>
 #include <sys/stat.h>
+#include "../../utils/errors/problem-context.h"
 
 int elementId = 0;
 int htmlIdentWidth = 0;
+
+#ifdef WEB_ENV
+
+void generateBoilerPlate(Generator generator, ExpressionNode *expression) {
+
+    // CSS Boilerplate
+    sb_append(generator.cssSb, "body {\n");
+    sb_append(generator.cssSb, "width: 100vw;\nheight: 100vh;\nbackground: #0a0a0a;\noverflow: hidden;\n");
+    sb_append(generator.cssSb, "}\n\n");
+
+    sb_append(generator.cssSb, ".ellipse {\n");
+    sb_append(generator.cssSb, "border-radius: 50%;\n");
+    sb_append(generator.cssSb, "}\n\n");
+
+    sb_append(generator.cssSb, ".triangle {\n");
+    sb_append(generator.cssSb,
+              "clip-path: polygon(0% 100%, 50% 0%, 100% 100%);\n");
+    sb_append(generator.cssSb, "}\n\n");
+
+    // Animations generation
+    generateExpression(generator, state.program->expression);
+}
+
+Generator generateProgram() {
+    Generator generator = {
+        .htmlSb = sb_create(), .cssSb = sb_create(), .jsSb = sb_create()};
+
+    if (state.program == NULL)
+        return generator;
+
+    if (generator.htmlSb == NULL || generator.cssSb == NULL ||
+        generator.jsSb == NULL)
+        return generator;
+
+    generateBoilerPlate(generator, state.program->expression);
+
+    return generator;
+}
+
+# else
+
+void generateBoilerPlate(Generator generator, ExpressionNode *expression) {
+
+    // CSS Boilerplate
+    sb_append(generator.cssSb, "body {\n");
+    sb_append(generator.cssSb,
+              "\twidth: 100vw;\n\theight: 100vh;\n\tbackground: "
+              "#0a0a0a;\n\toverflow: hidden;\n");
+    sb_append(generator.cssSb, "}\n\n");
+
+    sb_append(generator.cssSb, ".ellipse {\n");
+    sb_append(generator.cssSb, "\tborder-radius: 50%;\n");
+    sb_append(generator.cssSb, "}\n\n");
+
+    sb_append(generator.cssSb, ".triangle {\n");
+    sb_append(generator.cssSb,
+              "\tclip-path: polygon(0% 100%, 50% 0%, 100% 100%);\n");
+    sb_append(generator.cssSb, "}\n\n");
+
+    // HTML Boilerplate
+    sb_append(generator.htmlSb, "<!DOCTYPE html>");
+
+    sb_appendf(generator.htmlSb, "%.*s<html>\n", htmlIdentWidth, TABS);
+    htmlIdentWidth++;
+
+    sb_appendf(generator.htmlSb, "%.*s<head>\n", htmlIdentWidth, TABS);
+    htmlIdentWidth++;
+
+    sb_appendf(generator.htmlSb, "%.*s<meta charset=\"UTF-8\"/>\n",
+               htmlIdentWidth, TABS);
+    sb_appendf(generator.htmlSb,
+               "%.*s<meta name=\"viewport\" content=\"width=device-width, "
+               "initial-scale=1.0\"/>\n",
+               htmlIdentWidth, TABS);
+    sb_appendf(generator.htmlSb, "%.*s<title>Bubblegum</title>\n",
+               htmlIdentWidth, TABS);
+    sb_appendf(generator.htmlSb,
+               "%.*s<link rel=\"stylesheet\" href=\"index.css\"/>\n",
+               htmlIdentWidth, TABS);
+
+    htmlIdentWidth--;
+    sb_appendf(generator.htmlSb, "%.*s</head>\n", htmlIdentWidth, TABS);
+
+    sb_appendf(generator.htmlSb, "%.*s<body>\n", htmlIdentWidth, TABS);
+    htmlIdentWidth++;
+
+    // Animations generation
+    generateExpression(generator, state.program->expression);
+
+    // Script link
+    sb_appendf(generator.htmlSb,
+               "%.*s <script src=\"anime.min.js\"></script>\n", htmlIdentWidth,
+               TABS);
+    sb_appendf(generator.htmlSb, "%.*s<script src=\"index.js\"></script>\n",
+               htmlIdentWidth, TABS);
+
+    htmlIdentWidth--;
+    sb_appendf(generator.htmlSb, "%.*s</body>\n", htmlIdentWidth, TABS);
+
+    htmlIdentWidth--;
+    sb_appendf(generator.htmlSb, "%.*s</html>\n", htmlIdentWidth, TABS);
+}
 
 void buildFiles(Generator generator) {
     mkdir("output", 0777);
@@ -75,67 +178,6 @@ void buildFiles(Generator generator) {
     fclose(target);
 }
 
-void generateBoilerPlate(Generator generator, ExpressionNode *expression) {
-
-    // CSS Boilerplate
-    sb_append(generator.cssSb, "body {\n");
-    sb_append(generator.cssSb,
-              "\twidth: 100vw;\n\theight: 100vh;\n\tbackground: "
-              "#0a0a0a;\n\toverflow: hidden;\n");
-    sb_append(generator.cssSb, "}\n\n");
-
-    sb_append(generator.cssSb, ".ellipse {\n");
-    sb_append(generator.cssSb, "\tborder-radius: 50%;\n");
-    sb_append(generator.cssSb, "}\n\n");
-
-    sb_append(generator.cssSb, ".triangle {\n");
-    sb_append(generator.cssSb,
-              "\tclip-path: polygon(0% 100%, 50% 0%, 100% 100%);\n");
-    sb_append(generator.cssSb, "}\n\n");
-
-    // HTML Boilerplate
-    sb_append(generator.htmlSb, "<!DOCTYPE html>");
-
-    sb_appendf(generator.htmlSb, "%.*s<html>\n", htmlIdentWidth, TABS);
-    htmlIdentWidth++;
-
-    sb_appendf(generator.htmlSb, "%.*s<head>\n", htmlIdentWidth, TABS);
-    htmlIdentWidth++;
-
-    sb_appendf(generator.htmlSb, "%.*s<meta charset=\"UTF-8\"/>\n",
-               htmlIdentWidth, TABS);
-    sb_appendf(generator.htmlSb,
-               "%.*s<meta name=\"viewport\" content=\"width=device-width, "
-               "initial-scale=1.0\"/>\n",
-               htmlIdentWidth, TABS);
-    sb_appendf(generator.htmlSb, "%.*s<title>Bubblegum</title>\n",
-               htmlIdentWidth, TABS);
-    sb_appendf(generator.htmlSb,
-               "%.*s<link rel=\"stylesheet\" href=\"index.css\"/>\n",
-               htmlIdentWidth, TABS);
-
-    htmlIdentWidth--;
-    sb_appendf(generator.htmlSb, "%.*s</head>\n", htmlIdentWidth, TABS);
-
-    sb_appendf(generator.htmlSb, "%.*s<body>\n", htmlIdentWidth, TABS);
-    htmlIdentWidth++;
-
-    // Animations generation
-    generateExpression(generator, state.program->expression);
-
-    // Script link
-    sb_appendf(generator.htmlSb,
-               "%.*s <script src=\"anime.min.js\"></script>\n", htmlIdentWidth,
-               TABS);
-    sb_appendf(generator.htmlSb, "%.*s<script src=\"index.js\"></script>\n",
-               htmlIdentWidth, TABS);
-
-    htmlIdentWidth--;
-    sb_appendf(generator.htmlSb, "%.*s</body>\n", htmlIdentWidth, TABS);
-
-    htmlIdentWidth--;
-    sb_appendf(generator.htmlSb, "%.*s</html>\n", htmlIdentWidth, TABS);
-}
 
 void generateProgram() {
     if (state.program == NULL)
@@ -152,6 +194,8 @@ void generateProgram() {
 
     buildFiles(generator);
 }
+
+#endif
 
 void generateExpression(Generator generator, ExpressionNode *expression) {
     switch (expression->type) {
@@ -172,6 +216,13 @@ void generateExpression(Generator generator, ExpressionNode *expression) {
 void generateVariable(Generator generator, char *varname) {
     SymbolTable *entry;
     HASH_FIND_STR(state.symbolTable, varname, entry);
+    if (entry == NULL) {
+        LogError("Cannot find varname %s\n", varname);
+        ProblemContext* context = createProblemContext(ERROR, ERROR_VUNKNOWN, yylineno);
+        add(state.errorList, context);
+        return;
+    }
+        
 
     generateFunction(generator, entry->function);
 }

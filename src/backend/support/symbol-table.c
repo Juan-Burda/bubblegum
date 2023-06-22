@@ -95,7 +95,7 @@ int stAddParametersToAnimation(ParameterMap** map, ParamListAnimationNode* param
 
         currParam = (ParameterMap*)_malloc(sizeof(ParameterMap));
         currParam->type = paramType;
-
+        int len = 0; 
         switch (currParam->type) {
             case PA_A_ALTERNATE:
             case PA_A_LOOP:
@@ -123,7 +123,7 @@ int stAddParametersToAnimation(ParameterMap** map, ParamListAnimationNode* param
                 break;
 
             case PA_REC_END_COLOR:
-                int len = strlen(currNode->parameter->value.color->string);
+                len = strlen(currNode->parameter->value.color->string);
                 char* color = (char*)_malloc(len + 1);
                 strncpy(color, currNode->parameter->value.color->string, len);
                 currParam->value.color = color;
@@ -184,10 +184,11 @@ int stAddParametersToShape(ParameterMap** map, ParamListShapeNode* paramList) {
         currParam = (ParameterMap*)_malloc(sizeof(ParameterMap));
 
         currParam->type = paramType;
+        int len = 0;
         switch (currParam->type) {
             case PS_S_FILL_COLOR:
             case PS_S_BORDER_COLOR:
-                int len = strlen(currNode->parameter->value.color->string);
+                len = strlen(currNode->parameter->value.color->string);
                 char* color = (char*)_malloc(len + 1);
                 strncpy(color, currNode->parameter->value.color->string, len);
                 currParam->value.color = color;
@@ -259,9 +260,10 @@ int stAddParametersToMedia(ParameterMap** map, ParamListMediaNode* paramList) {
         currParam = (ParameterMap*)_malloc(sizeof(ParameterMap));
 
         currParam->type = paramType;
+        int len = 0;
         switch (currParam->type) {
             case PM_I_URL:
-                int len = strlen(currNode->parameter->value.string);
+                len = strlen(currNode->parameter->value.string);
                 char* url = (char*)_malloc(len + 1);
                 strncpy(url, currNode->parameter->value.string, len);
                 currParam->value.string = url;

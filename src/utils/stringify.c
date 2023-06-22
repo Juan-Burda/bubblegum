@@ -69,7 +69,7 @@ const char* stringifyParameterType(parameter_t type) {
 
 const char* stringifyMediaType(MediaType type) {
     switch (type) {
-        STRINGIFY_ENUM_CASE(PM_I_URL)
+        STRINGIFY_ENUM_CASE(M_IMAGE)
 
         default:
             return UNKNOWN;

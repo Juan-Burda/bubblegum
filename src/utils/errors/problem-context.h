@@ -1,6 +1,8 @@
 #ifndef PROBLEM_CONTEXT_H_
 #define PROBLEM_CONTEXT_H_
 
+#include "../error-codes.h"
+
 typedef enum {
     WARNING,
     ERROR

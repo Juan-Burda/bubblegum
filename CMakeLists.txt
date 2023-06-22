@@ -56,11 +56,23 @@ else ()
 
 endif ()
 
+# Generar código Web Assembly. Solo en entornos con emscripten.
+option(WEB_ENV "Generación de código Web Assembly para ejecutar en un entorno web" OFF)
+
+
+# Web assembly no necesita de un main
+if (WEB_ENV) 
+	add_executable(Compiler 
+	src/web.c)
+    add_definitions(-D WEB_ENV)
+else()
+	add_executable(Compiler 
+	src/main.c)
+endif ()
+
 # Especificar punto de entrada del proyecto y códigos fuente (extensión *.c).
 # Los *.h se incluyen automáticamente desde estos fuentes.
-add_executable(Compiler
-	src/main.c
-
+target_sources(Compiler PRIVATE
 	src/utils/ast-utils.c
 	src/utils/stringify.c
 	src/utils/wrapper-functions.c
@@ -93,6 +105,22 @@ add_executable(Compiler
 	# Agregar otros archivos *.c (si no se incluyen, no se compilan).
 	# ...
 )
+
+if (WEB_ENV)
+	target_link_options(Compiler PUBLIC
+		-O3
+		-sMODULARIZE=1
+		-sEXPORT_NAME='createCompilerModule'
+		-sENVIRONMENT='web'
+		-sSINGLE_FILE=1 
+		-sEXPORT_ES6=1 
+		-sUSE_ES6_IMPORT_META=0 
+		--no-entry 
+		-sEXPORTED_FUNCTIONS=['_getCode','_malloc','_free','_freeCode']
+		-sEXPORTED_RUNTIME_METHODS=['ccall','cwrap','getValue','stringToNewUTF8','UTF8ToString']
+		-sASYNCIFY
+	) 
+endif ()
 
 # Linkear el proyecto y sus librerías.
 target_link_libraries(Compiler)
