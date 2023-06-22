@@ -1,8 +1,8 @@
 #include "generator.h"
 #include "animation/animation.h"
 #include "layout/layout.h"
-#include "shape/shape.h"
 #include "media/media.h"
+#include "shape/shape.h"
 #include "text/text.h"
 #include <errno.h>
 #include <sys/stat.h>
@@ -51,13 +51,37 @@ void buildFiles(Generator generator) {
     sb_free(generator.jsSb);
 
     fclose(jsFile);
+
+    char ch;
+    FILE *source, *target;
+
+    source = fopen("src/assets/anime.min.js", "r");
+
+    if (source == NULL) {
+        exit(EXIT_FAILURE);
+    }
+
+    target = fopen("output/anime.min.js", "w");
+
+    if (target == NULL) {
+        fclose(source);
+        exit(EXIT_FAILURE);
+    }
+
+    while ((ch = fgetc(source)) != EOF)
+        fputc(ch, target);
+
+    fclose(source);
+    fclose(target);
 }
 
 void generateBoilerPlate(Generator generator, ExpressionNode *expression) {
 
     // CSS Boilerplate
     sb_append(generator.cssSb, "body {\n");
-    sb_append(generator.cssSb, "\twidth: 100vw;\n\theight: 100vh;\n\tbackground: #0a0a0a;\n\toverflow: hidden;\n");
+    sb_append(generator.cssSb,
+              "\twidth: 100vw;\n\theight: 100vh;\n\tbackground: "
+              "#0a0a0a;\n\toverflow: hidden;\n");
     sb_append(generator.cssSb, "}\n\n");
 
     sb_append(generator.cssSb, ".ellipse {\n");
@@ -141,13 +165,12 @@ void generateExpression(Generator generator, ExpressionNode *expression) {
             break;
     }
 
-    if (expression->nextExpression != NULL)
+    if (expression->nextExpression != NULL && expression->nextExpression->type != E_EMPTY)
         generateExpression(generator, expression->nextExpression);
 }
 
-
-void generateVariable(Generator generator, char* varname) {
-    SymbolTable* entry;
+void generateVariable(Generator generator, char *varname) {
+    SymbolTable *entry;
     HASH_FIND_STR(state.symbolTable, varname, entry);
 
     generateFunction(generator, entry->function);
