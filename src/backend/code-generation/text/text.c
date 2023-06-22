@@ -14,11 +14,11 @@ void generateText(Generator generator, TextNode *text) {
 }
 
 void generateTextParams(Generator generator, TextNode *text) {
+    if (text->paramMap == NULL)
+        return;
+
     ParameterMap *paramMap = text->paramMap, *currParameter, *tmp;
     UT_hash_handle hh = text->paramMap->hh;
-
-    if (HASH_COUNT(paramMap) == 0)
-        return;
 
     sb_appendf(generator.cssSb, "#id-%d {\n", elementId);
 

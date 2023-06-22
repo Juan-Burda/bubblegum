@@ -6,6 +6,7 @@
 #define ERROR_VTOOLONG "Varname too long"
 #define ERROR_VREDECLARED "Variable redeclared"
 #define ERROR_PREASSIGNED "Parameter reassigned"
+#define ERROR_UNKNOWNPARAM "Parameter unknown"
 
 #define WARN_NOPARAM "Found no parameters"
 

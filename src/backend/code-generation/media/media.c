@@ -21,6 +21,9 @@ void generateMedia(Generator generator, MediaNode *media) {
 }
 
 void generateMediaParams(Generator generator, MediaNode *media) {
+    if (media->paramMap == NULL)
+        return;
+
     ParameterMap *paramMap = media->paramMap, *currParameter, *tmp;
     UT_hash_handle hh = media->paramMap->hh;
 

@@ -31,12 +31,12 @@ void generateShape(Generator generator, ShapeNode *shape) {
 }
 
 void generateShapeParams(Generator generator, ShapeNode *shape) {
+    if (shape->paramMap == NULL)
+        return;
+
     ShapeType shapeType = shape->type;
     ParameterMap *paramMap = shape->paramMap, *currParameter, *tmp;
     UT_hash_handle hh = shape->paramMap->hh;
-
-    if (HASH_COUNT(paramMap) == 0)
-        return;
 
     sb_appendf(generator.cssSb, "#id-%d {\n", elementId);
 

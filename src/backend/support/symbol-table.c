@@ -133,8 +133,11 @@ int stAddParametersToAnimation(ParameterMap** map, ParamListAnimationNode* param
 
             default:
                 LogError("\t\tUnknown Animation type");
-                free(currParam);
-                exit(EXIT_FAILURE);
+
+                ProblemContext* context = createProblemContext(ERROR, ERROR_UNKNOWNPARAM, yylineno);
+                add(state.errorList, context);
+
+                return 1;
         }
 
         HASH_ADD_INT(*map, type, currParam);
@@ -206,8 +209,11 @@ int stAddParametersToShape(ParameterMap** map, ParamListShapeNode* paramList) {
 
             default:
                 LogError("\t\tUnknown Shape parameter");
-                free(currParam);
-                exit(EXIT_FAILURE);
+
+                ProblemContext* context = createProblemContext(ERROR, ERROR_UNKNOWNPARAM, yylineno);
+                add(state.errorList, context);
+
+                return 1;
         }
 
         HASH_ADD_INT(*map, type, currParam);
@@ -264,8 +270,11 @@ int stAddParametersToMedia(ParameterMap** map, ParamListMediaNode* paramList) {
 
             default:
                 LogError("\t\tUnkown Media parameter");
-                free(currParam);
-                exit(EXIT_FAILURE);
+
+                ProblemContext* context = createProblemContext(ERROR, ERROR_UNKNOWNPARAM, yylineno);
+                add(state.errorList, context);
+
+                return 1;
         }
 
         HASH_ADD_INT(*map, type, currParam);
@@ -318,7 +327,7 @@ int stAddParametersToText(ParameterMap** map, ParamListTextNode* paramList) {
             case PT_T_FONT_SIZE:
                 currParam->value.integer = currNode->parameter->value.integer;
                 break;
-                
+
             case PT_T_BACKGROUND_COLOR:
                 len = strlen(currNode->parameter->value.color->string);
                 char* color = (char*)_malloc(len + 1);

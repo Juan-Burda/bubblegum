@@ -5,7 +5,6 @@ extern int htmlIdentWidth;
 
 void generateAnimationCompoundStatement(
     Generator generator, AnimationCompoundStatementNode *compoundStatement) {
-
     switch (compoundStatement->type) {
         case CS_A_FUNCTION:
             generateFunction(generator, compoundStatement->value.functionNode);
@@ -38,15 +37,14 @@ void generateAnimation(Generator generator, AnimationNode *animation) {
 }
 
 void generateAnimationParams(Generator generator, AnimationNode *animation) {
+    if (animation->paramMap == NULL)
+        return;
+
     AnimationType animationType = animation->type;
     ParameterMap *paramMap = animation->paramMap, *currParameter, *tmp;
     UT_hash_handle hh = animation->paramMap->hh;
 
     int targetChildShapes = 0;
-
-
-    if (HASH_COUNT(paramMap) == 0)
-        return;
 
     // Default params
     sb_appendf(generator.jsSb, "\teasing: 'easeInOutSine',\n");

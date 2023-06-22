@@ -143,8 +143,6 @@ void freeParameterMap(ParameterMap* parameters) {
         LogDebug("\t%s", stringifyParameterType(currParameter->type));
         HASH_DEL(parameters, currParameter);
 
-        if (PARAM_IS_STRING(currParameter->type))
-            free(currParameter->value.string);
         free(currParameter);
     }
 }
