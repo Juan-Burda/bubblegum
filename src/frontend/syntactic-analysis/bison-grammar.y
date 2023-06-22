@@ -102,7 +102,7 @@
 %token <token> PARAM_Y_AXIS
 %token <token> PARAM_BASE
 // For text
-%token <token> PARAM_FONT_WIDTH
+%token <token> PARAM_FONT_SIZE
 %token <token> PARAM_FONT_FAMILY
 %token <token> PARAM_FONT_WEIGHT
 %token <token> PARAM_FONT_STYLE
@@ -313,7 +313,7 @@ paramListText: %empty						{ $$ = ParamListTextAddParamAction(TRUE,	NULL,	NULL);
 	| paramText COMMA paramListText			{ $$ = ParamListTextAddParamAction(FALSE,	$3,		$1); }
 	| paramText								{ $$ = ParamListTextAddParamAction(FALSE,	NULL,	$1); }
 
-paramText: PARAM_FONT_WIDTH COLON TYPE_INTEGER 				{ $$ = ParamTextAction(PT_T_FONT_WIDTH, 		(ParamTextUnion) { .integer = $3 }); }
+paramText: PARAM_FONT_SIZE COLON TYPE_INTEGER 				{ $$ = ParamTextAction(PT_T_FONT_SIZE, 			(ParamTextUnion) { .integer = $3 }); }
 	| PARAM_FONT_FAMILY COLON TYPE_FONT_FAMILY 				{ $$ = ParamTextAction(PT_T_FONT_FAMILY,		(ParamTextUnion) { .fontFamily = $3 }); }
 	| PARAM_FONT_WEIGHT COLON TYPE_INTEGER 					{ $$ = ParamTextAction(PT_T_FONT_WEIGHT,		(ParamTextUnion) { .integer = $3 }); }
 	| PARAM_FONT_STYLE COLON TYPE_FONT_STYLE 				{ $$ = ParamTextAction(PT_T_FONT_STYLE, 		(ParamTextUnion) { .fontStyle = $3 }); }

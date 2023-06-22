@@ -315,9 +315,10 @@ int stAddParametersToText(ParameterMap** map, ParamListTextNode* paramList) {
         char* aux;
         switch (currParam->type) {
             case PT_T_FONT_WEIGHT:
-            case PT_T_FONT_WIDTH:
+            case PT_T_FONT_SIZE:
                 currParam->value.integer = currNode->parameter->value.integer;
-
+                break;
+                
             case PT_T_BACKGROUND_COLOR:
                 len = strlen(currNode->parameter->value.color->string);
                 char* color = (char*)_malloc(len + 1);

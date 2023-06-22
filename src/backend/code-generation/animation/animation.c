@@ -44,6 +44,10 @@ void generateAnimationParams(Generator generator, AnimationNode *animation) {
 
     int targetChildShapes = 0;
 
+
+    if (HASH_COUNT(paramMap) == 0)
+        return;
+
     // Default params
     sb_appendf(generator.jsSb, "\teasing: 'easeInOutSine',\n");
 

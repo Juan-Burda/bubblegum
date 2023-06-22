@@ -62,7 +62,7 @@ token ParameterHeightPatternAction(const char* lexeme);
 token ParameterXAxisPatternAction(const char* lexeme);
 token ParameterYAxisPatternAction(const char* lexeme);
 token ParameterBasePatternAction(const char* lexeme);
-token ParameterFontWidthPatternAction(const char* lexeme);
+token ParameterFontSizePatternAction(const char* lexeme);
 token ParameterFontFamilyPatternAction(const char* lexeme);
 token ParameterFontWeightPatternAction(const char* lexeme);
 token ParameterFontStylePatternAction(const char* lexeme);

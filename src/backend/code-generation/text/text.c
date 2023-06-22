@@ -17,11 +17,14 @@ void generateTextParams(Generator generator, TextNode *text) {
     ParameterMap *paramMap = text->paramMap, *currParameter, *tmp;
     UT_hash_handle hh = text->paramMap->hh;
 
+    if (HASH_COUNT(paramMap) == 0)
+        return;
+
     sb_appendf(generator.cssSb, "#id-%d {\n", elementId);
 
     HASH_ITER(hh, paramMap, currParameter, tmp) {
         switch (currParameter->type) {
-            case PT_T_FONT_WIDTH:
+            case PT_T_FONT_SIZE:
                 sb_appendf(generator.cssSb, "\tfont-size: %dpx;\n",
                            currParameter->value.integer);
                 break;

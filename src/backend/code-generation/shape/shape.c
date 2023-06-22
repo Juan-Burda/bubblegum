@@ -35,6 +35,9 @@ void generateShapeParams(Generator generator, ShapeNode *shape) {
     ParameterMap *paramMap = shape->paramMap, *currParameter, *tmp;
     UT_hash_handle hh = shape->paramMap->hh;
 
+    if (HASH_COUNT(paramMap) == 0)
+        return;
+
     sb_appendf(generator.cssSb, "#id-%d {\n", elementId);
 
     HASH_ITER(hh, paramMap, currParameter, tmp) {

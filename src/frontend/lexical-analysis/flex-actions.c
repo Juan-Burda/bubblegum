@@ -1,8 +1,8 @@
 #include "flex-actions.h"
-#include <stdlib.h>
-#include <string.h>
 #include "../../backend/support/logger.h"
 #include "../../utils/wrapper-functions.h"
+#include <stdlib.h>
+#include <string.h>
 
 /**
  * Implementación de "flex-actions.h".
@@ -260,11 +260,11 @@ token ParameterBasePatternAction(const char *lexeme) {
 }
 
 // For text
-token ParameterFontWidthPatternAction(const char *lexeme) {
-    LogDebug("ParameterFontWidthPatternAction: '%s' ", lexeme);
-    yylval.token = PARAM_FONT_WIDTH;
+token ParameterFontSizePatternAction(const char *lexeme) {
+    LogDebug("ParameterFontSizePatternAction: '%s' ", lexeme);
+    yylval.token = PARAM_FONT_SIZE;
 
-    return PARAM_FONT_WIDTH;
+    return PARAM_FONT_SIZE;
 }
 
 token ParameterFontFamilyPatternAction(const char *lexeme) {
@@ -318,7 +318,8 @@ token FontStylePatternAction(const char *lexeme, const fontstyle_t fontstyle) {
     return TYPE_FONT_STYLE;
 }
 
-token FontFamilyPatternAction(const char *lexeme, const fontfamily_t fontfamily) {
+token FontFamilyPatternAction(const char *lexeme,
+                              const fontfamily_t fontfamily) {
     LogDebug("FontFamilyPatternAction: '%s' ", lexeme);
     yylval.fontfamily = fontfamily;
 

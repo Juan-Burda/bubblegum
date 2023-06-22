@@ -86,7 +86,7 @@ url             https?:\/\/([a-zA-Z0-9$\-_.+!*'(),%;:@&=]+(?:\/[a-zA-Z0-9$\-_.+!
 "x-axis"	    							{ return ParameterXAxisPatternAction(yytext); }
 "y-axis"	    							{ return ParameterYAxisPatternAction(yytext); }
 "base"  	    							{ return ParameterBasePatternAction(yytext); }
-"font-width"  	    						{ return ParameterFontWidthPatternAction(yytext); }
+"font-size"  	    						{ return ParameterFontSizePatternAction(yytext); }
 "font-family"  	    						{ return ParameterFontFamilyPatternAction(yytext); }
 "font-weight"  	    						{ return ParameterFontWeightPatternAction(yytext); }
 "font-style"  	    						{ return ParameterFontStylePatternAction(yytext); }

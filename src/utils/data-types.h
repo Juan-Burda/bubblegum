@@ -38,7 +38,11 @@ typedef enum {
     LINE_THROUGH
 } textdeco_t;
 
-#define PARAM_IS_STRING(type) ((type) == PA_M_POINT || (type) == PS_S_BORDER_COLOR || (type) == PS_S_FILL_COLOR || (type) == PM_I_URL || (type) == PT_T_BACKGROUND_COLOR)
+#define PARAM_IS_STRING(type)                                                  \
+    ((type) == PA_A_ALTERNATE || (type) == PA_A_LOOP ||                        \
+     (type) == PA_M_POINT || (type) == PS_S_BORDER_COLOR ||                    \
+     (type) == PS_S_FILL_COLOR || (type) == PM_I_URL ||                        \
+     (type) == PT_T_BACKGROUND_COLOR)
 
 typedef enum {
     PA_A_ALTERNATE,
@@ -65,7 +69,7 @@ typedef enum {
 
     PM_I_URL,
 
-    PT_T_FONT_WIDTH,
+    PT_T_FONT_SIZE,
     PT_T_FONT_FAMILY,
     PT_T_FONT_WEIGHT,
     PT_T_FONT_STYLE,
@@ -73,4 +77,4 @@ typedef enum {
     PT_T_BACKGROUND_COLOR,
 } parameter_t;
 
-#endif  // DATA_TYPES_H_
+#endif // DATA_TYPES_H_

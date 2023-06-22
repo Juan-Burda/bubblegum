@@ -7,10 +7,8 @@ extern int jsIdentWidth;
 void generateMedia(Generator generator, MediaNode *media) {
     switch (media->type) {
         case M_IMAGE:
-            sb_appendf(
-                generator.htmlSb,
-                "%.*s<img id=\"id-%d\"></img>\n",
-                htmlIdentWidth, TABS, elementId);
+            sb_appendf(generator.htmlSb, "%.*s<img id=\"id-%d\"></img>\n",
+                       htmlIdentWidth, TABS, elementId);
             break;
 
         default:
@@ -25,6 +23,9 @@ void generateMedia(Generator generator, MediaNode *media) {
 void generateMediaParams(Generator generator, MediaNode *media) {
     ParameterMap *paramMap = media->paramMap, *currParameter, *tmp;
     UT_hash_handle hh = media->paramMap->hh;
+
+    if (HASH_COUNT(paramMap) == 0)
+        return;
 
     sb_appendf(generator.cssSb, "#id-%d {\n", elementId);
 
